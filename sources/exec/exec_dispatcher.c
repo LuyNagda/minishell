@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_dispatcher.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/12/18 16:56:31 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/04 14:11:34 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void	ft_dispatch_commands(t_minishell *shell)
 		if (!ft_quote_is_closed(shell->commands.latest_command))
 			ft_concat_quoted_pipes(shell, 0);
 		ft_post_command(shell);
-		command =  shell->commands.latest_command;
+		command = ft_strtrim(shell->commands.latest_command, " ");
 
-		ft_printf("COMMAND: %s\n", command);
+		ft_printf("COMMAND: |%s|\n", command);
 
 		//TODO: Les doubles chevrons dans les String.						// CA A L'AIR D'ETRE BON
 		//TODO: LES ESPACE APRES LES PIPE									// CA A L'AIR D'ETRE BON
