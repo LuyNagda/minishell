@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/04 16:00:29 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/04 16:15:34 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	ft_shell_loop(t_minishell *shell)
 			continue ;
 		ft_replace_whitespace(line, ' ');
 		add_history(line);
-		shell->sended_line = ft_strtrim(line, " ");
+		shell->sended_line = ft_strtrim(line, " \"");
 		parse_input(shell);
 		exec_simple_cmd(shell, shell->sended_line);
 	}

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:19:33 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/04 16:01:08 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/04 16:47:41 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <errno.h>
+#include <dirent.h>
 
 void	exec_simple_cmd(t_minishell *shell, char *command)
 {
@@ -29,26 +30,36 @@ void	exec_simple_cmd(t_minishell *shell, char *command)
 	char	*binary_path;
 	char	**split;
 
-	if (ft_str_equals(command, "clear"))
+	index = 0;
+	envp = env_map_to_array(shell->env_map);
+	path_array = convert_path_to_array(shell->env_map);
+	split = ft_split(command, ' ');
+	if (!split)
+		exit(1);
+	if (ft_str_equals(split[0], "cd"))
+	{
+		if (split[2])
+		{
+			ft_printf("cd: string not in pwd: %s\n", split[1]);
+			return ;
+		}
+		if (chdir(split[1]) != 0)
+			ft_printf("cd: %s: %s", strerror(errno), split[1]);
+		return ;
+	}
+	if (ft_str_equals(split[0], "clear"))
 	{
 		ft_printf("\ec");
 		return ;
 	}
-	if (ft_str_equals(command, "exit"))
+	if (ft_str_equals(split[0], "exit"))
 	{
-		free(command);
 		shell->is_running = _false;
 		return ;
 	}
-	index = 0;
-	envp = env_map_to_array(shell->env_map);
-	path_array = convert_path_to_array(shell->env_map);
-	path = find_command(command, path_array);
+	path = find_command(split[0], path_array);
 	if (path == NULL)
 		return ;
-	split = ft_split(command, ' ');
-	if (!split)
-		exit(1);
 	sub_process_pid = fork();
 	if (sub_process_pid == -1)
 		return ;
