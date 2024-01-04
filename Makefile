@@ -34,7 +34,7 @@ SOURCES = $(addprefix "sources/", $(SRCS:.c=.o))
 OBJS = $(addprefix $(BUILD_DIRECTORY), $(FILES:.c=.o))
 
 $(NAME): $(BUILD_DIRECTORY) $(OBJS) $(LIBFT)
-	$(CC) -lreadline $(OBJS) $(LIBFT) -o $(NAME)
+	$(CC) $(OBJS) $(LIBFT) -lreadline -o $(NAME)
 
 $(LIBFT): force
 	$(MAKE_LIBFT)
