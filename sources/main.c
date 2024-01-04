@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/12/18 17:09:15 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/04 16:00:29 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include "../dependencies/libft/.includes/string_utils.h"
 
 static void	ft_shell_loop(t_minishell *shell)
 {
@@ -26,9 +27,9 @@ static void	ft_shell_loop(t_minishell *shell)
 			continue ;
 		ft_replace_whitespace(line, ' ');
 		add_history(line);
-		shell->sended_line = line;
+		shell->sended_line = ft_strtrim(line, " ");
 		parse_input(shell);
-		//exec_simple_cmd(minishell, NULL);
+		exec_simple_cmd(shell, shell->sended_line);
 	}
 }
 

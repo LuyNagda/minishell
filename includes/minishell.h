@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/12/19 13:39:03 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/04 15:07:42 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ typedef struct s_builtin
 void		ft_dispatch_commands(t_minishell *shell);
 
 char		**convert_path_to_array(t_env_map *env_map);
+char		*find_command(char *command, char **path_array);
 void		exec_simple_cmd(t_minishell *minishell, char *cmd);
 
 /* *****************************************************/

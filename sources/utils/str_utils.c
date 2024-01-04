@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_str_equals.c                                    :+:      :+:    :+:   */
+/*   str_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 10:54:43 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/12/19 19:34:26 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/04 15:56:09 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	ft_str_contains(const char *src, const char *search, size_t *start_at, size_
 		}
 		src_index++;
 	}
-	return (0);
+	return (0);	
 }
 
 void	ft_replace_whitespace(char *line, char value)

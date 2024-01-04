@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 09:06:13 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/12/19 14:15:03 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/04 15:19:03 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,6 @@ void	parse_input(t_minishell *shell)
 	ft_tokenize(shell);
 	if (ft_has_whitepipe(shell) != 0)
 		return (free(shell->sended_line));
-	ft_dispatch_commands(shell);
-	free(shell->sended_line);
+	//ft_dispatch_commands(shell);
+	//free(shell->sended_line);
 }

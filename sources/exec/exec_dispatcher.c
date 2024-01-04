@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/04 14:11:34 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/04 15:17:52 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,6 @@ void	ft_dispatch_commands(t_minishell *shell)
 		//TODO: CHERCHER SI Y'A DES VARIABLES D'ENV DANS LA STRING
 		//TODO: LES REPLACE SI Y'EN A DES TROUVEES
 		//TODO: Dispatch Envoyer Builtin dans Buildin et Autre dans Autre.
-
-		if (ft_str_equals(command, "exit"))
-		{
-			free(command);
-			shell->is_running = _false;
-			return;
-		}
 
 		free(command);
 		shell->commands.latest_command = NULL;
