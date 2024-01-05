@@ -16,6 +16,7 @@ FILES =	main.c							\
 		parsing/parsing.c				\
 		exec/exec_builtin.c				\
 		exec/exec_dispatcher.c			\
+		exec/exec_pipex.c				\
 		exec/exec_extern.c				\
 		exec/path_handler.c				\
 		utils/quote_utils.c				\
