@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:19:33 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/05 15:27:23 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/05 16:56:20 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "../../dependencies/libft/.includes/ft_printf.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <errno.h>
@@ -28,6 +29,7 @@ void	exec_simple_cmd(t_minishell *shell, char *command)
 	char	**path_array;
 	char	*path;
 	char	**split;
+	char	cwd[1024];
 
 	index = 0;
 	envp = env_map_to_array(shell->env_map);
@@ -35,6 +37,22 @@ void	exec_simple_cmd(t_minishell *shell, char *command)
 	split = ft_split(command, ' ');
 	if (!split)
 		exit(1);
+	if (ft_str_equals(split[0], "pwd"))
+	{
+		if (getcwd(cwd, sizeof(cwd)) == NULL)
+			perror("getcwd() error");
+		else
+			ft_printf("%s\n", cwd);
+		return ;
+	}
+	if (ft_str_equals(split[0], "pwd"))
+	{
+		if (getcwd(cwd, sizeof(cwd)) == NULL)
+			perror("getcwd() error");
+		else
+			ft_printf("%s\n", cwd);
+		return ;
+	}
 	if (ft_str_equals(split[0], "env"))
 	{
 		while (envp[index])
@@ -84,4 +102,3 @@ void	exec_simple_cmd(t_minishell *shell, char *command)
 	ft_free_split(path_array);
 	ft_free_split(split);
 }
-
