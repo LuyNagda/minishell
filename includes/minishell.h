@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/05 12:32:54 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/05 14:42:10 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,21 @@ typedef struct s_message
 	char		*whitepipe_error;
 
 }				t_message;
+
+typedef struct s_pipex
+{
+	int		index;
+	int		sub_process_pid;
+	int		c_pipe[2];
+	int		o_pipe[2];
+	int		num_of_commands;
+	char	**envp;
+	char	**path_array;
+	char	*path;
+	char	**split;
+	char	**command;
+	char	*temp;
+}			t_pipex;
 
 typedef struct s_minishell
 {

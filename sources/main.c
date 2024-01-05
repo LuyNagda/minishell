@@ -6,12 +6,13 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/05 14:12:51 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/05 14:57:14 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "../dependencies/libft/.includes/string_utils.h"
@@ -31,6 +32,8 @@ static void	ft_shell_loop(t_minishell *shell)
 		parse_input(shell);
 		//exec_simple_cmd(shell, shell->sended_line);
 		exec_simple_pipex(shell, shell->sended_line);
+		free(line);
+		free(shell->sended_line);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/05 14:09:15 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/05 14:45:57 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,85 +20,86 @@
 #include <string.h>
 #include <sys/wait.h>
 
-void	child_one(char **command, int pipe[2], char *path)
+void	child_one(t_pipex *pipex)
 {
-	if (dup2(pipe[0], STDIN_FILENO) == -1)
+	if (dup2(pipex->c_pipe[0], STDIN_FILENO) == -1)
 		perror("DUP2 failed");
-	if (dup2(pipe[1], STDOUT_FILENO) == -1)
+	if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
 		perror("DUP2 failed");
-	if (path == NULL)
+	if (pipex->path == NULL)
 		exit(EXIT_FAILURE);
-	if (execve(path, command, 0) == -1)
-		ft_printf("%s: %s", strerror(errno), command[0]);
+	if (execve(pipex->path, pipex->command, 0) == -1)
+		ft_printf("%s: %s", strerror(errno), pipex->command[0]);
 	exit(EXIT_FAILURE);
 }
 
-void	child_middle(char **command, int c_pipe[2], int o_pipe[2], char *path)
+void	child_middle(t_pipex *pipex)
 {
-	if (dup2(o_pipe[0], STDIN_FILENO) == -1)
+	if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
 		perror("DUP2 failed");
-	if (dup2(c_pipe[1], STDOUT_FILENO) == -1)
+	if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
 		perror("DUP2 failed");
-	if (path == NULL)
+	if (pipex->path == NULL)
 		exit(EXIT_FAILURE);
-	ft_printf("This is from middle child: \n");
-	if (execve(path, command, 0) == -1)
-		ft_printf("%s: %s", strerror(errno), command[0]);
+	if (execve(pipex->path, pipex->command, 0) == -1)
+		ft_printf("%s: %s", strerror(errno), pipex->command[0]);
 	exit(EXIT_FAILURE);
 }
 
-void	child_last(char **command, int o_pipe[2], char *path)
+void	child_last(t_pipex *pipex)
 {
-	if (dup2(o_pipe[0], STDIN_FILENO) == -1)
+	if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
 		perror("DUP2 failed");
-	if (path == NULL)
+	if (pipex->path == NULL)
 		exit(EXIT_FAILURE);
-	if (execve(path, command, 0) == -1)
-		ft_printf("%s: %s", strerror(errno), command[0]);
+	if (execve(pipex->path, pipex->command, 0) == -1)
+		ft_printf("%s: %s", strerror(errno), pipex->command[0]);
 	exit(EXIT_FAILURE);
+}
+
+void	exec_simple_pipex_loop(t_pipex *pipex)
+{
+	while (pipex->split[pipex->index])
+	{
+		pipex->temp = ft_strtrim(pipex->split[pipex->index], " ");
+		pipex->command = ft_split(pipex->temp, ' ');
+		free(pipex->temp);
+		if (pipe(pipex->c_pipe) == -1)
+			perror("Can't create pipe");
+		pipex->path = find_command(pipex->command[0], pipex->path_array);
+		pipex->sub_process_pid = fork();
+		if (pipex->sub_process_pid < 0)
+			perror("Fork");
+		if (pipex->index == 0 && pipex->sub_process_pid == 0)
+			child_one(pipex);
+		else if (pipex->index && (pipex->index < pipex->num_of_commands - 1) && pipex->sub_process_pid == 0)
+			child_middle(pipex);
+		else if (pipex->index == pipex->num_of_commands - 1 && pipex->sub_process_pid == 0)
+			child_last(pipex);
+		close(pipex->c_pipe[1]);
+		pipex->o_pipe[0] = pipex->c_pipe[0];
+		wait(NULL);
+		pipex->index++;
+		ft_free_split(pipex->command);
+		free(pipex->path);
+	}
 }
 
 void	exec_simple_pipex(t_minishell *shell, char *line)
 {
-	int		index;
-	int		sub_process_pid;
-	int		c_pipe[2];
-	int		o_pipe[2];
-	int		num_of_commands;
-	char	**envp;
-	char	**path_array;
-	char	*path;
-	char	**split;
-	char	**command;
+	t_pipex	pipex;
 
-	index = 0;
-	num_of_commands = 0;
-	envp = env_map_to_array(shell->env_map);
-	path_array = convert_path_to_array(shell->env_map);
-	split = ft_split(line, '|');
-	if (!split)
+	pipex.index = 0;
+	pipex.num_of_commands = 0;
+	pipex.envp = env_map_to_array(shell->env_map);
+	pipex.path_array = convert_path_to_array(shell->env_map);
+	pipex.split = ft_split(line, '|');
+	if (!pipex.split)
 		exit(1);
-	while (split[num_of_commands])
-		num_of_commands++;
-	while (split[index])
-	{
-		split[index] = ft_strtrim(split[index], " ");
-		command = ft_split(split[index], ' ');
-		if (pipe(c_pipe) == -1)
-			perror("Can't create pipe");
-		path = find_command(command[0], path_array);
-		sub_process_pid = fork();
-		if (sub_process_pid < 0)
-			perror("Fork");
-		if (index == 0 && sub_process_pid == 0)
-			child_one(command, c_pipe, path);
-		else if (index && (index < num_of_commands - 1) && sub_process_pid == 0)
-			child_middle(command, c_pipe, o_pipe, path);
-		else if (index == num_of_commands - 1 && sub_process_pid == 0)
-			child_last(command, o_pipe, path);
-		close(c_pipe[1]);
-		o_pipe[0] = c_pipe[0];
-		wait(NULL);
-		index++;
-	}
+	while (pipex.split[pipex.num_of_commands])
+		pipex.num_of_commands++;
+	exec_simple_pipex_loop(&pipex);
+	ft_free_split(pipex.envp);
+	ft_free_split(pipex.path_array);
+	ft_free_split(pipex.split);
 }
