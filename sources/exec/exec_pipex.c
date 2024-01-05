@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/05 14:45:57 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/05 16:59:43 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,11 @@ void	child_one(t_pipex *pipex)
 {
 	if (dup2(pipex->c_pipe[0], STDIN_FILENO) == -1)
 		perror("DUP2 failed");
-	if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
-		perror("DUP2 failed");
+	if (pipex->num_of_commands != 1)
+	{
+		if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
+			perror("DUP2 failed");
+	}
 	if (pipex->path == NULL)
 		exit(EXIT_FAILURE);
 	if (execve(pipex->path, pipex->command, 0) == -1)
