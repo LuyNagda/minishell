@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:19:33 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/04 16:47:41 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/05 12:25:32 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	exec_simple_cmd(t_minishell *shell, char *command)
 	char	**envp;
 	char	**path_array;
 	char	*path;
-	char	*binary_path;
 	char	**split;
 
 	index = 0;
@@ -36,6 +35,12 @@ void	exec_simple_cmd(t_minishell *shell, char *command)
 	split = ft_split(command, ' ');
 	if (!split)
 		exit(1);
+	if (ft_str_equals(split[0], "env"))
+	{
+		while (envp[index])
+			ft_printf("%s\n", envp[index++]);
+		return ;
+	}
 	if (ft_str_equals(split[0], "cd"))
 	{
 		if (split[2])
@@ -43,8 +48,13 @@ void	exec_simple_cmd(t_minishell *shell, char *command)
 			ft_printf("cd: string not in pwd: %s\n", split[1]);
 			return ;
 		}
-		if (chdir(split[1]) != 0)
-			ft_printf("cd: %s: %s", strerror(errno), split[1]);
+		if (split[1])
+		{
+			if (chdir(split[1]) != 0)
+				ft_printf("cd: %s: %s\n", strerror(errno), split[1]);
+		}
+		else if (chdir("/home/lunagda") != 0)
+			ft_printf("cd: %s: %s\n", strerror(errno), split[1]);
 		return ;
 	}
 	if (ft_str_equals(split[0], "clear"))
