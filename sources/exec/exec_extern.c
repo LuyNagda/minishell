@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:19:33 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/05 12:25:32 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/05 15:27:23 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	exec_simple_cmd(t_minishell *shell, char *command)
 	{
 		if (split[2])
 		{
-			ft_printf("cd: string not in pwd: %s\n", split[1]);
+			ft_printf("cd: too many arguments\n");
 			return ;
 		}
 		if (split[1])
