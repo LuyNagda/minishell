@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:19:33 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/05 16:56:20 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/06 14:28:23 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,6 @@ void	exec_simple_cmd(t_minishell *shell, char *command)
 	split = ft_split(command, ' ');
 	if (!split)
 		exit(1);
-	if (ft_str_equals(split[0], "pwd"))
-	{
-		if (getcwd(cwd, sizeof(cwd)) == NULL)
-			perror("getcwd() error");
-		else
-			ft_printf("%s\n", cwd);
-		return ;
-	}
 	if (ft_str_equals(split[0], "pwd"))
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
