@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/08 15:36:41 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/08 20:49:09 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ int	main(int argc, char **argv, char **env)
 	ft_shell_loop(&shell);
 	env_map_flush(shell.env_map);
 	ft_flush_tokens(shell.commands.tokens);
-	rl_clear_history();
-	rl_clear_message();
-	rl_clear_visible_line();
-	rl_clear_pending_input();
+	//rl_clear_history();
+	//rl_clear_message();
+	//rl_clear_visible_line();
+	//rl_clear_pending_input();
 	return (0);
 }
