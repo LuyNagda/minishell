@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/08 17:58:18 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/08 18:04:21 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	**trim_command_list(char **command_list)
 
 	i = 0;
 	nb = 0;
-	while (command_list[i])
+	while (command_list[nb])
 		nb++;
 	result = (char **)malloc((nb + 1) * sizeof(char *));
 	while (i < nb)
@@ -58,6 +58,6 @@ char	**trim_command_list(char **command_list)
 		free(command_list[i]);
 		i++;
 	}
-	result[i] = '0';
+	result[i] = 0;
 	return (result);
 }
