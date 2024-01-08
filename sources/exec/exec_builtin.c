@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 12:24:01 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/08 17:48:23 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/08 21:33:25 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include "../../dependencies/libft/.includes/ft_printf.h"
 #include "../../dependencies/libft/.includes/string_utils.h"
 
+int	g_status_code;
+
 void	exec_clear(void)
 {
 	ft_printf("\ec");
@@ -27,7 +29,9 @@ void	exec_echo(t_minishell *shell, char **split)
 {
 	t_env_map *tmp;
 
-	if (ft_str_equals(split[1], "-n"))
+	if (ft_str_equals(split[1], "$?"))
+		ft_printf("%d\n", g_status_code);
+	else if (ft_str_equals(split[1], "-n"))
 	{
 		if (!ft_strncmp(split[2], "$", 1))
 		{

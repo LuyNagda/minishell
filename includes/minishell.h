@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/08 17:00:02 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/08 21:29:25 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "../dependencies/libft/.includes/boolean.h"
 # include <stddef.h>
+
+extern int	g_status_code;
 
 typedef enum e_token
 {
@@ -67,6 +69,7 @@ typedef struct s_message
 typedef struct s_pipex
 {
 	int		index;
+	int		status;
 	int		sub_process_pid;
 	int		c_pipe[2];
 	int		o_pipe[2];

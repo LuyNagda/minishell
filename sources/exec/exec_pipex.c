@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/08 17:43:01 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/08 21:35:44 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+
+int	g_status_code;
 
 void	child_one(t_pipex *pipex)
 {
@@ -36,7 +38,7 @@ void	child_one(t_pipex *pipex)
 			error_msg("DUP2 failed");
 	}
 	if (pipex->path == NULL)
-		exit(EXIT_FAILURE);
+		exit(127);
 	if (execve(pipex->path, pipex->command_list, 0) == -1)
 		ft_printf("%s: %s", strerror(errno), pipex->command_list[0]);
 	exit(EXIT_FAILURE);
@@ -49,7 +51,7 @@ void	child_middle(t_pipex *pipex)
 	if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
 		error_msg("DUP2 failed");
 	if (pipex->path == NULL)
-		exit(EXIT_FAILURE);
+		exit(127);
 	if (execve(pipex->path, pipex->command_list, 0) == -1)
 		ft_printf("%s: %s", strerror(errno), pipex->command_list[0]);
 	exit(EXIT_FAILURE);
@@ -65,7 +67,7 @@ void	child_last(t_pipex *pipex)
 			error_msg("DUP2 failed");
 	}
 	if (pipex->path == NULL)
-		exit(EXIT_FAILURE);
+		exit(127);
 	if (execve(pipex->path, pipex->command_list, 0) == -1)
 		ft_printf("%s: %s", strerror(errno), pipex->command_list[0]);
 	exit(EXIT_FAILURE);
@@ -128,6 +130,8 @@ void	exec_cmd(t_minishell *shell, char *line)
 		shell->commands.latest_command = NULL;
 		ft_concat_tokens(shell, _false);
 	}
+	waitpid(pipex.sub_process_pid, &pipex.status, 0);
+	g_status_code = WEXITSTATUS(pipex.status);
 	ft_free_split(pipex.envp);
 	ft_free_split(pipex.path_array);
 }
