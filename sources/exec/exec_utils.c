@@ -6,11 +6,12 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/08 16:33:07 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/08 17:27:24 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include "../../dependencies/libft/.includes/string_utils.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -37,4 +38,21 @@ void	error_msg(char *string)
 {
 	perror(string);
 	exit(EXIT_FAILURE);
+}
+
+
+char	**trim_command_list(char **command_list)
+{
+	int		i;
+	char	**result;
+
+	i = 0;
+	result = (char **)malloc(2 * sizeof(char *));
+	while (i < 2)
+	{
+		result[i] = ft_strdup(ft_strtrim(command_list[i], " >"));
+		free(command_list[i]);
+		i++;
+	}
+	return (result);
 }

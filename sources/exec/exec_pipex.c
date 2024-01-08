@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/08 16:48:43 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/08 17:43:01 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@ void	child_one(t_pipex *pipex)
 	if (pipex->num_of_commands != 1)
 	{
 		if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
+			error_msg("DUP2 failed");
+	}
+	else if (pipex->num_of_commands == 1 && ft_str_contains(pipex->command, ">", 0, 0))
+	{
+		if (dup2(pipex->outfile, STDOUT_FILENO) == -1)
 			error_msg("DUP2 failed");
 	}
 	if (pipex->path == NULL)
@@ -54,6 +59,11 @@ void	child_last(t_pipex *pipex)
 {
 	if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
 		error_msg("DUP2 failed");
+	if (ft_str_contains(pipex->command, ">", 0, 0))
+	{
+		if (dup2(pipex->outfile, STDOUT_FILENO) == -1)
+			error_msg("DUP2 failed");
+	}
 	if (pipex->path == NULL)
 		exit(EXIT_FAILURE);
 	if (execve(pipex->path, pipex->command_list, 0) == -1)
@@ -63,7 +73,22 @@ void	child_last(t_pipex *pipex)
 
 void	exec_cmd_loop(t_pipex *pipex)
 {
-	pipex->command_list = ft_split(pipex->command, ' ');
+	if (ft_str_contains(pipex->command, ">>", 0, 0))
+	{
+		pipex->command_list = ft_split(pipex->command, '>');
+		pipex->command_list = trim_command_list(pipex->command_list);
+		pipex->outfile = open(pipex->command_list[1], O_WRONLY | O_APPEND | O_CREAT, 0777);
+		pipex->command_list = ft_split(pipex->command_list[0], ' ');
+	}
+	else if (ft_str_contains(pipex->command, ">", 0, 0))
+	{
+		pipex->command_list = ft_split(pipex->command, '>');
+		pipex->command_list = trim_command_list(pipex->command_list);
+		pipex->outfile = open(pipex->command_list[1], O_CREAT | O_RDWR | O_TRUNC, 0777);
+		pipex->command_list = ft_split(pipex->command_list[0], ' ');
+	}
+	else
+		pipex->command_list = ft_split(pipex->command, ' ');
 	if (pipe(pipex->c_pipe) == -1)
 		error_msg("Pipe");
 	pipex->path = find_command(pipex->command_list[0], pipex->path_array);
@@ -78,7 +103,6 @@ void	exec_cmd_loop(t_pipex *pipex)
 		child_last(pipex);
 	close(pipex->c_pipe[1]);
 	pipex->o_pipe[0] = pipex->c_pipe[0];
-	wait(NULL);
 	pipex->index++;
 	ft_free_split(pipex->command_list);
 	free(pipex->path);

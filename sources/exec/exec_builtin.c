@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 12:24:01 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/08 15:31:15 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/08 17:48:23 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ void	exec_echo(t_minishell *shell, char **split)
 		if (!ft_strncmp(split[2], "$", 1))
 		{
 			tmp = env_map_find_node(shell->env_map, &split[2][1]);
-			ft_printf("%s", tmp->value);			
+			if (!tmp)
+				ft_printf("\n");
+			else
+				ft_printf("%s", tmp->value);			
 		}
 		else
 			ft_printf("%s", split[2]);
@@ -42,7 +45,10 @@ void	exec_echo(t_minishell *shell, char **split)
 		if (!ft_strncmp(split[1], "$", 1))
 		{
 			tmp = env_map_find_node(shell->env_map, &split[1][1]);
-			ft_printf("%s\n", tmp->value);			
+			if (!tmp)
+				ft_printf("\n");
+			else
+				ft_printf("%s\n", tmp->value);			
 		}
 		else
 			ft_printf("%s\n", split[1]);

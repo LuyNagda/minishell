@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/08 16:32:14 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/08 17:00:02 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ void		exec_builtin(t_minishell *shell, char *line);
 void		exec_cmd(t_minishell *shell, char *line);
 char		**convert_path_to_array(t_env_map *env_map);
 char		*find_command(char *command, char **path_array);
+void		exec_redirection(t_minishell *shell, char *line);
 void		exec_simple_cmd(t_minishell *minishell, char *cmd);
 
 /* *****************************************************/
@@ -184,6 +185,7 @@ char		ft_get_last_char_iw(char *line);
 char		ft_get_first_char_iw(char *line);
 int			ft_str_only_whitespace(const char *src);
 
+char		**trim_command_list(char **command_list);
 void		error_msg(char *string);
 t_message	ft_init_messages(void);
 
