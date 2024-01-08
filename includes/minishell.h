@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/08 15:42:57 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/08 16:32:14 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ typedef struct s_pipex
 	int		c_pipe[2];
 	int		o_pipe[2];
 	int		num_of_commands;
+	int		infile;
+	int		outfile;
 	char	**envp;
 	char	**path_array;
 	char	*path;
@@ -182,6 +184,7 @@ char		ft_get_last_char_iw(char *line);
 char		ft_get_first_char_iw(char *line);
 int			ft_str_only_whitespace(const char *src);
 
+void		error_msg(char *string);
 t_message	ft_init_messages(void);
 
 /* *****************************************************/

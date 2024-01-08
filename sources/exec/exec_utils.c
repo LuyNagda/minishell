@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/08 15:11:43 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/08 16:33:07 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 size_t	ft_count_command(t_minishell *shell)
 {
@@ -30,4 +31,10 @@ size_t	ft_count_command(t_minishell *shell)
 	}
 	ft_default_cmd_struct(shell, _false);
 	return (command_number);
+}
+
+void	error_msg(char *string)
+{
+	perror(string);
+	exit(EXIT_FAILURE);
 }

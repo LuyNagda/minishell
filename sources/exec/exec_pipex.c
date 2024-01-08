@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/08 15:41:20 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/08 16:44:48 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,16 @@
 #include <errno.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 void	child_one(t_pipex *pipex)
 {
 	if (dup2(pipex->c_pipe[0], STDIN_FILENO) == -1)
-		perror("DUP2 failed");
+		error_msg("DUP2 failed");
 	if (pipex->num_of_commands != 1)
 	{
 		if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
-			perror("DUP2 failed");
+			error_msg("DUP2 failed");
 	}
 	if (pipex->path == NULL)
 		exit(EXIT_FAILURE);
@@ -39,9 +40,9 @@ void	child_one(t_pipex *pipex)
 void	child_middle(t_pipex *pipex)
 {
 	if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
-		perror("DUP2 failed");
+		error_msg("DUP2 failed");
 	if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
-		perror("DUP2 failed");
+		error_msg("DUP2 failed");
 	if (pipex->path == NULL)
 		exit(EXIT_FAILURE);
 	if (execve(pipex->path, pipex->command_list, 0) == -1)
@@ -52,7 +53,9 @@ void	child_middle(t_pipex *pipex)
 void	child_last(t_pipex *pipex)
 {
 	if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
-		perror("DUP2 failed");
+		error_msg("DUP2 failed");
+	if (dup2(pipex->outfile, STDOUT_FILENO) == -1)
+		error_msg("DUP2 failed");
 	if (pipex->path == NULL)
 		exit(EXIT_FAILURE);
 	if (execve(pipex->path, pipex->command_list, 0) == -1)
@@ -64,11 +67,11 @@ void	exec_cmd_loop(t_pipex *pipex)
 {
 	pipex->command_list = ft_split(pipex->command, ' ');
 	if (pipe(pipex->c_pipe) == -1)
-		perror("Can't create pipe");
+		error_msg("Pipe");
 	pipex->path = find_command(pipex->command_list[0], pipex->path_array);
 	pipex->sub_process_pid = fork();
 	if (pipex->sub_process_pid < 0)
-		perror("Fork");
+		error_msg("Fork");
 	if (pipex->index == 0 && pipex->sub_process_pid == 0)
 		child_one(pipex);
 	else if (pipex->index && (pipex->index < pipex->num_of_commands - 1) && pipex->sub_process_pid == 0)
