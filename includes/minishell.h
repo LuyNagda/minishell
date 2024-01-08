@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/08 15:10:43 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:42:57 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ typedef struct s_pipex
 	char	**path_array;
 	char	*path;
 	char	**split;
-	char	**command;
+	char	*command;
+	char	**command_list;
 	char	*temp;
 }			t_pipex;
 
@@ -102,7 +103,12 @@ typedef struct s_builtin
 /* *****************************************************/
 
 size_t		ft_count_command(t_minishell *shell);
-void		exec_simple_pipex(t_minishell *shell, char *line);
+void		exec_export(t_minishell *shell, char **split);
+void		exec_unset(t_minishell *shell, char **split);
+void		exec_env(t_minishell *shell);
+void		exec_exit(t_minishell *shell);
+void		exec_builtin(t_minishell *shell, char *line);
+void		exec_cmd(t_minishell *shell, char *line);
 char		**convert_path_to_array(t_env_map *env_map);
 char		*find_command(char *command, char **path_array);
 void		exec_simple_cmd(t_minishell *minishell, char *cmd);
@@ -131,6 +137,7 @@ size_t		env_map_get_size(t_env_map *env_map);
 /* *****************************************************/
 
 void		parse_input(t_minishell *shell);
+int			in_builtins(char *command);
 char		*ft_concat_tokens(t_minishell *shell, t_boolean reset_values);
 void		ft_concat_quoted_pipes(t_minishell *shell, char *final_str);
 void		ft_post_command(t_minishell *shell);

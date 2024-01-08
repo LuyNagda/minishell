@@ -16,11 +16,11 @@ FILES =	main.c							\
 		parsing/parsing.c				\
 		parsing/in_builtins.c			\
 		exec/exec_builtin.c				\
-		exec/exec_builtin_2.c				\
-		exec/exec_dispatcher.c			\
+		exec/exec_builtin_2.c			\
 		exec/exec_pipex.c				\
 		exec/exec_extern.c				\
 		exec/path_handler.c				\
+		exec/exec_utils.c				\
 		utils/quote_utils.c				\
 		utils/str_utils.c				\
 		utils/messages_utils.c			\
