@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 10:54:43 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/04 15:56:09 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/08 12:10:47 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	ft_str_contains(const char *src, const char *search, size_t *start_at, size_
 			search_index++;
 		if (search[search_index] == '\0')
 		{
-			*start_at = src_index;
+			//*start_at = src_index;
 			return (1);
 		}
 		src_index++;

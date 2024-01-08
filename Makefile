@@ -14,7 +14,9 @@ FILES =	main.c							\
 		tokens/tokens_concat.c			\
 		tokens/tokens_utils.c			\
 		parsing/parsing.c				\
+		parsing/in_builtins.c			\
 		exec/exec_builtin.c				\
+		exec/exec_builtin_2.c				\
 		exec/exec_dispatcher.c			\
 		exec/exec_pipex.c				\
 		exec/exec_extern.c				\
