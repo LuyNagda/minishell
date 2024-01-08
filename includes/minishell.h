@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/05 14:42:10 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/08 15:10:43 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ typedef struct s_builtin
 /* ********************* EXEC **************************/
 /* *****************************************************/
 
-void		ft_dispatch_commands(t_minishell *shell);
+size_t		ft_count_command(t_minishell *shell);
 void		exec_simple_pipex(t_minishell *shell, char *line);
 char		**convert_path_to_array(t_env_map *env_map);
 char		*find_command(char *command, char **path_array);
