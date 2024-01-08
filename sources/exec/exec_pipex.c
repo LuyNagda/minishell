@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/08 16:44:48 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/08 16:48:43 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ void	child_middle(t_pipex *pipex)
 void	child_last(t_pipex *pipex)
 {
 	if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
-		error_msg("DUP2 failed");
-	if (dup2(pipex->outfile, STDOUT_FILENO) == -1)
 		error_msg("DUP2 failed");
 	if (pipex->path == NULL)
 		exit(EXIT_FAILURE);
