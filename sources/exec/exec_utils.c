@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/08 17:27:24 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/08 17:58:18 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,20 @@ void	error_msg(char *string)
 char	**trim_command_list(char **command_list)
 {
 	int		i;
+	int		nb;
 	char	**result;
 
 	i = 0;
-	result = (char **)malloc(2 * sizeof(char *));
-	while (i < 2)
+	nb = 0;
+	while (command_list[i])
+		nb++;
+	result = (char **)malloc((nb + 1) * sizeof(char *));
+	while (i < nb)
 	{
 		result[i] = ft_strdup(ft_strtrim(command_list[i], " >"));
 		free(command_list[i]);
 		i++;
 	}
+	result[i] = '0';
 	return (result);
 }
