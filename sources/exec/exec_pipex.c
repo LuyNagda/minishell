@@ -128,15 +128,15 @@ void	exec_cmd(t_minishell *shell, char *line)
 	pipex.envp = env_map_to_array(shell->env_map);
 	pipex.path_array = convert_path_to_array(shell->env_map);
 	ft_concat_tokens(shell, _false);
-	while (shell->commands.latest_command != NULL)
+	while (shell->parsing_cmd.latest_command != NULL)
 	{
-		if (!ft_quote_is_closed(shell->commands.latest_command))
+		if (!ft_quote_is_closed(shell->parsing_cmd.latest_command))
 			ft_concat_quoted_pipes(shell, 0);
 		ft_post_command(shell);
-		pipex.command = ft_strtrim(shell->commands.latest_command, " ");
+		pipex.command = ft_strtrim(shell->parsing_cmd.latest_command, " ");
 		exec_cmd_loop(shell, &pipex);
 		free(pipex.command);
-		shell->commands.latest_command = NULL;
+		shell->parsing_cmd.latest_command = NULL;
 		ft_concat_tokens(shell, _false);
 	}
 	waitpid(pipex.sub_process_pid, &pipex.status, 0);

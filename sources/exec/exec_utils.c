@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/08 18:04:21 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/09 18:01:21 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ size_t	ft_count_command(t_minishell *shell)
 
 	command_number = 0;
 	ft_concat_tokens(shell, _false);
-	while (shell->commands.latest_command != NULL)
+	while (shell->parsing_cmd.latest_command != NULL)
 	{
-		if (!ft_quote_is_closed(shell->commands.latest_command))
+		if (!ft_quote_is_closed(shell->parsing_cmd.latest_command))
 			ft_concat_quoted_pipes(shell, 0);
 		++command_number;
-		free(shell->commands.latest_command);
-		shell->commands.latest_command = NULL;
+		free(shell->parsing_cmd.latest_command);
+		shell->parsing_cmd.latest_command = NULL;
 		ft_concat_tokens(shell, _false);
 	}
 	ft_default_cmd_struct(shell, _false);

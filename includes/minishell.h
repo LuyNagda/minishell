@@ -38,13 +38,25 @@ typedef struct s_tokens
 	struct s_tokens	*next;
 }					t_tokens;
 
-typedef struct s_commands
+typedef struct s_parsing_cmd
 {
-	t_tokens	*tokens;
 	size_t		last_end;
 	long long	next_start;
+	t_tokens	*tokens;
 	char		*latest_command;
-}				t_commands;
+}				t_parsing_cmd;
+
+
+typedef struct s_commands
+{
+	char				*command_name;
+	char				**arguments;
+	char				**mixed;
+	size_t				position;
+	size_t				arguments_amount;
+	size_t 				commands_amount;
+	struct	s_commands	*next;
+}						t_commands;
 
 typedef struct s_env
 {
@@ -87,21 +99,14 @@ typedef struct s_pipex
 
 typedef struct s_minishell
 {
-	t_boolean	is_running;
-	t_env_map	*env_map;
-	t_message	messages;
+	t_boolean		is_running;
+	t_env_map		*env_map;
+	t_message		messages;
 
-	char		*sended_line;
-	t_commands	commands;
-}				t_minishell;
-
-typedef struct s_builtin
-{
-	char				*name;
-	char				*args;
-	int					(*ptr_func)(t_minishell *minishell);
-	struct s_builtin	*next_builtin;
-}			t_builtin;
+	char			*sended_line;
+	t_parsing_cmd	parsing_cmd;
+	t_commands		*commands;
+}					t_minishell;
 
 /* *****************************************************/
 /* ********************* EXEC **************************/

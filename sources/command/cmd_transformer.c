@@ -22,7 +22,7 @@ static void	ft_delete_cmd_space(t_minishell *shell, size_t space_before, size_t 
 	char		*cmd;
 	t_boolean	used;
 
-	cmd = shell->commands.latest_command;
+	cmd = shell->parsing_cmd.latest_command;
 	used = _false;
 	while (cmd[index])
 	{
@@ -41,15 +41,15 @@ static void	ft_delete_cmd_space(t_minishell *shell, size_t space_before, size_t 
 			used = _true;
 	}
 	cmd = ft_substr(cmd, space_before, ft_strlen(cmd) - space_after);
-	free(shell->commands.latest_command);
-	shell->commands.latest_command = cmd;
+	free(shell->parsing_cmd.latest_command);
+	shell->parsing_cmd.latest_command = cmd;
 }
 
 static int ft_cmd_valid_quotes(t_minishell *shell, size_t start)
 {
-	if (ft_index_is_in_quote(shell->commands.latest_command, start, '"'))
+	if (ft_index_is_in_quote(shell->parsing_cmd.latest_command, start, '"'))
 		return (1);
-	if (ft_index_is_in_quote(shell->commands.latest_command, start, '\''))
+	if (ft_index_is_in_quote(shell->parsing_cmd.latest_command, start, '\''))
 		return (0);
 	return (1);
 }
@@ -57,12 +57,12 @@ static int ft_cmd_valid_quotes(t_minishell *shell, size_t start)
 static int ft_cmd_contains_valid_key(t_minishell *shell, char *key, size_t *start)
 {
 	size_t starting_s = *start;
-	if (!ft_str_contains(shell->commands.latest_command, key, start, starting_s))
+	if (!ft_str_contains(shell->parsing_cmd.latest_command, key, start, starting_s))
 		return 0;
 	if (!ft_cmd_valid_quotes(shell, *start))
 		return 0;
-	if (!(*start == 0 || (start > 0 && shell->commands.latest_command[*start -1] != '$' &&\
-	shell->commands.latest_command[*start + 1] != '$')))
+	if (!(*start == 0 || (start > 0 && shell->parsing_cmd.latest_command[*start -1] != '$' &&\
+	shell->parsing_cmd.latest_command[*start + 1] != '$')))
 		return 0;
 	return 1;
 }
@@ -90,8 +90,8 @@ static void replace_valid_keys(t_minishell *shell, char *key, char *value, size_
 
 	if (ft_cmd_contains_valid_key(shell, key, cmd_index))
 	{
-		before_key = ft_substr(shell->commands.latest_command, 0, *cmd_index);
-		after_key = ft_strdup(shell->commands.latest_command + (*cmd_index + ft_strlen(key)));
+		before_key = ft_substr(shell->parsing_cmd.latest_command, 0, *cmd_index);
+		after_key = ft_strdup(shell->parsing_cmd.latest_command + (*cmd_index + ft_strlen(key)));
 		if (after_key[0] != ' ' && after_key[0] != '"' &&\
 		after_key[0] != '\'' && after_key[0] != '\0')
 		{
@@ -100,8 +100,8 @@ static void replace_valid_keys(t_minishell *shell, char *key, char *value, size_
 			return;
 		}
 		keyed = ft_strjoin(before_key, value);
-		free(shell->commands.latest_command);
-		shell->commands.latest_command = ft_strjoin(keyed, after_key);
+		free(shell->parsing_cmd.latest_command);
+		shell->parsing_cmd.latest_command = ft_strjoin(keyed, after_key);
 		free(before_key);
 		free(keyed);
 	}
@@ -116,14 +116,14 @@ static void replace_invalid_keys(t_minishell *shell, size_t *cmd_index)
 
 	while (ft_cmd_contains_valid_key(shell, "$", cmd_index))
 	{
-		before_key = ft_substr(shell->commands.latest_command, 0, *cmd_index);
-		invalid_key = ft_substr(shell->commands.latest_command, *cmd_index, ft_strlen_until(shell->commands.latest_command + *cmd_index, ' '));
-		after_key = ft_strdup(shell->commands.latest_command + (*cmd_index + ft_strlen(invalid_key)));
+		before_key = ft_substr(shell->parsing_cmd.latest_command, 0, *cmd_index);
+		invalid_key = ft_substr(shell->parsing_cmd.latest_command, *cmd_index, ft_strlen_until(shell->parsing_cmd.latest_command + *cmd_index, ' '));
+		after_key = ft_strdup(shell->parsing_cmd.latest_command + (*cmd_index + ft_strlen(invalid_key)));
 
-		free(shell->commands.latest_command);
+		free(shell->parsing_cmd.latest_command);
 		final = ft_strjoin(before_key, "");
 
-		shell->commands.latest_command = ft_strjoin(final, after_key);
+		shell->parsing_cmd.latest_command = ft_strjoin(final, after_key);
 		free(before_key);
 		free(after_key);
 		free(invalid_key);
@@ -145,9 +145,9 @@ static void	ft_cmd_transform_env(t_minishell *shell)
 		cmd_index = 0;
 		env = env_map_find_node(shell->env_map, env_map_get_key(shell->env_map, index++));
 		key = ft_strjoin("$", env->key);
-		if (ft_str_contains(shell->commands.latest_command, key, &usless, 0))
+		if (ft_str_contains(shell->parsing_cmd.latest_command, key, &usless, 0))
 		{
-			while (shell->commands.latest_command[cmd_index])
+			while (shell->parsing_cmd.latest_command[cmd_index])
 			{
 				replace_valid_keys(shell, key, env->value, &cmd_index);
 				cmd_index++;
@@ -157,7 +157,7 @@ static void	ft_cmd_transform_env(t_minishell *shell)
 		index++;
 	}
 	cmd_index = 0;
-	size_t t = ft_strlen(shell->commands.latest_command);
+	size_t t = ft_strlen(shell->parsing_cmd.latest_command);
 	while (t--)
 	{
 		replace_invalid_keys(shell, &cmd_index);
@@ -171,12 +171,12 @@ void	ft_post_command(t_minishell *shell)
 	char	*tmp;
 
 	ft_delete_cmd_space(shell, 0, 0, 0);
-	last = ft_get_last_char_iw(shell->commands.latest_command);
+	last = ft_get_last_char_iw(shell->parsing_cmd.latest_command);
 	if (last == '|')
 	{
-		tmp = ft_strdup(shell->commands.latest_command);
-		free(shell->commands.latest_command);
-		shell->commands.latest_command = ft_substr(tmp, 0, ft_strlen(tmp) -1);
+		tmp = ft_strdup(shell->parsing_cmd.latest_command);
+		free(shell->parsing_cmd.latest_command);
+		shell->parsing_cmd.latest_command = ft_substr(tmp, 0, ft_strlen(tmp) -1);
 		free(tmp);
 	}
 	ft_cmd_transform_env(shell);

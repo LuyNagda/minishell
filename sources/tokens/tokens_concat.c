@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 21:35:26 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/12/15 20:02:47 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/09 17:59:37 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,22 +67,22 @@ char	*ft_concat_tokens_util_type(t_tokens *tokens, size_t start_pos, t_token_typ
 
 char	*ft_concat_tokens(t_minishell *shell, t_boolean reset_values)
 {
-	long long	n_start;
-	t_commands	*commands;
+	long long		n_start;
+	t_parsing_cmd	*parsing_cmd;
 
-	commands = &shell->commands;
-	if (commands->next_start == -1 || !commands->tokens || ft_get_tokens_amount(commands->tokens) == 0)
+	parsing_cmd = &shell->parsing_cmd;
+	if (parsing_cmd->next_start == -1 || !shell->parsing_cmd.tokens || ft_get_tokens_amount(shell->parsing_cmd.tokens) == 0)
 		return (NULL);
 	if (reset_values)
 		ft_default_cmd_struct(shell, _false);
-	commands->latest_command = ft_concat_tokens_util_type(commands->tokens, commands->last_end, PIPE);
-	commands->last_end += (ft_strlen(commands->latest_command) + 1);
-	n_start = ft_next_token_pos(commands->tokens, PIPE, (long long)commands->last_end);
+	parsing_cmd->latest_command = ft_concat_tokens_util_type(shell->parsing_cmd.tokens, parsing_cmd->last_end, PIPE);
+	parsing_cmd->last_end += (ft_strlen(parsing_cmd->latest_command) + 1);
+	n_start = ft_next_token_pos(shell->parsing_cmd.tokens, PIPE, (long long)parsing_cmd->last_end);
 	if (n_start == -1)
-		commands->next_start = -1;
+		parsing_cmd->next_start = -1;
 	else
-		commands->next_start = n_start;
-	return (commands->latest_command);
+		parsing_cmd->next_start = n_start;
+	return (parsing_cmd->latest_command);
 }
 
 void	ft_concat_quoted_pipes(t_minishell *shell, char *final_str)
@@ -90,13 +90,13 @@ void	ft_concat_quoted_pipes(t_minishell *shell, char *final_str)
 	char	*add_pipe;
 	char	*tmp;
 
-	if (shell->commands.latest_command == NULL)
+	if (shell->parsing_cmd.latest_command == NULL)
 		return ;
-	if (ft_quote_is_closed(shell->commands.latest_command))
-		add_pipe = ft_strdup(shell->commands.latest_command);
+	if (ft_quote_is_closed(shell->parsing_cmd.latest_command))
+		add_pipe = ft_strdup(shell->parsing_cmd.latest_command);
 	else
-		add_pipe = ft_strjoin(shell->commands.latest_command, "|");
-	free(shell->commands.latest_command);
+		add_pipe = ft_strjoin(shell->parsing_cmd.latest_command, "|");
+	free(shell->parsing_cmd.latest_command);
 	if (!final_str)
 		final_str = ft_strdup(add_pipe);
 	else
@@ -107,7 +107,7 @@ void	ft_concat_quoted_pipes(t_minishell *shell, char *final_str)
 	}
 	free(add_pipe);
 	if (ft_quote_is_closed(final_str))
-		shell->commands.latest_command = final_str;
+		shell->parsing_cmd.latest_command = final_str;
 	else
 	{
 		ft_concat_tokens(shell, _false);

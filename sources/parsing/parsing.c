@@ -64,15 +64,15 @@ static void	ft_tokenize(t_minishell *shell)
 	null_token = ft_create_token(0, 0);
 	if (!null_token)
 		return ;
-	shell->commands.tokens = null_token;
+	shell->parsing_cmd.tokens = null_token;
 	while (shell->sended_line[index])
 	{
-		ft_add_black_token(&shell->commands.tokens, \
+		ft_add_black_token(&shell->parsing_cmd.tokens, \
 		ft_create_token(shell->sended_line[index++], 1));
 	}
-	ft_add_black_token(&shell->commands.tokens, ft_create_token('|', PIPE));
+	ft_add_black_token(&shell->parsing_cmd.tokens, ft_create_token('|', PIPE));
 	ft_default_cmd_struct(shell, _false);
-	ft_set_tokens_attributes(shell->commands.tokens);
+	ft_set_tokens_attributes(shell->parsing_cmd.tokens);
 }
 
 static int	ft_has_whitepipe(t_minishell *shell)
@@ -80,18 +80,18 @@ static int	ft_has_whitepipe(t_minishell *shell)
 	char		*command;
 
 	ft_concat_tokens(shell, _false);
-	while (shell->commands.latest_command != NULL)
+	while (shell->parsing_cmd.latest_command != NULL)
 	{
-		if (!ft_quote_is_closed(shell->commands.latest_command))
+		if (!ft_quote_is_closed(shell->parsing_cmd.latest_command))
 			ft_concat_quoted_pipes(shell, 0);
-		command =  shell->commands.latest_command;
+		command =  shell->parsing_cmd.latest_command;
 		if (ft_str_only_whitespace(command))
 		{
 			ft_putstr_fd(shell->messages.whitepipe_error, 2);
 			return (free(command), ft_default_cmd_struct(shell, _false), 2);
 		}
 		free(command);
-		shell->commands.latest_command = NULL;
+		shell->parsing_cmd.latest_command = NULL;
 		ft_concat_tokens(shell, _false);
 	}
 	return (ft_default_cmd_struct(shell, _false), 0);

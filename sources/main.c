@@ -53,7 +53,7 @@ int	main(int argc, char **argv, char **env)
 	shell.env_map = env_map_init(env);
 	ft_shell_loop(&shell);
 	env_map_flush(shell.env_map);
-	ft_flush_tokens(shell.commands.tokens);
+	ft_flush_tokens(shell.parsing_cmd.tokens);
 	rl_clear_history();
 	rl_clear_message();
 	rl_clear_visible_line();
