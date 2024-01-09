@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/08 21:29:25 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/09 12:31:58 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,11 @@ typedef struct s_builtin
 /* *****************************************************/
 
 size_t		ft_count_command(t_minishell *shell);
-void		exec_export(t_minishell *shell, char **split);
-void		exec_unset(t_minishell *shell, char **split);
-void		exec_env(t_minishell *shell);
-void		exec_exit(t_minishell *shell);
-void		exec_builtin(t_minishell *shell, char *line);
+int			exec_export(t_minishell *shell, char **split);
+int			exec_unset(t_minishell *shell, char **split);
+int			exec_env(t_minishell *shell);
+int			exec_exit(t_minishell *shell);
+int			exec_builtin(t_minishell *shell, char *line);
 void		exec_cmd(t_minishell *shell, char *line);
 char		**convert_path_to_array(t_env_map *env_map);
 char		*find_command(char *command, char **path_array);

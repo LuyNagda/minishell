@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 12:24:01 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/08 21:33:25 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/09 12:37:56 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,31 +18,31 @@
 #include "../../dependencies/libft/.includes/ft_printf.h"
 #include "../../dependencies/libft/.includes/string_utils.h"
 
-int	g_status_code;
+//int	g_status_code;
 
-void	exec_clear(void)
+int	exec_clear(void)
 {
-	ft_printf("\ec");
+	return (ft_printf("\ec"), 0);
 }
 
-void	exec_echo(t_minishell *shell, char **split)
+int	exec_echo(t_minishell *shell, char **split)
 {
 	t_env_map *tmp;
 
 	if (ft_str_equals(split[1], "$?"))
-		ft_printf("%d\n", g_status_code);
+		return (ft_printf("%d\n", g_status_code), 0);
 	else if (ft_str_equals(split[1], "-n"))
 	{
 		if (!ft_strncmp(split[2], "$", 1))
 		{
 			tmp = env_map_find_node(shell->env_map, &split[2][1]);
 			if (!tmp)
-				ft_printf("\n");
+				return (ft_printf("\n"), 0);
 			else
-				ft_printf("%s", tmp->value);			
+				return (ft_printf("%s", tmp->value), 0);			
 		}
 		else
-			ft_printf("%s", split[2]);
+			return (ft_printf("%s", split[2]), 0);
 	}
 	else
 	{
@@ -50,61 +50,63 @@ void	exec_echo(t_minishell *shell, char **split)
 		{
 			tmp = env_map_find_node(shell->env_map, &split[1][1]);
 			if (!tmp)
-				ft_printf("\n");
+				return (ft_printf("\n"), 0);
 			else
-				ft_printf("%s\n", tmp->value);			
+				return (ft_printf("%s\n", tmp->value), 0);			
 		}
 		else
-			ft_printf("%s\n", split[1]);
+			return (ft_printf("%s\n", split[1]), 0);
 	}
 }
 
-void	exec_cd(t_minishell *shell, char **split)
+int	exec_cd(t_minishell *shell, char **split)
 {
+	t_env_map	*node;
+
+	node = env_map_find_node(shell->env_map, "HOME");
+	if (node == NULL)
+		return (127);
 	if (split[2])
-	{
-		ft_printf("cd: too many arguments\n");
-		return ;
-	}
-	if (split[1])
+		return (ft_printf("cd: too many arguments\n"), 1);
+	else if (split[1])
 	{
 		if (chdir(split[1]) != 0)
-			ft_printf("cd: %s: %s\n", strerror(errno), split[1]);
+			return (ft_printf("cd: %s: %s\n", strerror(errno), split[1]), 1);
 	}
-	else if (chdir("/home/lunagda") != 0)
-		ft_printf("cd: %s: %s\n", strerror(errno), split[1]);
+	else if (chdir(node->key) != 0)
+		return (ft_printf("cd: %s: %s\n", strerror(errno), split[1]), 127);
 }
 
-void	exec_pwd(char **split)
+int	exec_pwd(char **split)
 {
 	char	cwd[1024];
 
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
-		perror("getcwd() error");
+		return (perror("getcwd() error"), 127);
 	else
-		ft_printf("%s\n", cwd);
+		return (ft_printf("%s\n", cwd), 0);
 }
 
-void	exec_builtin(t_minishell *shell, char *line)
+int	exec_builtin(t_minishell *shell, char *line)
 {
 	char	**split;
 	
 	split = ft_split(line, ' ');
 	if (ft_str_equals(split[0], "clear"))
-		exec_clear();
+		g_status_code = exec_clear();
 	else if (ft_str_equals(split[0], "echo"))
-		exec_echo(shell, split);
+		g_status_code = exec_echo(shell, split);
 	else if (ft_str_equals(split[0], "cd"))
-		exec_cd(shell, split);
+		g_status_code = exec_cd(shell, split);
 	else if (ft_str_equals(split[0], "pwd"))
-		exec_pwd(split);
+		g_status_code = exec_pwd(split);
 	else if (ft_str_equals(split[0], "export"))
-		exec_export(shell, split);
+		g_status_code = exec_export(shell, split);
 	else if (ft_str_equals(split[0], "unset"))
-		exec_unset(shell, split);
+		g_status_code = exec_unset(shell, split);
 	else if (ft_str_equals(split[0], "env"))
-		exec_env(shell);
+		g_status_code = exec_env(shell);
 	else if (ft_str_equals(split[0], "exit"))
-		exec_exit(shell);
-	ft_free_split(split);
+		g_status_code = exec_exit(shell);
+	return (ft_free_split(split), g_status_code);
 }
