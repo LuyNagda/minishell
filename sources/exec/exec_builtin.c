@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 12:24:01 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/09 12:37:56 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/09 15:32:30 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,9 @@ int	exec_echo(t_minishell *shell, char **split)
 int	exec_cd(t_minishell *shell, char **split)
 {
 	t_env_map	*node;
+	t_env_map	*oldpwd;
+	t_env_map	*pwd;
+	char		*cwd;
 
 	node = env_map_find_node(shell->env_map, "HOME");
 	if (node == NULL)
@@ -72,19 +75,33 @@ int	exec_cd(t_minishell *shell, char **split)
 	{
 		if (chdir(split[1]) != 0)
 			return (ft_printf("cd: %s: %s\n", strerror(errno), split[1]), 1);
+		else
+		{
+			oldpwd = env_map_find_node(shell->env_map, "PWD");
+			env_map_replace(shell->env_map, "OLDPWD", oldpwd->value);
+			cwd = get_cwd_for_cd();
+			env_map_replace(shell->env_map, "PWD", cwd);
+		}
 	}
-	else if (chdir(node->key) != 0)
+	else if (chdir(node->value) != 0)
 		return (ft_printf("cd: %s: %s\n", strerror(errno), split[1]), 127);
+	else
+	{
+		oldpwd = env_map_find_node(shell->env_map, "PWD");
+		env_map_replace(shell->env_map, "OLDPWD", oldpwd->value);
+		cwd = get_cwd_for_cd();
+		env_map_replace(shell->env_map, "PWD", cwd);
+	}
 }
 
-int	exec_pwd(char **split)
+int	exec_pwd(t_minishell *shell, char **split)
 {
-	char	cwd[1024];
+	t_env_map	*node;
 
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
-		return (perror("getcwd() error"), 127);
-	else
-		return (ft_printf("%s\n", cwd), 0);
+	node = env_map_find_node(shell->env_map, "PWD");
+	if (node == NULL)
+		return (ft_printf("PWD has been unset.\n"), 1);
+	return (ft_printf("%s\n", node->value), 0);
 }
 
 int	exec_builtin(t_minishell *shell, char *line)
@@ -99,7 +116,7 @@ int	exec_builtin(t_minishell *shell, char *line)
 	else if (ft_str_equals(split[0], "cd"))
 		g_status_code = exec_cd(shell, split);
 	else if (ft_str_equals(split[0], "pwd"))
-		g_status_code = exec_pwd(split);
+		g_status_code = exec_pwd(shell, split);
 	else if (ft_str_equals(split[0], "export"))
 		g_status_code = exec_export(shell, split);
 	else if (ft_str_equals(split[0], "unset"))

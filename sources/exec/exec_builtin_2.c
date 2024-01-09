@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 12:24:01 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/09 12:53:39 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/09 15:19:23 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "../../dependencies/libft/.includes/ft_printf.h"
 #include "../../dependencies/libft/.includes/string_utils.h"
 #include "../../dependencies/libft/.includes/chained_utils.h"
+#include <unistd.h>
 
 //int	g_status_code;
 
@@ -23,6 +24,8 @@ int	exec_export(t_minishell *shell, char **split)
 	char		**export;
 
 	export = ft_split(split[1], '=');
+	if (!export[1])
+		return (0);
 	node = env_map_find_node(shell->env_map, export[0]);
 	if (node != NULL)
 		return (env_map_replace(shell->env_map, export[0], export[1]), 0);
@@ -60,4 +63,14 @@ int	exec_exit(t_minishell *shell)
 {
 	shell->is_running = _false;
 	return (0);
+}
+
+char	*get_cwd_for_cd(void)
+{
+	char	cwd[1024];
+
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+		return (ft_strdup(cwd));
+	else
+		return (NULL);
 }

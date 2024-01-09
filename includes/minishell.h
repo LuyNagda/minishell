@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/09 12:31:58 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/09 13:47:27 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,16 +178,17 @@ int			ft_index_is_in_quote(const char *line, size_t pos, char quote);
 int			ft_index_is_in_quotes(const char *line, size_t pos);
 int			ft_quote_is_closed_range(const char *line, size_t start, size_t end);
 int			ft_str_equals(const char *str1, const char *str2);
-int	ft_str_contains(const char *src, const char *search, size_t *start_at, size_t starting_search);
+int			ft_str_contains(const char *src, const char *search, size_t *start_at, size_t starting_search);
 int			ft_str_starts_with(const char *src, const char *value);
 void		ft_replace_whitespace(char *line, char value);
-char	*ft_replace_all(char *line, const char *replaced, const char *replacer);
+char		*ft_replace_all(char *line, const char *replaced, const char *replacer);
 size_t		ft_find_first(const char *str, char charset);
 size_t		ft_find_first_charset(const char *haystack, const char *needle);
 char		ft_get_last_char_iw(char *line);
 char		ft_get_first_char_iw(char *line);
 int			ft_str_only_whitespace(const char *src);
 
+char		*get_cwd_for_cd(void);
 char		**trim_command_list(char **command_list);
 void		error_msg(char *string);
 t_message	ft_init_messages(void);

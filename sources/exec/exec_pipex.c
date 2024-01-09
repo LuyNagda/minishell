@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/09 12:36:05 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/09 15:05:16 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 //int	g_status_code;
 
-void	child_one(t_pipex *pipex)
+void	child_one(t_minishell *shell, t_pipex *pipex)
 {
 	if (dup2(pipex->c_pipe[0], STDIN_FILENO) == -1)
 		error_msg("DUP2 failed");
@@ -39,12 +39,14 @@ void	child_one(t_pipex *pipex)
 	}
 	if (pipex->path == NULL)
 		exit(127);
+	if (ft_str_equals(pipex->path, "builtin"))
+		exit(exec_builtin(shell, pipex->command_list[0]));
 	if (execve(pipex->path, pipex->command_list, 0) == -1)
 		ft_printf("%s: %s", strerror(errno), pipex->command_list[0]);
 	exit(EXIT_FAILURE);
 }
 
-void	child_middle(t_pipex *pipex)
+void	child_middle(t_minishell *shell, t_pipex *pipex)
 {
 	if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
 		error_msg("DUP2 failed");
@@ -52,12 +54,14 @@ void	child_middle(t_pipex *pipex)
 		error_msg("DUP2 failed");
 	if (pipex->path == NULL)
 		exit(127);
+	//if (ft_str_equals(pipex->path, "builtin"))
+	//	exit(exec_builtin(shell, pipex->command_list[0]));
 	if (execve(pipex->path, pipex->command_list, 0) == -1)
 		ft_printf("%s: %s", strerror(errno), pipex->command_list[0]);
 	exit(EXIT_FAILURE);
 }
 
-void	child_last(t_pipex *pipex)
+void	child_last(t_minishell *shell, t_pipex *pipex)
 {
 	if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
 		error_msg("DUP2 failed");
@@ -68,12 +72,14 @@ void	child_last(t_pipex *pipex)
 	}
 	if (pipex->path == NULL)
 		exit(127);
+	if (ft_str_equals(pipex->path, "builtin"))
+		exit(exec_builtin(shell, pipex->command_list[0]));
 	if (execve(pipex->path, pipex->command_list, 0) == -1)
 		ft_printf("%s: %s", strerror(errno), pipex->command_list[0]);
 	exit(EXIT_FAILURE);
 }
 
-void	exec_cmd_loop(t_pipex *pipex)
+void	exec_cmd_loop(t_minishell *shell,t_pipex *pipex)
 {
 	if (ft_str_contains(pipex->command, ">>", 0, 0))
 	{
@@ -93,16 +99,19 @@ void	exec_cmd_loop(t_pipex *pipex)
 		pipex->command_list = ft_split(pipex->command, ' ');
 	if (pipe(pipex->c_pipe) == -1)
 		error_msg("Pipe");
-	pipex->path = find_command(pipex->command_list[0], pipex->path_array);
+	if (in_builtins(pipex->command))
+		pipex->path = ft_strdup("builtin");
+	else
+		pipex->path = find_command(pipex->command_list[0], pipex->path_array);
 	pipex->sub_process_pid = fork();
 	if (pipex->sub_process_pid < 0)
 		error_msg("Fork");
 	if (pipex->index == 0 && pipex->sub_process_pid == 0)
-		child_one(pipex);
+		child_one(shell, pipex);
 	else if (pipex->index && (pipex->index < pipex->num_of_commands - 1) && pipex->sub_process_pid == 0)
-		child_middle(pipex);
+		child_middle(shell, pipex);
 	else if (pipex->index == pipex->num_of_commands - 1 && pipex->sub_process_pid == 0)
-		child_last(pipex);
+		child_last(shell, pipex);
 	close(pipex->c_pipe[1]);
 	pipex->o_pipe[0] = pipex->c_pipe[0];
 	pipex->index++;
@@ -125,7 +134,7 @@ void	exec_cmd(t_minishell *shell, char *line)
 			ft_concat_quoted_pipes(shell, 0);
 		ft_post_command(shell);
 		pipex.command = ft_strtrim(shell->commands.latest_command, " ");
-		exec_cmd_loop(&pipex);
+		exec_cmd_loop(shell, &pipex);
 		free(pipex.command);
 		shell->commands.latest_command = NULL;
 		ft_concat_tokens(shell, _false);

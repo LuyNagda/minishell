@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 10:54:43 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/08 12:10:47 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/09 13:49:52 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,4 +106,16 @@ char	ft_get_first_char_iw(char *line)
 			return (line[index]);
 	}
 	return (line[index]);
+}
+
+int	ft_str_starts_with(const char *src, const char *value)
+{
+	int	i;
+
+	i = 0;
+	while (src[i] && value[i] && src[i] == value[i])
+		i++;
+	if (value[i] == '\0')
+		return (1);
+	return (0);
 }
