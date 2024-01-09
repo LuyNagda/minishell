@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 23:30:20 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/12/03 04:25:16 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/09 16:44:17 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	ft_free_split(char **words_list)
 	free(words_list);
 }
 
-static char	**fill_array(const char *string, char delimiter, char **words_list)
+static char	**fill_array(const char *string, char delimiter, char **words_list, size_t words)
 {
 	size_t		index;
 	size_t		delimiters;
@@ -56,18 +56,18 @@ static char	**fill_array(const char *string, char delimiter, char **words_list)
 
 	index = 0;
 	delimiters = 0;
-	while (string[index])
+	while (string[index] && delimiters < words)
 	{
 		sep_i = 0;
 		can_read = index + sep_i < ft_strlen(string);
 		if (string[index] != delimiter && can_read)
 		{
-			while (can_read && string[index + sep_i] != delimiter)
+			while (can_read && string[index + sep_i] && string[index + sep_i] != delimiter)
 				can_read = index + sep_i++ < ft_strlen(string);
 			words_list[delimiters] = ft_substr(string, index, sep_i);
 			if (!words_list[delimiters])
 				return (ft_free_split(words_list), NULL);
-			index = index + sep_i -1;
+			index = index + sep_i - 1;
 			delimiters++;
 		}
 		index++;
@@ -86,5 +86,5 @@ char	**ft_split(char const *string, char delimiter)
 	words_list = ft_calloc(count_delimiters + 1, sizeof(char *));
 	if (!words_list)
 		return (NULL);
-	return (fill_array(string, delimiter, words_list));
+	return (fill_array(string, delimiter, words_list, count_delimiters));
 }
