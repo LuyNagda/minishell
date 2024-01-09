@@ -102,6 +102,7 @@ typedef struct s_minishell
 	char			*sended_line;
 	t_parsing_cmd	parsing_cmd;
 	t_commands		*commands;
+	size_t			command_amount;
 
 	t_env_map		*env_map;
 	char			**envp;

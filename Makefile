@@ -19,16 +19,13 @@ FILES =	main.c							\
 		builtins/clear_builtin.c		\
 		builtins/echo_builtin.c			\
 		builtins/env_builtin.c			\
-		builtins/cd_builtin.c			\
 		builtins/exit_builtin.c			\
 		builtins/export_builtin.c		\
 		builtins/pwd_builtin.c			\
 		builtins/unset_builtin.c		\
 		parsing/parsing.c				\
-		parsing/in_builtins.c			\
 		exec/exec_dispatcher.c			\
 		exec/exec_pipex.c				\
-		exec/exec_extern.c				\
 		exec/path_handler.c				\
 		exec/exec_utils.c				\
 		utils/quote_utils.c				\
@@ -56,11 +53,13 @@ $(BUILD_DIRECTORY)%.o: ./sources/%.c Makefile ./includes/*.h
 	$(CC) $(FLAGS) -I ./includes/ $< -o $@
 
 $(BUILD_DIRECTORY):
-	mkdir -p $(BUILD_DIRECTORY)exec	\
-	$(BUILD_DIRECTORY)command		\
-	$(BUILD_DIRECTORY)environment	\
-	$(BUILD_DIRECTORY)utils			\
-	$(BUILD_DIRECTORY)parsing		\
+	mkdir -p $(BUILD_DIRECTORY)exec		\
+	$(BUILD_DIRECTORY)command/parsing	\
+	$(BUILD_DIRECTORY)command/parsed	\
+	$(BUILD_DIRECTORY)environment		\
+	$(BUILD_DIRECTORY)utils				\
+	$(BUILD_DIRECTORY)parsing			\
+	$(BUILD_DIRECTORY)builtins			\
 	$(BUILD_DIRECTORY)tokens
 
 all : $(NAME)

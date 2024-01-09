@@ -27,12 +27,12 @@ void	child_one(t_minishell *shell, t_commands *commands, t_pipex *pipex)
 {
 	if (dup2(pipex->c_pipe[0], STDIN_FILENO) == -1)
 		error_msg("DUP2 failed");
-	if (pipex->num_of_commands != 1)
+	if (shell->command_amount != 1)
 	{
 		if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
 			error_msg("DUP2 failed");
 	}
-	else if (pipex->num_of_commands == 1 && ft_str_contains(commands.raw_command, ">", 0, 0))
+	else if (shell->command_amount == 1 && ft_str_contains(commands->raw_command, ">", 0, 0))
 	{
 		if (dup2(pipex->outfile, STDOUT_FILENO) == -1)
 			error_msg("DUP2 failed");
@@ -65,7 +65,7 @@ void	child_last(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
 	if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
 		error_msg("DUP2 failed");
-	if (ft_str_contains(pipex->command, ">", 0, 0))
+	if (ft_str_contains(command->raw_command, ">", 0, 0))
 	{
 		if (dup2(pipex->outfile, STDOUT_FILENO) == -1)
 			error_msg("DUP2 failed");
@@ -83,14 +83,14 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
 	if (ft_str_contains(command->raw_command, ">>", 0, 0))
 	{
-		pipex->command_list = ft_split(pipex->command, '>');
+		pipex->command_list = ft_split(command->raw_command, '>');
 		pipex->command_list = trim_command_list(pipex->command_list);
 		pipex->outfile = open(pipex->command_list[1], O_WRONLY | O_APPEND | O_CREAT, 0777);
 		pipex->command_list = ft_split(pipex->command_list[0], ' ');
 	}
 	else if (ft_str_contains(command->raw_command, ">", 0, 0))
 	{
-		pipex->command_list = ft_split(pipex->command, '>');
+		pipex->command_list = ft_split(command->raw_command, '>');
 		pipex->command_list = trim_command_list(pipex->command_list);
 		pipex->outfile = open(pipex->command_list[1], O_CREAT | O_RDWR | O_TRUNC, 0777);
 		pipex->command_list = ft_split(pipex->command_list[0], ' ');
@@ -108,7 +108,7 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		error_msg("Fork");
 	if (pipex->index == 0 && pipex->sub_process_pid == 0)
 		child_one(shell, command, pipex);
-	else if (pipex->index && (pipex->index < pipex->num_of_commands - 1) && pipex->sub_process_pid == 0)
+	else if (pipex->index && (pipex->index < shell->command_amount - 1) && pipex->sub_process_pid == 0)
 		child_middle(shell, command, pipex);
 		child_last(shell, command, pipex);
 	close(pipex->c_pipe[1]);
@@ -122,6 +122,7 @@ void	exec_cmd(t_minishell *shell, t_commands *command)
 {
 	t_pipex	pipex;
 
+	shell->command_amount = ft_get_numbers_of_commands(shell->commands);
 	pipex.index = 0;
 	pipex.path_array = convert_path_to_array(shell->env_map);
 	exec_cmd_loop(shell, command, &pipex);
