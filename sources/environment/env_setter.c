@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include "../../dependencies/libft/.includes/string_utils.h"
 #include "stdlib.h"
 
 t_env_map	*env_map_add_back(t_env_map **env_map, t_env_map *new_node, int is_immutable)
@@ -64,6 +65,8 @@ t_env_map	*env_map_remove_from_key(t_env_map *env_map, char *key)
 	{
 		if (ft_str_equals(tmp->next_node->key, key))
 		{
+			if (tmp->next_node->is_immutable)
+				return (NULL);
 			last_node = tmp->next_node;
 			tmp->next_node = tmp->next_node->next_node;
 			free(last_node);
@@ -85,7 +88,8 @@ t_env_map	*env_map_replace(t_env_map *env_map, char *key, char *value)
 	{
 		if (ft_str_equals(tmp->key, key))
 		{
-			tmp->value = value;
+			free(tmp->value);
+			tmp->value = ft_strdup(value);
 			return (env_map);
 		}
 		tmp = tmp->next_node;

@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:36:19 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/12/04 22:35:31 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/09 20:48:03 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,26 @@ void	ft_display_tokens(t_tokens *tokens)
 		if (!tokens->next)
 			break ;
 		tokens = tokens->next;
+	}
+}
+
+void	ft_display_commands_list(t_commands *commands)
+{
+	size_t	command_nb = 0;
+	while (commands)
+	{
+		ft_printf("%i -> Error During Creation : %i \n %i -> Command Raw: %s\n %i -> Command Name: %s\n",command_nb, commands->error_during_creation,command_nb, commands->raw_command,command_nb, commands->command_name);
+		ft_printf("%i -> Arguments (%i)\n", command_nb, commands->arguments_amount);
+		int index = 0;
+		while (commands->arguments[index])
+			ft_printf("|%s|\n", commands->arguments[index++]);
+		ft_printf("%i -> Mixed (%i)\n", command_nb, commands->arguments_amount + 1);
+		index = 0;
+		while (commands->mixed[index])
+			ft_printf("|%s|\n", commands->mixed[index++]);
+		ft_printf("%i -> Already Executed: \n", command_nb, commands->has_already_executed);
+		ft_printf("%i -> Ordered Position In List: \n", command_nb, commands->position);
+		ft_printf(" \n\n-------------------------------\n\n");
+		commands = commands->next_node;
 	}
 }

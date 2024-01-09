@@ -31,14 +31,9 @@ static void	ft_shell_loop(t_minishell *shell)
 			continue ;
 		ft_replace_whitespace(line, ' ');
 		add_history(line);
-		shell->sended_line = ft_strtrim(line, " ");
+		shell->sended_line = line;
 		parse_input(shell);
-		if (ft_str_contains(shell->sended_line, "|", 0, 0) || ft_str_contains(shell->sended_line, "<", 0, 0) || ft_str_contains(shell->sended_line, ">", 0, 0) || !in_builtins(shell->sended_line))
-			exec_cmd(shell, shell->sended_line);
-		else
-			exec_builtin(shell, shell->sended_line);
-		free(line);
-		free(shell->sended_line);
+		ft_dispatch_command(shell);
 	}
 }
 

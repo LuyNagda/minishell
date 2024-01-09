@@ -1,23 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_handler.c                                      :+:      :+:    :+:   */
+/*   exit_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/15 12:48:23 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/12/15 12:50:13 by jbadaire         ###   ########.fr       */
+/*   Created: 2024/01/09 20:25:39 by jbadaire          #+#    #+#             */
+/*   Updated: 2024/01/09 20:32:47 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "../../includes/minishell.h"
 
-void	ft_default_cmd_struct(t_minishell *shell, t_boolean reset_tokens)
+int	exec_exit(t_minishell *shell)
 {
-	shell->parsing_cmd.last_end = 0;
-	shell->parsing_cmd.next_start = 0;
-	shell->parsing_cmd.latest_command = NULL;
-	if (reset_tokens && shell->parsing_cmd.tokens && ft_get_tokens_amount(shell->parsing_cmd.tokens) > 0)
-		ft_flush_tokens(shell->parsing_cmd.tokens);
+	shell->is_running = _false;
+	return (0);
 }
-

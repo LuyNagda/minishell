@@ -15,25 +15,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-size_t	ft_count_command(t_minishell *shell)
-{
-	size_t	command_number;
-
-	command_number = 0;
-	ft_concat_tokens(shell, _false);
-	while (shell->parsing_cmd.latest_command != NULL)
-	{
-		if (!ft_quote_is_closed(shell->parsing_cmd.latest_command))
-			ft_concat_quoted_pipes(shell, 0);
-		++command_number;
-		free(shell->parsing_cmd.latest_command);
-		shell->parsing_cmd.latest_command = NULL;
-		ft_concat_tokens(shell, _false);
-	}
-	ft_default_cmd_struct(shell, _false);
-	return (command_number);
-}
-
 void	error_msg(char *string)
 {
 	perror(string);

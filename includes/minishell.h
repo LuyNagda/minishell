@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/09 13:47:27 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/09 21:50:53 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,17 @@ typedef struct s_parsing_cmd
 	char		*latest_command;
 }				t_parsing_cmd;
 
-
 typedef struct s_commands
 {
+	char				*raw_command;
 	char				*command_name;
 	char				**arguments;
 	char				**mixed;
 	size_t				position;
 	size_t				arguments_amount;
-	size_t 				commands_amount;
-	struct	s_commands	*next;
+	t_boolean			has_already_executed;
+	t_boolean			error_during_creation;
+	struct	s_commands	*next_node;
 }						t_commands;
 
 typedef struct s_env
@@ -85,14 +86,10 @@ typedef struct s_pipex
 	int		sub_process_pid;
 	int		c_pipe[2];
 	int		o_pipe[2];
-	int		num_of_commands;
 	int		infile;
 	int		outfile;
-	char	**envp;
 	char	**path_array;
 	char	*path;
-	char	**split;
-	char	*command;
 	char	**command_list;
 	char	*temp;
 }			t_pipex;
@@ -100,25 +97,37 @@ typedef struct s_pipex
 typedef struct s_minishell
 {
 	t_boolean		is_running;
-	t_env_map		*env_map;
 	t_message		messages;
 
 	char			*sended_line;
 	t_parsing_cmd	parsing_cmd;
 	t_commands		*commands;
+
+	t_env_map		*env_map;
+	char			**envp;
+
+	t_pipex			*pipex;
 }					t_minishell;
 
+/* *****************************************************/
+/* ******************** BUILTIN ************************/
+/* *****************************************************/
+int			ft_dispatch_builtin(t_minishell *shell, t_commands *command);
+void		exec_export(t_minishell *shell, t_commands *command);
+int			exec_unset(t_minishell *shell, t_commands *command);
+void		exec_echo(t_minishell *shell, t_commands *commands);
+int			exec_pwd(t_minishell *shell);
+int			exec_cd(t_minishell *shell, t_commands *command);
+int			exec_env(t_minishell *shell);
+int			exec_exit(t_minishell *shell);
+int			exec_clear(void);
 /* *****************************************************/
 /* ********************* EXEC **************************/
 /* *****************************************************/
 
-size_t		ft_count_command(t_minishell *shell);
-int			exec_export(t_minishell *shell, char **split);
-int			exec_unset(t_minishell *shell, char **split);
-int			exec_env(t_minishell *shell);
-int			exec_exit(t_minishell *shell);
-int			exec_builtin(t_minishell *shell, char *line);
-void		exec_cmd(t_minishell *shell, char *line);
+void		ft_dispatch_command(t_minishell *shell);
+void		exec_cmd(t_minishell *shell, t_commands *command);
+int			is_builtins(t_commands *command);
 char		**convert_path_to_array(t_env_map *env_map);
 char		*find_command(char *command, char **path_array);
 void		exec_redirection(t_minishell *shell, char *line);
@@ -144,14 +153,28 @@ void		env_map_flush(t_env_map *env_map);
 size_t		env_map_get_size(t_env_map *env_map);
 
 /* *****************************************************/
+/* ******************** COMMANDS ***********************/
+/* *****************************************************/
+
+size_t		ft_get_numbers_of_commands(t_commands *commands_list);
+t_commands	*ft_get_command_from_pos(t_commands *command_list, size_t command_node_pos);
+t_commands	*ft_add_command(t_commands **commands, t_commands *new_node);
+
+t_commands	*ft_command_list_init();
+t_commands	*ft_create_command_node(char *cmd);
+void		ft_flush_command_list(t_commands *list);
+
+void		*ft_populate_command_list(t_minishell *shell);
+
+/* *****************************************************/
 /* ******************** PARSING ************************/
 /* *****************************************************/
 
 void		parse_input(t_minishell *shell);
-int			in_builtins(char *command);
 char		*ft_concat_tokens(t_minishell *shell, t_boolean reset_values);
 void		ft_concat_quoted_pipes(t_minishell *shell, char *final_str);
 void		ft_post_command(t_minishell *shell);
+
 /* *****************************************************/
 /* ******************** TOKENS *************************/
 /* *****************************************************/
@@ -184,6 +207,7 @@ int			ft_index_is_in_quotes(const char *line, size_t pos);
 int			ft_quote_is_closed_range(const char *line, size_t start, size_t end);
 int			ft_str_equals(const char *str1, const char *str2);
 int			ft_str_contains(const char *src, const char *search, size_t *start_at, size_t starting_search);
+char		**ft_memcpy_array(char **src, size_t start);
 int			ft_str_starts_with(const char *src, const char *value);
 void		ft_replace_whitespace(char *line, char value);
 char		*ft_replace_all(char *line, const char *replaced, const char *replacer);
@@ -193,7 +217,6 @@ char		ft_get_last_char_iw(char *line);
 char		ft_get_first_char_iw(char *line);
 int			ft_str_only_whitespace(const char *src);
 
-char		*get_cwd_for_cd(void);
 char		**trim_command_list(char **command_list);
 void		error_msg(char *string);
 t_message	ft_init_messages(void);
@@ -202,6 +225,7 @@ t_message	ft_init_messages(void);
 /* ********************* DEBUG *************************/
 /* *****************************************************/
 
+void		ft_display_commands_list(t_commands *commands);
 void		ft_display_env_map(t_env_map *env_map);
 void		ft_display_env_array(char **env_array);
 void		ft_display_tokens(t_tokens *tokens);

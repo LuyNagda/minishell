@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 09:06:13 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/04 15:19:03 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/09 19:44:52 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,6 @@ void	parse_input(t_minishell *shell)
 	ft_tokenize(shell);
 	if (ft_has_whitepipe(shell) != 0)
 		return (free(shell->sended_line));
-	//ft_dispatch_commands(shell);
-	//free(shell->sended_line);
+	ft_populate_command_list(shell);
+	free(shell->sended_line);
 }

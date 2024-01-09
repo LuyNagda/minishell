@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../../dependencies/libft/.includes/string_utils.h"
-#include "../../dependencies/libft/.includes/char_utils.h"
+#include "minishell.h"
+#include "../../../dependencies/libft/.includes/string_utils.h"
+#include "../../../dependencies/libft/.includes/char_utils.h"
 #include <stdlib.h>
-#include "../../dependencies/libft/.includes/ft_printf.h"
+#include "../../../dependencies/libft/.includes/ft_printf.h"
 
 
 static void	ft_delete_cmd_space(t_minishell *shell, size_t space_before, size_t space_after, size_t index)

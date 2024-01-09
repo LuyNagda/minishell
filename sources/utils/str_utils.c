@@ -6,13 +6,14 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 10:54:43 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/09 13:49:52 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/09 19:10:27 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../dependencies/libft/.includes/char_utils.h"
 #include "../../dependencies/libft/.includes/string_utils.h"
+#include "../../dependencies/libft/.includes/memory_utils.h"
 
 int	ft_str_equals(const char *str1, const char *str2)
 {
@@ -118,4 +119,33 @@ int	ft_str_starts_with(const char *src, const char *value)
 	if (value[i] == '\0')
 		return (1);
 	return (0);
+}
+
+char	**ft_memcpy_array(char **src, size_t start)
+{
+	char	*current;
+	char	**dest;
+	size_t	index;
+	size_t	tab_len;
+
+	dest = NULL;
+	if (!src)
+		return (NULL);
+	tab_len = ft_str_tab_len(src);
+	if (tab_len <= 0)
+		return (NULL);
+	dest = ft_calloc(tab_len - start, sizeof (char *));
+	if (!dest)
+		return (NULL);
+	index = 0;
+	while (src[start] && tab_len >= start)
+	{
+		current = ft_strdup(src[start]);
+		if (!current)
+			break;
+		dest[index] = current;
+		start++;
+		index++;
+	}
+	return (dest);
 }

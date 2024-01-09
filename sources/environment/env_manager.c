@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:43:45 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/12/18 17:30:32 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/09 21:35:39 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ t_env_map	*env_map_init(char **envp)
 	env_map = malloc(sizeof(t_env_map));
 	if (!env_map)
 		return (NULL);
-	env_map->is_system = 0;
-	env_map->has_equal = 0;
-	env_map->is_immutable = 0;
-	env_map->key = NULL;
-	env_map->value = NULL;
+	env_map->is_system = _true;
+	env_map->has_equal = _true;
+	env_map->is_immutable = _true;
+	env_map->key = "?";
+	env_map->value = "0";
 	env_map->next_node = NULL;
 	env_array_to_map(&env_map, envp);
 	return (env_map);

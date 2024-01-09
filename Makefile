@@ -4,8 +4,10 @@ MAKE_LIBFT = make -C ./dependencies/libft
 LIBFT = ./dependencies/libft/build/libft.a
 
 FILES =	main.c							\
-		command/cmd_handler.c			\
-		command/cmd_transformer.c		\
+		command/parsing/cmd_handler.c	\
+		command/parsing/cmd_transformer.c\
+		command/parsed/command_handler.c\
+		command/parsed/command_manager.c\
 		environment/env_getter.c		\
 		environment/env_setter.c		\
 		environment/env_manager.c		\
@@ -13,10 +15,18 @@ FILES =	main.c							\
 		tokens/tokens_handler.c			\
 		tokens/tokens_concat.c			\
 		tokens/tokens_utils.c			\
+		builtins/cd_builtin.c			\
+		builtins/clear_builtin.c		\
+		builtins/echo_builtin.c			\
+		builtins/env_builtin.c			\
+		builtins/cd_builtin.c			\
+		builtins/exit_builtin.c			\
+		builtins/export_builtin.c		\
+		builtins/pwd_builtin.c			\
+		builtins/unset_builtin.c		\
 		parsing/parsing.c				\
 		parsing/in_builtins.c			\
-		exec/exec_builtin.c				\
-		exec/exec_builtin_2.c			\
+		exec/exec_dispatcher.c			\
 		exec/exec_pipex.c				\
 		exec/exec_extern.c				\
 		exec/path_handler.c				\
