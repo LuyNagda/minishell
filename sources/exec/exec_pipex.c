@@ -23,7 +23,7 @@
 
 //int	g_status_code;
 
-void	child_one(t_minishell *shell, t_commands commands, t_pipex *pipex)
+void	child_one(t_minishell *shell, t_commands *commands, t_pipex *pipex)
 {
 	if (dup2(pipex->c_pipe[0], STDIN_FILENO) == -1)
 		error_msg("DUP2 failed");
@@ -40,13 +40,13 @@ void	child_one(t_minishell *shell, t_commands commands, t_pipex *pipex)
 	if (pipex->path == NULL)
 		exit(127);
 	if (ft_str_equals(pipex->path, "builtin"))
-		exit(ft_dispatch_builtin(shell, pipex->command_list[0]));
+		exit(ft_dispatch_builtin(shell, commands));
 	if (execve(pipex->path, pipex->command_list, 0) == -1)
 		ft_printf("%s: %s", strerror(errno), pipex->command_list[0]);
 	exit(EXIT_FAILURE);
 }
 
-void	child_middle(t_minishell *shell, t_commands command, t_pipex *pipex)
+void	child_middle(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
 	if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
 		error_msg("DUP2 failed");
@@ -61,7 +61,7 @@ void	child_middle(t_minishell *shell, t_commands command, t_pipex *pipex)
 	exit(EXIT_FAILURE);
 }
 
-void	child_last(t_minishell *shell, t_commands command, t_pipex *pipex)
+void	child_last(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
 	if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
 		error_msg("DUP2 failed");
@@ -73,7 +73,7 @@ void	child_last(t_minishell *shell, t_commands command, t_pipex *pipex)
 	if (pipex->path == NULL)
 		exit(127);
 	if (ft_str_equals(pipex->path, "builtin"))
-		exit(ft_dispatch_builtin(shell, pipex->command_list[0]));
+		exit(ft_dispatch_builtin(shell, command));
 	if (execve(pipex->path, pipex->command_list, 0) == -1)
 		ft_printf("%s: %s", strerror(errno), pipex->command_list[0]);
 	exit(EXIT_FAILURE);
@@ -99,7 +99,7 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		pipex->command_list = ft_split(command->raw_command, ' ');
 	if (pipe(pipex->c_pipe) == -1)
 		error_msg("Pipe");
-	if (in_builtins(command->command_name))
+	if (is_builtins(command))
 		pipex->path = ft_strdup("builtin");
 	else
 		pipex->path = find_command(pipex->command_list[0], pipex->path_array);
@@ -107,11 +107,10 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	if (pipex->sub_process_pid < 0)
 		error_msg("Fork");
 	if (pipex->index == 0 && pipex->sub_process_pid == 0)
-		child_one(shell, pipex);
+		child_one(shell, command, pipex);
 	else if (pipex->index && (pipex->index < pipex->num_of_commands - 1) && pipex->sub_process_pid == 0)
-		child_middle(shell, pipex);
-	else if (pipex->index == pipex->num_of_commands - 1 && pipex->sub_process_pid == 0)
-		child_last(shell, pipex);
+		child_middle(shell, command, pipex);
+		child_last(shell, command, pipex);
 	close(pipex->c_pipe[1]);
 	pipex->o_pipe[0] = pipex->c_pipe[0];
 	pipex->index++;

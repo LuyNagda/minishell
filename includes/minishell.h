@@ -131,7 +131,6 @@ int			is_builtins(t_commands *command);
 char		**convert_path_to_array(t_env_map *env_map);
 char		*find_command(char *command, char **path_array);
 void		exec_redirection(t_minishell *shell, char *line);
-void		exec_simple_cmd(t_minishell *minishell, char *cmd);
 
 /* *****************************************************/
 /* ********************** ENV **************************/
