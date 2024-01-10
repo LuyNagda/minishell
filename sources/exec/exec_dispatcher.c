@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/09 20:35:26 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/10 02:03:44 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void ft_dispatch_command(t_minishell *shell)
 	{
 		if (tmp->error_during_creation)
 			break;
+		ft_display_commands_list(shell->commands);
 		if (!is_builtins(tmp))
 			exec_cmd(shell, tmp);
 		else

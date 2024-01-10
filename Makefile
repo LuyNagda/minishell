@@ -4,34 +4,34 @@ MAKE_LIBFT = make -C ./dependencies/libft
 LIBFT = ./dependencies/libft/build/libft.a
 
 FILES =	main.c							\
-		command/parsing/cmd_handler.c	\
-		command/parsing/cmd_transformer.c\
-		command/parsed/command_handler.c\
-		command/parsed/command_manager.c\
-		environment/env_getter.c		\
-		environment/env_setter.c		\
-		environment/env_manager.c		\
-		environment/env_transformer.c	\
-		tokens/tokens_handler.c			\
-		tokens/tokens_concat.c			\
-		tokens/tokens_utils.c			\
 		builtins/cd_builtin.c			\
 		builtins/clear_builtin.c		\
 		builtins/echo_builtin.c			\
 		builtins/env_builtin.c			\
 		builtins/exit_builtin.c			\
 		builtins/export_builtin.c		\
-		builtins/pwd_builtin.c			\
 		builtins/unset_builtin.c		\
-		parsing/parsing.c				\
+		builtins/pwd_builtin.c			\
+		command/command_handler.c		\
+		command/command_manager.c		\
+		environment/env_getter.c		\
+		environment/env_manager.c		\
+		environment/env_setter.c		\
+		environment/env_transformer.c	\
 		exec/exec_dispatcher.c			\
 		exec/exec_pipex.c				\
 		exec/path_handler.c				\
 		exec/exec_utils.c				\
+		parsing/on_parsing.c			\
+		parsing/post_parsing.c			\
+		parsing/pre_parsing.c			\
+		tokens/tokenizer.c				\
+		tokens/tokens_handler.c			\
+		tokens/tokens_concat.c			\
+		tokens/tokens_utils.c			\
 		utils/quote_utils.c				\
 		utils/str_utils.c				\
 		utils/messages_utils.c			\
-		utils/history_utils.c			\
 		utils/debug.c					\
 
 BUILD_DIRECTORY = ./build/
@@ -54,8 +54,7 @@ $(BUILD_DIRECTORY)%.o: ./sources/%.c Makefile ./includes/*.h
 
 $(BUILD_DIRECTORY):
 	mkdir -p $(BUILD_DIRECTORY)exec		\
-	$(BUILD_DIRECTORY)command/parsing	\
-	$(BUILD_DIRECTORY)command/parsed	\
+	$(BUILD_DIRECTORY)command			\
 	$(BUILD_DIRECTORY)environment		\
 	$(BUILD_DIRECTORY)utils				\
 	$(BUILD_DIRECTORY)parsing			\

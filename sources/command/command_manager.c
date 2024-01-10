@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/minishell.h"
-#include "../../../dependencies/libft/.includes/string_utils.h"
+#include "../../includes/minishell.h"
+#include "../../dependencies/libft/.includes/string_utils.h"
 #include "stdlib.h"
 
 t_commands	*ft_command_list_init()

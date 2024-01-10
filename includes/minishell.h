@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/09 21:50:53 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/10 07:36:00 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,26 @@ typedef enum e_token
 	REDIRECT_OUT = 6,
 	REDIRECT_OUT_DOUBLE = 7,
 	DOUBLE_QUOTE = 8,
-	SIMPLE_QUOTE = 9
+	SIMPLE_QUOTE = 9,
 }	t_token_type;
+
+typedef enum e_parsing_result
+{
+	INVALID_INPUT,
+	ERROR,
+	SUCCESS
+}	t_parsing_result;
 
 typedef struct s_tokens
 {
 	t_token_type	type;
-	char			value;
+	char			*value;
+	struct s_tokens	*previous;
 	struct s_tokens	*next;
 }					t_tokens;
 
 typedef struct s_parsing_cmd
 {
-	size_t		last_end;
-	long long	next_start;
 	t_tokens	*tokens;
 	char		*latest_command;
 }				t_parsing_cmd;
@@ -140,7 +146,6 @@ void		exec_redirection(t_minishell *shell, char *line);
 t_env_map	*env_map_init(char **env_array);
 t_env_map	*ft_create_env_node(char *k, char *v, int has_equals, int is_system);
 t_env_map	*env_map_add_back(t_env_map **env_map, t_env_map *new_node, int is_immutable);
-t_env_map	*env_map_remove_back(t_env_map *env_map);
 t_env_map	*env_map_remove_from_key(t_env_map *env_map, char *key);
 t_env_map	*env_map_replace(t_env_map *env_map, char *key, char *value);
 t_env_map	*env_map_find_node(t_env_map *env_map, char *key);
@@ -170,52 +175,45 @@ void		*ft_populate_command_list(t_minishell *shell);
 /* ******************** PARSING ************************/
 /* *****************************************************/
 
-void		parse_input(t_minishell *shell);
-char		*ft_concat_tokens(t_minishell *shell, t_boolean reset_values);
-void		ft_concat_quoted_pipes(t_minishell *shell, char *final_str);
-void		ft_post_command(t_minishell *shell);
+t_parsing_result	pre_parsing(t_minishell *shell);
+t_parsing_result	on_parse(t_minishell *shell);
+void				post_parsing(t_minishell *shell);
+
 
 /* *****************************************************/
 /* ******************** TOKENS *************************/
 /* *****************************************************/
 
-t_tokens	*ft_create_token(char token, t_token_type token_type);
-void		ft_add_black_token(t_tokens **tokens_list, t_tokens *token);
+void		tokenize_input (t_minishell *shell);
+t_tokens	*ft_create_token(char *token, t_token_type token_type);
+void		ft_add_back_token(t_tokens **tokens_list, t_tokens *token);
 void		ft_flush_tokens(t_tokens *tokens);
-void		ft_default_cmd_struct(t_minishell *shell, t_boolean reset_tokens);
+size_t		get_current_token_pos(t_tokens *tokens);
 
-char		*ft_concat_same_tokens_type(t_tokens *tokens, t_token_type token_type);
-char		*ft_concat_tokens_util_type(t_tokens *tokens, size_t start_pos, t_token_type type);
-char		*ft_concat_tokens_util_end(t_tokens *tokens, size_t start_pos);
+char		*rebuild_string_from_token(t_minishell *shell);
+void		ft_concat_quoted_pipes(t_minishell *shell, char *final_str);
 
+size_t		ft_tokens_len(t_tokens *tokens);
 size_t		ft_get_tokens_amount(t_tokens *tokens);
 size_t		ft_get_tokens_type_amount(t_tokens *tokens, t_token_type tokenType);
 long long	ft_next_token_pos(t_tokens *tok, t_token_type type, long long start);
-size_t		ft_total_length(t_tokens *tokens);
 
 /* *****************************************************/
 /* ********************* UTILS *************************/
 /* *****************************************************/
 
-int			ft_has_valid_history(char *line);
-
-int			ft_is_quote(char c, char quote);
-int			ft_count_quotes(char *line, char character);
 int			ft_quote_is_closed(const char *line);
 int			ft_index_is_in_quote(const char *line, size_t pos, char quote);
 int			ft_index_is_in_quotes(const char *line, size_t pos);
 int			ft_quote_is_closed_range(const char *line, size_t start, size_t end);
 int			ft_str_equals(const char *str1, const char *str2);
-int			ft_str_contains(const char *src, const char *search, size_t *start_at, size_t starting_search);
+int			ft_str_index_of(const char *src, const char *search, size_t *start_at, size_t starting_search);
+int			ft_str_contains(const char *src, const char *search, size_t starting_search);
 char		**ft_memcpy_array(char **src, size_t start);
 int			ft_str_starts_with(const char *src, const char *value);
 void		ft_replace_whitespace(char *line, char value);
-char		*ft_replace_all(char *line, const char *replaced, const char *replacer);
-size_t		ft_find_first(const char *str, char charset);
-size_t		ft_find_first_charset(const char *haystack, const char *needle);
 char		ft_get_last_char_iw(char *line);
 char		ft_get_first_char_iw(char *line);
-int			ft_str_only_whitespace(const char *src);
 
 char		**trim_command_list(char **command_list);
 void		error_msg(char *string);

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/09 15:21:27 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/10 07:03:22 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,16 @@ static void	ft_shell_loop(t_minishell *shell)
 	while (shell->is_running)
 	{
 		line = readline(shell->messages.minishell_prefix);
-		if (!line || !ft_has_valid_history(line))
-			continue ;
-		ft_replace_whitespace(line, ' ');
-		add_history(line);
-		shell->sended_line = line;
-		parse_input(shell);
-		ft_dispatch_command(shell);
+		shell->sended_line = ft_strtrim(line, " ");
+		free(line);
+		if (pre_parsing(shell) != SUCCESS)
+			continue;
+		add_history(shell->sended_line);
+		tokenize_input(shell);
+		on_parse(shell);
+		//post_parsing(shell);
+		//ft_dispatch_command(shell);
+		ft_flush_tokens(shell->parsing_cmd.tokens);
 	}
 }
 

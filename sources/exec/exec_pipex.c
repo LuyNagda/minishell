@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/09 15:05:16 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/09 22:26:12 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	child_one(t_minishell *shell, t_commands *commands, t_pipex *pipex)
 		if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
 			error_msg("DUP2 failed");
 	}
-	else if (shell->command_amount == 1 && ft_str_contains(commands->raw_command, ">", 0, 0))
+	else if (shell->command_amount == 1 && ft_str_contains(commands->raw_command, ">", 0))
 	{
 		if (dup2(pipex->outfile, STDOUT_FILENO) == -1)
 			error_msg("DUP2 failed");
@@ -65,7 +65,7 @@ void	child_last(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
 	if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
 		error_msg("DUP2 failed");
-	if (ft_str_contains(command->raw_command, ">", 0, 0))
+	if (ft_str_contains(command->raw_command, ">", 0))
 	{
 		if (dup2(pipex->outfile, STDOUT_FILENO) == -1)
 			error_msg("DUP2 failed");
@@ -81,14 +81,14 @@ void	child_last(t_minishell *shell, t_commands *command, t_pipex *pipex)
 
 void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
-	if (ft_str_contains(command->raw_command, ">>", 0, 0))
+	if (ft_str_contains(command->raw_command, ">>", 0))
 	{
 		pipex->command_list = ft_split(command->raw_command, '>');
 		pipex->command_list = trim_command_list(pipex->command_list);
 		pipex->outfile = open(pipex->command_list[1], O_WRONLY | O_APPEND | O_CREAT, 0777);
 		pipex->command_list = ft_split(pipex->command_list[0], ' ');
 	}
-	else if (ft_str_contains(command->raw_command, ">", 0, 0))
+	else if (ft_str_contains(command->raw_command, ">", 0))
 	{
 		pipex->command_list = ft_split(command->raw_command, '>');
 		pipex->command_list = trim_command_list(pipex->command_list);

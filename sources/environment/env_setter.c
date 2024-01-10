@@ -32,27 +32,6 @@ t_env_map	*env_map_add_back(t_env_map **env_map, t_env_map *new_node, int is_imm
 	return (*env_map);
 }
 
-t_env_map	*env_map_remove_back(t_env_map *env_map)
-{
-	t_env_map	*tmp;
-	t_env_map	*last_node;
-
-	if (!env_map)
-		return (NULL);
-	if (!env_map->next_node)
-	{
-		free(env_map);
-		return (NULL);
-	}
-	tmp = env_map;
-	while (tmp->next_node->next_node)
-		tmp = tmp->next_node;
-	last_node = tmp->next_node;
-	tmp->next_node = NULL;
-	free(last_node);
-	return (env_map);
-}
-
 t_env_map	*env_map_remove_from_key(t_env_map *env_map, char *key)
 {
 	t_env_map	*tmp;
