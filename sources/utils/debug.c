@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:36:19 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/10 00:43:18 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/10 14:15:42 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ void	ft_display_tokens(t_tokens *tokens)
 {
 	while (tokens)
 	{
-		ft_printf("type = {%d},	value = {%s},	pos = {%d}\n", tokens->type, tokens->value, get_current_token_pos(tokens));
+		ft_printf("type = {%d},\0", tokens->type);
+		ft_printf("		value = {%s},\0",tokens->value);
+		ft_printf("		pos = {%d}\n",get_current_token_pos(tokens));
+
 		if (!tokens->next)
 			break ;
 		tokens = tokens->next;

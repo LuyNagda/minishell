@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:19:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/10 10:43:27 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/10 17:03:07 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../includes/minishell.h"
@@ -15,13 +15,29 @@
 #include "../../dependencies/libft/.includes/ft_printf.h"
 #include <stdlib.h>
 
-int is_variable_in_string(char *str, size_t index)
+/**
+ * @brief Checks if a variable in a string is not within single quotes.
+ *
+ * This function determines whether a variable in a string, indicated by the
+ * given index, is not within single quotes. It considers escaped quotes and
+ * tracks the current quote status to make the decision.
+ *
+ * @param str The input string.
+ * @param index The index of the variable in the string.
+ * @return 1 if the variable is not within single quotes, 0 otherwise.
+ */
+static int is_variable_in_string(const char *str, size_t index)
 {
-	int inside_single_quotes = 0;
-	int inside_double_quotes = 0;
-	char current_quote = 0; // 0: pas de quote, ' ou " sinon
+	int		inside_single_quotes;
+	int		inside_double_quotes;
+	char	current_quote;
+	size_t	i;
 
-	for (size_t i = 0; i <= index; ++i)
+	inside_single_quotes = 0;
+	inside_double_quotes = 0;
+	current_quote = 0;
+	i = 0;
+	while (i <= index)
 	{
 		if (str[i] == '\'' && (i == 0 || str[i - 1] != '\\'))
 		{
@@ -35,27 +51,14 @@ int is_variable_in_string(char *str, size_t index)
 				current_quote = inside_double_quotes ? 0 : '"';
 			inside_double_quotes = !inside_double_quotes;
 		}
+		i++;
 	}
 	return (current_quote == 0 || current_quote == '"');
 }
 
 static t_boolean ft_token_is_in_expendable_quote(t_minishell *shell, char *rebuilded_string, size_t token_pos)
 {
-	size_t len;
-	size_t index;
-	t_tokens *tmp;
-
-	index = 0;
-	len = 0;
-	tmp = shell->parsing_cmd.tokens;
-	while (tmp)
-	{
-		len += ft_strlen(tmp->value);
-		tmp = tmp->next;
-		index++;
-		if (token_pos == index)
-			break;
-	}
+	size_t len = get_index_from_token(shell, token_pos);
 	return (is_variable_in_string(rebuilded_string, len));
 }
 
@@ -101,7 +104,7 @@ static t_boolean contains_valid_key(t_minishell *shell, t_tokens *token)
 		return (_false);
 	nb_dollars = 0;
 	previous = token->previous;
-	while (token_pos > 0 && previous && previous->value && previous->value[0] == '$' && ++nb_dollars)
+	while (previous && previous->value && previous->value[0] == '$' && ++nb_dollars)
 		previous = previous->previous;
 	if (nb_dollars != 1)
 		return (_false);
@@ -141,6 +144,8 @@ t_parsing_result on_parse(t_minishell *shell)
 	if (ft_has_only_whitespace_between_pipes(shell) != 0)
 		return (ft_putstr_fd(shell->messages.whitepipe_error, 2), free(shell->sended_line), INVALID_INPUT);
 	treat_variable_keys(shell);
+	ft_display_tokens(shell->parsing_cmd.tokens);
+
 	//TODO: Build t_command
 	return (SUCCESS);
 }

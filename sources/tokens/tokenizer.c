@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:16:57 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/10 07:01:27 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/10 17:04:10 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,54 +36,65 @@ static void ft_pre_process_token_type(t_tokens *tmp)
 	}
 }
 
-static void ft_post_process_token_type(t_tokens *tmp)
+static t_boolean ft_token_is_in_quote(t_minishell *shell, char *rebuilded_string, size_t token_pos)
 {
-	t_tokens *next;
-	while (tmp)
+	size_t len = get_index_from_token(shell, token_pos);
+	return (ft_index_is_in_quotes(rebuilded_string, len));
+}
+
+static void post_process_redirections(t_tokens *tmp)
+{
+	t_tokens	*next;
+
+	if (tmp->type == REDIRECT_OUT && tmp->next && tmp->next->type == REDIRECT_OUT)
 	{
-		if (tmp->type == REDIRECT_OUT && tmp->next && tmp->next->type == REDIRECT_OUT)
-		{
-			tmp->type = REDIRECT_OUT_DOUBLE;
-			free(tmp->value);
-			tmp->value = ft_strdup(">>");
-			next = tmp->next->next;
-			free(tmp->next);
-			tmp->next = next;
-		}
-		else if (tmp->type == REDIRECT_IN && tmp->next && tmp->next->type == REDIRECT_IN)
-		{
-			tmp->type = REDIRECT_IN_DOUBLE;
-			free(tmp->value);
-			tmp->value = ft_strdup("<<");
-			next = tmp->next->next;
-			free(tmp->next);
-			tmp->next = next;
-		}
-		tmp = tmp->next;
+		tmp->type = REDIRECT_OUT_DOUBLE;
+		free(tmp->value);
+		tmp->value = ft_strdup(">>");
+		next = tmp->next->next;
+		free(tmp->next);
+		tmp->next = next;
+	}
+	else if (tmp->type == REDIRECT_IN && tmp->next && tmp->next->type == REDIRECT_IN)
+	{
+		tmp->type = REDIRECT_IN_DOUBLE;
+		free(tmp->value);
+		tmp->value = ft_strdup("<<");
+		next = tmp->next->next;
+		free(tmp->next);
+		tmp->next = next;
 	}
 }
 
-static t_boolean is_word(char c)
+static void ft_post_process_token_type(t_tokens *tmp, t_minishell *shell)
 {
-	return (ft_is_alpha_num(c));
+	char		*rebuilded;
+
+	rebuilded = rebuild_string_from_token(shell);
+	while (tmp)
+	{
+		post_process_redirections(tmp);
+		tmp = tmp->next;
+	}
+	if (rebuilded)
+		free(rebuilded);
 }
 
-static void ft_split_to_tokens(t_minishell *shell)
+static void ft_split_to_tokens(t_minishell *shell, size_t current_position, int tmp)
 {
-	size_t current_position;
 	char *sended;
-	int tmp;
 
 	sended = shell->sended_line;
+
 	while (sended[0])
 	{
-		if (!is_word(sended[0]))
+		if (!ft_is_alpha_num(sended[0]))
 		{
 			ft_add_back_token(&shell->parsing_cmd.tokens, ft_create_token(ft_substr(sended++, 0, 1), 1));
 			continue;
 		}
 		current_position = 0;
-		while (sended[current_position] && (is_word(sended[current_position])))
+		while (sended[current_position] && ft_is_alpha_num((sended[current_position])))
 			current_position++;
 		ft_add_back_token(&shell->parsing_cmd.tokens, ft_create_token(ft_substr(sended, 0, current_position), 1));
 		tmp = 0;
@@ -95,7 +106,7 @@ static void ft_split_to_tokens(t_minishell *shell)
 void tokenize_input(t_minishell *shell)
 {
 	shell->parsing_cmd.tokens = ft_create_token(0, 0);
-	ft_split_to_tokens(shell);
+	ft_split_to_tokens(shell, 0, 0);
 	ft_pre_process_token_type(shell->parsing_cmd.tokens);
-	ft_post_process_token_type(shell->parsing_cmd.tokens);
+	ft_post_process_token_type(shell->parsing_cmd.tokens, shell);
 }

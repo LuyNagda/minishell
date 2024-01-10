@@ -67,8 +67,8 @@ size_t ft_get_tokens_amount(t_tokens *tokens)
  */
 size_t get_current_token_pos(t_tokens *tokens)
 {
-	t_tokens	*tmp;
-	size_t		amount_before;
+	t_tokens *tmp;
+	size_t amount_before;
 
 	amount_before = 0;
 	tmp = tokens;
@@ -112,4 +112,35 @@ long long ft_next_token_pos(t_tokens *tok, t_token_type type, long long start)
 		tok = tok->next;
 	}
 	return (-1);
+}
+
+/**
+ * @brief Gets the index in the original string corresponding to a given token position.
+ *
+ * This function calculates the index in the original string corresponding to the
+ * given token position by traversing the linked list of tokens up to that position
+ * and summing the lengths of their values.
+ *
+ * @param shell A pointer to the minishell structure.
+ * @param token_pos The position of the token in the linked list.
+ * @return The index in the original string corresponding to the token position.
+ */
+size_t get_index_from_token(t_minishell *shell, size_t token_pos)
+{
+	size_t len;
+	size_t index;
+	t_tokens *tmp;
+
+	index = 0;
+	len = 0;
+	tmp = shell->parsing_cmd.tokens;
+	while (tmp)
+	{
+		len += ft_strlen(tmp->value);
+		tmp = tmp->next;
+		index++;
+		if (token_pos == index)
+			break;
+	}
+	return len;
 }

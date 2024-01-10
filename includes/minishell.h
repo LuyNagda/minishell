@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
 /*   Updated: 2024/01/10 07:36:00 by jbadaire         ###   ########.fr       */
@@ -29,6 +29,7 @@ typedef enum e_token
 	REDIRECT_OUT_DOUBLE = 7,
 	DOUBLE_QUOTE = 8,
 	SIMPLE_QUOTE = 9,
+	QUOTED = 10
 }	t_token_type;
 
 typedef enum e_parsing_result
@@ -119,6 +120,7 @@ typedef struct s_minishell
 /* *****************************************************/
 /* ******************** BUILTIN ************************/
 /* *****************************************************/
+
 int			ft_dispatch_builtin(t_minishell *shell, t_commands *command);
 void		exec_export(t_minishell *shell, t_commands *command);
 int			exec_unset(t_minishell *shell, t_commands *command);
@@ -128,6 +130,7 @@ int			exec_cd(t_minishell *shell, t_commands *command);
 int			exec_env(t_minishell *shell);
 int			exec_exit(t_minishell *shell);
 int			exec_clear(void);
+
 /* *****************************************************/
 /* ********************* EXEC **************************/
 /* *****************************************************/
@@ -146,6 +149,7 @@ void		exec_redirection(t_minishell *shell, char *line);
 t_env_map	*env_map_init(char **env_array);
 t_env_map	*ft_create_env_node(char *k, char *v, int has_equals, int is_system);
 t_env_map	*env_map_add_back(t_env_map **env_map, t_env_map *new_node, int is_immutable);
+t_env_map	*env_map_remove_back(t_env_map *env_map);
 t_env_map	*env_map_remove_from_key(t_env_map *env_map, char *key);
 t_env_map	*env_map_replace(t_env_map *env_map, char *key, char *value);
 t_env_map	*env_map_find_node(t_env_map *env_map, char *key);
@@ -197,6 +201,7 @@ size_t		ft_tokens_len(t_tokens *tokens);
 size_t		ft_get_tokens_amount(t_tokens *tokens);
 size_t		ft_get_tokens_type_amount(t_tokens *tokens, t_token_type tokenType);
 long long	ft_next_token_pos(t_tokens *tok, t_token_type type, long long start);
+size_t		get_index_from_token(t_minishell *shell, size_t token_pos);
 
 /* *****************************************************/
 /* ********************* UTILS *************************/

@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include "../../dependencies/libft/.includes/memory_utils.h"
 #include "../../dependencies/libft/.includes/string_utils.h"
 #include <stdlib.h>
 

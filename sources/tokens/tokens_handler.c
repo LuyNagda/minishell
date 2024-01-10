@@ -13,9 +13,9 @@
 #include "../../includes/minishell.h"
 #include "stdlib.h"
 
-t_tokens	*ft_create_token(char *token, t_token_type token_type)
+t_tokens *ft_create_token(char *token, t_token_type token_type)
 {
-	t_tokens	*tokens;
+	t_tokens *tokens;
 
 	tokens = malloc(sizeof(t_tokens));
 	if (!tokens)
@@ -27,10 +27,10 @@ t_tokens	*ft_create_token(char *token, t_token_type token_type)
 	return (tokens);
 }
 
-void	ft_add_back_token(t_tokens **tokens_list, t_tokens *token)
+void ft_add_back_token(t_tokens **tokens_list, t_tokens *token)
 {
-	t_tokens	*tmp;
-	size_t		pos;
+	t_tokens *tmp;
+	size_t pos;
 
 	tmp = *tokens_list;
 	pos = 1;
@@ -47,9 +47,9 @@ void	ft_add_back_token(t_tokens **tokens_list, t_tokens *token)
 	tmp->next = token;
 }
 
-void	ft_flush_tokens(t_tokens *tokens)
+void ft_flush_tokens(t_tokens *tokens)
 {
-	t_tokens	*tmp;
+	t_tokens *tmp;
 
 	while (tokens)
 	{
