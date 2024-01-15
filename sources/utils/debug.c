@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:36:19 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/15 12:18:25 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/15 15:23:05 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void ft_display_commands_list(t_commands *commands)
 			ft_printf("	[%s]\n", commands->arguments[index++]);
 		ft_printf(" [%i] -> Already Executed: %d\n", command_nb, commands->has_already_executed);
 		ft_printf(" [%i] -> Ordered Position In List: %d\n", command_nb, commands->position);
-		ft_printf( "[%i] -> Error During Creation : %i\n", commands->error_during_creation);
+		ft_printf( "[%i] -> Error During Creation : %i\n", command_nb, commands->error_during_creation);
 		ft_printf(" \n\n-------------------------------\n\n");
 		command_nb++;
 		commands = commands->next_node;
