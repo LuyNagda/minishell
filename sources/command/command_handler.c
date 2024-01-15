@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_handler.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 19:26:42 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/15 15:23:21 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/15 17:23:33 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ t_commands	*ft_command_new_node(t_env_map *map, char **args)
 	char 		**path_array;
 
 	path_array = convert_path_to_array(map);
+	if (path_array == NULL)
+		return (NULL);
 	command = ft_calloc(1, sizeof(t_commands));
 	if (!command)
 		return (NULL);

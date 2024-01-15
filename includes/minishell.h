@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/15 12:16:54 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/15 17:26:56 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,10 @@ typedef struct s_commands
 	t_boolean			has_already_executed;
 	t_boolean			error_during_creation;
 	t_boolean			is_builtin;
+
+	int input_fd;
+	int output_fd;
+	
 	struct	s_commands	*next_node;
 }						t_commands;
 
@@ -94,7 +98,7 @@ typedef struct s_pipex
 	int		o_pipe[2];
 	int		infile;
 	int		outfile;
-	char	**path_array;
+	char	**envp;
 	char	*path;
 	char	**command_list;
 	char	*temp;
@@ -183,7 +187,7 @@ void		*ft_populate_command_list(t_minishell *shell);
 t_parsing_result	pre_parsing(t_minishell *shell);
 t_parsing_result	on_parse(t_minishell *shell);
 t_parsing_result 	post_parsing(t_minishell *shell);
-
+int 				has_redirection(t_commands *command, char character);
 
 /* *****************************************************/
 /* ******************** TOKENS *************************/

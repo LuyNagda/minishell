@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/15 15:49:40 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/15 16:56:29 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,22 @@ static t_boolean has_error(t_minishell *shell)
 	return (_false);
 }
 
+int has_redirection(t_commands *command, char character)
+{
+	size_t index;
+
+	index = 0;
+	while (command->arguments[index])
+	{
+		if (command->arguments[index][0] == character && command->arguments[index][1] && command->arguments[index][1] == character)
+			return (2);
+		else if (command->arguments[index][0] == character)
+			return (1);
+		index++;
+	}
+	return (0);
+}
+
 void ft_dispatch_command(t_minishell *shell)
 {
 	t_commands	*tmp;
@@ -52,7 +68,9 @@ void ft_dispatch_command(t_minishell *shell)
 	if (has_error(shell))
 		return ;
 	tmp = shell->commands;
-	if (shell->command_amount == 1)
+	//ft_printf("command: %s", tmp->raw_command);
+	//ft_display_commands_list(tmp);
+	if (shell->command_amount == 1 && !(has_redirection(tmp, '>') || has_redirection(tmp, '<')))
 	{
 		if (shell->is_builtin)
 			ft_dispatch_builtin(shell, tmp);

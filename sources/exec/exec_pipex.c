@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/15 16:12:46 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/15 17:29:04 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ void	child_one(t_minishell *shell, t_commands *command, t_pipex *pipex)
 			error_msg("DUP2 failed");
 		close(pipex->outfile);
 	}
-	if (pipex->path == NULL)
+	if (command->path == NULL)
 		exit(127);
-	if (ft_str_equals(pipex->path, "builtin"))
+	if (command->is_builtin)
 		exit(ft_dispatch_builtin(shell, command));
-	if (execve(pipex->path, command->arguments, 0) == -1)
+	if (execve(command->path, command->arguments, 0) == -1)
 		ft_printf("%s: %s", strerror(errno), command->arguments[0]);
 	exit(EXIT_FAILURE);
 }
@@ -55,11 +55,11 @@ void	child_middle(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
 		error_msg("DUP2 failed");
 	close(pipex->c_pipe[1]);
-	if (pipex->path == NULL)
+	if (command->path == NULL)
 		exit(127);
-	//if (ft_str_equals(pipex->path, "builtin"))
-	//	exit(exec_builtin(shell, pipex->command_list[0]));
-	if (execve(pipex->path,command->arguments, 0) == -1)
+	if (command->is_builtin)
+		exit(ft_dispatch_builtin(shell, command));
+	if (execve(command->path,command->arguments, 0) == -1)
 		ft_printf("%s: %s", strerror(errno), command->arguments[0]);
 	exit(EXIT_FAILURE);
 }
@@ -77,37 +77,33 @@ void	child_last(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	close(pipex->c_pipe[1]);
 	close(pipex->c_pipe[0]);
 	close(pipex->o_pipe[0]);
-	if (pipex->path == NULL)
+	if (command->path == NULL)
 		exit(127);
-	if (ft_str_equals(pipex->path, "builtin"))
+	if (command->is_builtin)
 		exit(ft_dispatch_builtin(shell, command));
-	if (execve(pipex->path, command->arguments, 0) == -1)
+	if (execve(command->path, command->arguments, pipex->envp) == -1)
 		ft_printf("%s: %s", strerror(errno), command->arguments[0]);
 	exit(EXIT_FAILURE);
 }
 
 void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
-	//if (ft_str_contains(command->raw_command, ">>", 0))
-	//{
-	//	pipex->command_list = ft_split(command->raw_command, '>');
-	//	pipex->command_list = trim_command_list(pipex->command_list);
-	//	pipex->outfile = open(pipex->command_list[1], O_WRONLY | O_APPEND | O_CREAT, 0777);
-	//	pipex->command_list = ft_split(pipex->command_list[0], ' ');
-	//}
-	//else if (ft_str_contains(command->raw_command, ">", 0))
-	//{
-	//	pipex->command_list = ft_split(command->raw_command, '>');
-	//	pipex->command_list = trim_command_list(pipex->command_list);
-	//	pipex->outfile = open(pipex->command_list[1], O_CREAT | O_RDWR | O_TRUNC, 0777);
-	//	pipex->command_list = ft_split(pipex->command_list[0], ' ');
-	//}
-	//else
-	//ft_printf("command posi: %d\n", command->position);
-	pipex->command_list = ft_split(command->raw_command, ' ');
+	if (has_redirection(command, '>') == 2)
+	{
+		command->arguments = ft_split(command->raw_command, '>');
+		command->arguments = trim_command_list(command->arguments);
+		pipex->outfile = open(command->arguments[1], O_WRONLY | O_APPEND | O_CREAT, 0777);
+		command->arguments = ft_split(command->arguments[0], ' ');
+	}
+	else if (has_redirection(command, '>') == 1)
+	{
+		command->arguments = ft_split(command->raw_command, '>');
+		command->arguments = trim_command_list(command->arguments);
+		pipex->outfile = open(command->arguments[1], O_CREAT | O_RDWR | O_TRUNC, 0777);
+		command->arguments = ft_split(command->arguments[0], ' ');
+	}
 	if (pipe(pipex->c_pipe) == -1)
 		error_msg("Pipe");
-	pipex->path = find_command(command->arguments[0], pipex->path_array);
 	pipex->sub_process_pid = fork();
 	if (pipex->sub_process_pid < 0)
 		error_msg("Fork");
@@ -129,8 +125,8 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 {
 	t_pipex	pipex;
 
-	pipex.path_array = convert_path_to_array(shell->env_map);
-	if (pipex.path_array == NULL)
+	pipex.envp = env_map_to_array(shell->env_map);
+	if (pipex.envp == NULL)
 		return ;
 	while (commands)
 	{
@@ -140,5 +136,5 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 	close(pipex.o_pipe[0]);
 	waitpid(pipex.sub_process_pid, &pipex.status, 0);
 	g_status_code = WEXITSTATUS(pipex.status);
-	ft_free_split(pipex.path_array);
+	ft_free_split(pipex.envp);
 }
