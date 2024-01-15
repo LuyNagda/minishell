@@ -41,7 +41,7 @@ t_commands *build_command_from_tokens(t_minishell *shell)
 			args[arg_index++] = ft_strdup(tmp->value);
 		if (tmp->type == PIPE)
 		{
-			builded = ft_command_new_node(args);
+			builded = ft_command_new_node(shell->env_map, args);
 			if (!builded)
 				return (ft_free_split(args), NULL);
 			ft_add_command(&shell->commands, builded);

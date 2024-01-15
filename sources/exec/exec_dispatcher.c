@@ -25,17 +25,41 @@ int	is_builtins(t_commands *command)
 	 || ft_str_starts_with(command->arguments[0], "env"));
 }
 
+static t_boolean has_error(t_minishell *shell)
+{
+	t_commands	*tmp;
+
+	if (!shell || !shell->commands)
+		return (_true);
+	tmp = shell->commands;
+ 	while (tmp)
+	{
+		if (tmp->error_during_creation)
+		{
+			//TODO: Error during parsing
+			return (_true);
+		}
+	}
+	return (_false);
+}
+
 void ft_dispatch_command(t_minishell *shell)
 {
 	t_commands	*tmp;
+
+	if (has_error(shell))
+		return  ;
+
 	if (!shell || !shell->commands)
 		return ;
 	tmp = shell->commands;
+
+	//if (shell->is_builtin)
+	//	ft_dispatch_builtin();
+
 	while (tmp)
 	{
-		if (tmp->error_during_creation)
-			break;
-		if (!is_builtins(tmp))
+		if (is_builtins(tmp) && !tmp->is_builtin)
 			exec_cmd(shell, tmp);
 		else
 			ft_dispatch_builtin(shell, tmp);

@@ -15,7 +15,7 @@
 #include "../dependencies/libft/.includes/memory_utils.h"
 #include <stdlib.h>
 
-t_env_map	*env_array_to_map(t_env_map **env_map, char **envp)
+t_env_map	*env_array_to_map(t_minishell *shell, t_env_map **env_map, char **envp)
 {
 	size_t		index;
 	char		**split;
@@ -24,13 +24,16 @@ t_env_map	*env_array_to_map(t_env_map **env_map, char **envp)
 	t_env_map	*node;
 
 	index = 0;
-	key = NULL;
-	value = NULL;
 	while (envp[index])
 	{
+		key = NULL;
+		value = NULL;
 		split = ft_split(envp[index++], '=');
 		if (!split)
-			continue ;
+		{
+			shell->is_running = 0;
+			break;
+		}
 		if (split[0])
 			key = ft_strdup(split[0]);
 		if (split[1])

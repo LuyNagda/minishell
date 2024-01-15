@@ -51,7 +51,10 @@ int	main(int argc, char **argv, char **env)
 	(void) argv;
 	shell.is_running = 1;
 	shell.messages = ft_init_messages();
-	shell.env_map = env_map_init(env);
+	shell.env_map = env_map_init();
+	if (shell.env_map)
+		env_array_to_map(&shell, &shell.env_map, env);
+
 	ft_shell_loop(&shell);
 	env_map_flush(shell.env_map);
 	//ft_flush_tokens(shell.parsing_cmd.tokens);

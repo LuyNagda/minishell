@@ -62,10 +62,12 @@ t_commands	*ft_command_init()
 	return (list);
 }
 
-t_commands	*ft_command_new_node(char **args)
+t_commands	*ft_command_new_node(t_env_map *map, char **args)
 {
 	t_commands	*command;
+	char 		**path_array;
 
+	path_array = convert_path_to_array(map);
 	command = ft_calloc(1, sizeof(t_commands));
 	if (!command)
 		return (NULL);
@@ -78,6 +80,11 @@ t_commands	*ft_command_new_node(char **args)
 	command->position = 0;
 	command->next_node = NULL;
 	command->error_during_creation = _false;
+	if (is_builtins(command))
+		command->path = ft_strdup("builtin");
+	else
+		command->path = find_command(args[0], path_array);
+	ft_free_split(path_array);
 	return (command);
 }
 

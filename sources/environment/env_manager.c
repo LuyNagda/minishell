@@ -13,7 +13,7 @@
 #include "../../includes/minishell.h"
 #include "stdlib.h"
 
-t_env_map	*env_map_init(char **envp)
+t_env_map	*env_map_init()
 {
 	t_env_map	*env_map;
 
@@ -26,7 +26,6 @@ t_env_map	*env_map_init(char **envp)
 	env_map->key = "?";
 	env_map->value = "0";
 	env_map->next_node = NULL;
-	env_array_to_map(&env_map, envp);
 	return (env_map);
 }
 

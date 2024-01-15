@@ -51,6 +51,5 @@ char *find_command(char *command, char **path_array)
 		free(path);
 		i++;
 	}
-	ft_printf("command not found: %s\n", command);
 	return (NULL);
 }

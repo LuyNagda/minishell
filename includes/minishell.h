@@ -56,10 +56,12 @@ typedef struct s_commands
 {
 	char				*raw_command;
 	char				**arguments;
+	char				*path;
 	size_t				position;
 	size_t				arguments_amount;
 	t_boolean			has_already_executed;
 	t_boolean			error_during_creation;
+	t_boolean			is_builtin;
 	struct	s_commands	*next_node;
 }						t_commands;
 
@@ -109,7 +111,7 @@ typedef struct s_minishell
 	size_t			command_amount;
 
 	t_env_map		*env_map;
-	char			**envp;
+	t_boolean		is_builtin;
 
 	t_pipex			*pipex;
 }					t_minishell;
@@ -143,14 +145,14 @@ void		exec_redirection(t_minishell *shell, char *line);
 /* ********************** ENV **************************/
 /* *****************************************************/
 
-t_env_map	*env_map_init(char **env_array);
+t_env_map	*env_map_init();
 t_env_map	*ft_create_env_node(char *k, char *v, int has_equals, int is_system);
 t_env_map	*env_map_add_back(t_env_map **env_map, t_env_map *new_node, int is_immutable);
 t_env_map	*env_map_remove_back(t_env_map *env_map);
 t_env_map	*env_map_remove_from_key(t_env_map *env_map, char *key);
 t_env_map	*env_map_replace(t_env_map *env_map, char *key, char *value);
 t_env_map	*env_map_find_node(t_env_map *env_map, char *key);
-t_env_map	*env_array_to_map(t_env_map **env_map, char **env);
+t_env_map	*env_array_to_map(t_minishell *shell, t_env_map **env_map, char **env);
 
 char		**env_map_to_array(t_env_map *env_map);
 char		*env_map_get_key(t_env_map *env_map, size_t node_pos);
@@ -168,7 +170,7 @@ t_commands	*ft_get_command_from_pos(t_commands *command_list, size_t command_nod
 t_commands	*ft_add_command(t_commands **commands, t_commands *new_node);
 
 t_commands	*ft_command_init();
-t_commands	*ft_command_new_node(char **args);
+t_commands	*ft_command_new_node(t_env_map *map, char **args);
 t_commands	*ft_create_command_node(char *cmd);
 void		ft_flush_command_list(t_commands *list);
 

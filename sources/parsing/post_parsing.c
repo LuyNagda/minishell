@@ -10,15 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-#include "string_utils.h"
-#include <stdlib.h>
+
+static t_boolean is_builtin(t_minishell *shell)
+{
+	return (shell->commands->next_node ||\
+	ft_str_contains(shell->sended_line, ">", 0) ||\
+	ft_str_contains(shell->sended_line, "<", 0));
+}
 
 t_parsing_result post_parsing(t_minishell *shell)
 {
-
 	if (!build_command_from_tokens(shell))
 		return (ERROR);
+	shell->is_builtin = is_builtin(shell);
 	shell->command_amount = ft_get_numbers_of_commands(shell->commands);
-	//ft_display_commands_list(shell->commands);
 	return (SUCCESS);
 }

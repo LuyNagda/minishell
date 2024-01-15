@@ -110,6 +110,7 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		child_one(shell, command, pipex);
 	else if (pipex->index && (pipex->index < shell->command_amount - 1) && pipex->sub_process_pid == 0)
 		child_middle(shell, command, pipex);
+	else if (pipex->index && (pipex->index == shell->command_amount - 1) && pipex->sub_process_pid == 0)
 		child_last(shell, command, pipex);
 	close(pipex->c_pipe[1]);
 	pipex->o_pipe[0] = pipex->c_pipe[0];
@@ -122,7 +123,7 @@ void	exec_cmd(t_minishell *shell, t_commands *command)
 {
 	t_pipex	pipex;
 
-	shell->command_amount = ft_get_numbers_of_commands(shell->commands);
+	shell->commands->has_already_executed = _true;
 	pipex.index = 0;
 	pipex.path_array = convert_path_to_array(shell->env_map);
 	exec_cmd_loop(shell, command, &pipex);
