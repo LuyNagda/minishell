@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   exec_dispatcher.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/15 12:07:43 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/15 15:17:24 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include "ft_printf.h"
 
 int	is_builtins(t_commands *command)
 {
@@ -39,6 +40,7 @@ static t_boolean has_error(t_minishell *shell)
 			//TODO: Error during parsing
 			return (_true);
 		}
+		tmp = tmp->next_node;
 	}
 	return (_false);
 }
@@ -48,23 +50,19 @@ void ft_dispatch_command(t_minishell *shell)
 	t_commands	*tmp;
 
 	if (has_error(shell))
-		return  ;
-
-	if (!shell || !shell->commands)
 		return ;
 	tmp = shell->commands;
-
-	//if (shell->is_builtin)
-	//	ft_dispatch_builtin();
-
-	while (tmp)
-	{
-		if (is_builtins(tmp) && !tmp->is_builtin)
-			exec_cmd(shell, tmp);
-		else
-			ft_dispatch_builtin(shell, tmp);
-		tmp = tmp->next_node;
-	}
+	ft_printf("tmp: %d\n", shell->command_amount);
+	ft_display_commands_list(tmp);
+	//if (shell->command_amount == 1)
+	//{
+	//	if (shell->is_builtin)
+	//		ft_dispatch_builtin(shell, tmp);
+	//	else
+	//		exec_cmd(shell, tmp);
+	//	return ;
+	//}
+	//exec_cmd(shell, tmp);
 }
 
 int	ft_dispatch_builtin(t_minishell *shell, t_commands *command)

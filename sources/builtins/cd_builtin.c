@@ -3,24 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   cd_builtin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:57 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/09 20:28:07 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/15 15:09:32 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "ft_printf.h"
+
 #include "minishell.h"
 #include <errno.h>
 #include <unistd.h>
 #include <string.h>
+#include "string_utils.h"
+#include "ft_printf.h"
 
 static char	*get_cwd_for_cd(void)
 {
 	char	cwd[1024];
 
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		return (cwd);
+		return (ft_strdup(cwd));
 	else
 		return (NULL);
 }

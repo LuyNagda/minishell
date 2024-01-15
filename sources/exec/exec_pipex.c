@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/09 22:26:12 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/15 15:11:16 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,11 +107,20 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	if (pipex->sub_process_pid < 0)
 		error_msg("Fork");
 	if (pipex->index == 0 && pipex->sub_process_pid == 0)
+	{
+		ft_printf("1\n");
 		child_one(shell, command, pipex);
+	}
 	else if (pipex->index && (pipex->index < shell->command_amount - 1) && pipex->sub_process_pid == 0)
+	{
+		ft_printf("2\n");
 		child_middle(shell, command, pipex);
+	}
 	else if (pipex->index && (pipex->index == shell->command_amount - 1) && pipex->sub_process_pid == 0)
-		child_last(shell, command, pipex);
+	{
+		ft_printf("3\n");
+		child_last(shell, command, pipex);		
+	}
 	close(pipex->c_pipe[1]);
 	pipex->o_pipe[0] = pipex->c_pipe[0];
 	pipex->index++;
@@ -126,7 +135,8 @@ void	exec_cmd(t_minishell *shell, t_commands *command)
 	shell->commands->has_already_executed = _true;
 	pipex.index = 0;
 	pipex.path_array = convert_path_to_array(shell->env_map);
-	exec_cmd_loop(shell, command, &pipex);
+	while (command->raw_command)
+		exec_cmd_loop(shell, command, &pipex);
 	waitpid(pipex.sub_process_pid, &pipex.status, 0);
 	g_status_code = WEXITSTATUS(pipex.status);
 	ft_free_split(pipex.path_array);
