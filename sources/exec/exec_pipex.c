@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/15 17:31:53 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/15 17:44:27 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,20 +88,20 @@ void	child_last(t_minishell *shell, t_commands *command, t_pipex *pipex)
 
 void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
-	if (has_redirection(command, '>') == 2)
-	{
-		command->arguments = ft_split(command->raw_command, '>');
-		command->arguments = trim_command_list(command->arguments);
-		pipex->outfile = open(command->arguments[1], O_WRONLY | O_APPEND | O_CREAT, 0777);
-		command->arguments = ft_split(command->arguments[0], ' ');
-	}
-	else if (has_redirection(command, '>') == 1)
-	{
-		command->arguments = ft_split(command->raw_command, '>');
-		command->arguments = trim_command_list(command->arguments);
-		pipex->outfile = open(command->arguments[1], O_CREAT | O_RDWR | O_TRUNC, 0777);
-		command->arguments = ft_split(command->arguments[0], ' ');
-	}
+	//if (has_redirection(command, '>') == 2)
+	//{
+	//	command->arguments = ft_split(command->raw_command, '>');
+	//	command->arguments = trim_command_list(command->arguments);
+	//	pipex->outfile = open(command->arguments[1], O_WRONLY | O_APPEND | O_CREAT, 0777);
+	//	command->arguments = ft_split(command->arguments[0], ' ');
+	//}
+	//else if (has_redirection(command, '>') == 1)
+	//{
+	//	command->arguments = ft_split(command->raw_command, '>');
+	//	command->arguments = trim_command_list(command->arguments);
+	//	pipex->outfile = open(command->arguments[1], O_CREAT | O_RDWR | O_TRUNC, 0777);
+	//	command->arguments = ft_split(command->arguments[0], ' ');
+	//}
 	if (pipe(pipex->c_pipe) == -1)
 		error_msg("Pipe");
 	pipex->sub_process_pid = fork();
@@ -117,8 +117,6 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	if (pipex->o_pipe[0])
 		close(pipex->o_pipe[0]);
 	pipex->o_pipe[0] = pipex->c_pipe[0];
-	ft_free_split(pipex->command_list);
-	free(pipex->path);
 }
 
 void	exec_cmd(t_minishell *shell, t_commands *commands)
