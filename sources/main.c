@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/15 15:13:29 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/15 15:36:07 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	main(int argc, char **argv, char **env)
 		env_array_to_map(&shell, &shell.env_map, env);
 
 	ft_shell_loop(&shell);
-	env_map_flush(shell.env_map);
+	//env_map_flush(shell.env_map);
 	//ft_flush_tokens(shell.parsing_cmd.tokens);
 	ft_flush_command_list(shell.commands);
 	rl_clear_history();

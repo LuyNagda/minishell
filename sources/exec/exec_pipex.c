@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/15 15:11:16 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/15 15:32:48 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,24 +106,24 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	pipex->sub_process_pid = fork();
 	if (pipex->sub_process_pid < 0)
 		error_msg("Fork");
-	if (pipex->index == 0 && pipex->sub_process_pid == 0)
+	if (command->position == 0 && pipex->sub_process_pid == 0)
 	{
 		ft_printf("1\n");
 		child_one(shell, command, pipex);
 	}
-	else if (pipex->index && (pipex->index < shell->command_amount - 1) && pipex->sub_process_pid == 0)
+	else if ((command->position < shell->command_amount - 1) && pipex->sub_process_pid == 0)
 	{
 		ft_printf("2\n");
 		child_middle(shell, command, pipex);
 	}
-	else if (pipex->index && (pipex->index == shell->command_amount - 1) && pipex->sub_process_pid == 0)
+	else if (pipex->index && (command->position == shell->command_amount - 1) && pipex->sub_process_pid == 0)
 	{
 		ft_printf("3\n");
 		child_last(shell, command, pipex);		
 	}
 	close(pipex->c_pipe[1]);
 	pipex->o_pipe[0] = pipex->c_pipe[0];
-	pipex->index++;
+	shell->command_amount--;
 	ft_free_split(pipex->command_list);
 	free(pipex->path);
 }
@@ -135,7 +135,7 @@ void	exec_cmd(t_minishell *shell, t_commands *command)
 	shell->commands->has_already_executed = _true;
 	pipex.index = 0;
 	pipex.path_array = convert_path_to_array(shell->env_map);
-	while (command->raw_command)
+	while (shell->command_amount)
 		exec_cmd_loop(shell, command, &pipex);
 	waitpid(pipex.sub_process_pid, &pipex.status, 0);
 	g_status_code = WEXITSTATUS(pipex.status);
