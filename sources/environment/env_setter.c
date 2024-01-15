@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../../dependencies/libft/.includes/string_utils.h"
+#include "minishell.h"
+#include "string_utils.h"
 #include "stdlib.h"
 
-t_env_map	*env_map_add_back(t_env_map **env_map, t_env_map *new_node, int is_immutable)
+t_env_map *env_map_add_back(t_env_map **env_map, t_env_map *new_node, int is_immutable)
 {
-	t_env_map	*tmp;
+	t_env_map *tmp;
 
 	tmp = *env_map;
 	if (is_immutable)
@@ -32,10 +32,10 @@ t_env_map	*env_map_add_back(t_env_map **env_map, t_env_map *new_node, int is_imm
 	return (*env_map);
 }
 
-t_env_map	*env_map_remove_from_key(t_env_map *env_map, char *key)
+t_env_map *env_map_remove_from_key(t_env_map *env_map, char *key)
 {
-	t_env_map	*tmp;
-	t_env_map	*last_node;
+	t_env_map *tmp;
+	t_env_map *last_node;
 
 	if (!env_map)
 		return (NULL);
@@ -56,9 +56,9 @@ t_env_map	*env_map_remove_from_key(t_env_map *env_map, char *key)
 	return (env_map);
 }
 
-t_env_map	*env_map_replace(t_env_map *env_map, char *key, char *value)
+t_env_map *env_map_replace(t_env_map *env_map, char *key, char *value)
 {
-	t_env_map	*tmp;
+	t_env_map *tmp;
 
 	if (!env_map)
 		return (NULL);

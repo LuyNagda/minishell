@@ -6,12 +6,12 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 21:35:26 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/10 07:54:42 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/14 14:28:36 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../../dependencies/libft/.includes/string_utils.h"
+#include "minishell.h"
+#include "string_utils.h"
 #include <stdlib.h>
 
 
@@ -25,11 +25,11 @@
  * @return A dynamically allocated string containing the reconstructed command.
  *         The caller is responsible for freeing the memory allocated for the string.
  */
-char	*rebuild_string_from_token(t_minishell *shell)
+char *rebuild_string_from_token(t_minishell *shell)
 {
-	t_tokens	*tokens;
-	char		*str_1;
-	char		*str_2;
+	t_tokens *tokens;
+	char *str_1;
+	char *str_2;
 
 	tokens = shell->parsing_cmd.tokens;
 	str_1 = ft_strdup("");
@@ -42,4 +42,16 @@ char	*rebuild_string_from_token(t_minishell *shell)
 		tokens = tokens->next;
 	}
 	return (str_1);
+}
+
+void append_token(t_tokens *appended, t_tokens *to_append)
+{
+	char *joined;
+
+	if ((!appended || !appended->value) || (!to_append || !to_append->value))
+		return;
+	joined = ft_strjoin(appended->value, to_append->value);
+	free(appended->value);
+	appended->value = ft_strdup(joined);
+	free(joined);
 }

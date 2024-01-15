@@ -6,11 +6,16 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 19:26:42 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/10 10:48:12 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/15 11:49:29 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
+#include "string_utils.h"
+#include "memory_utils.h"
+#include "ft_printf.h"
+#include "stdlib.h"
+
 
 size_t	ft_get_numbers_of_commands(t_commands *commands_list)
 {
@@ -40,19 +45,54 @@ t_commands	*ft_get_command_from_pos(t_commands *command_list, size_t command_nod
 	return (command_list);
 }
 
+t_commands	*ft_command_init()
+{
+	t_commands	*list;
+
+	list = malloc(sizeof(t_commands));
+	if (!list)
+		return (NULL);
+	list->raw_command = NULL;
+	list->arguments = NULL;
+	list->arguments_amount = 0;
+	list->has_already_executed = _false;
+	list->position = 0;
+	list->next_node = NULL;
+	list->error_during_creation = _false;
+	return (list);
+}
+
+t_commands	*ft_command_new_node(char **args)
+{
+	t_commands	*command;
+
+	command = ft_calloc(1, sizeof(t_commands));
+	if (!command)
+		return (NULL);
+	command->raw_command = build_str_from_array(args);
+	if (!command->raw_command)
+		return (command);
+	command->arguments = args;
+	command->arguments_amount = ft_str_tab_len(args);
+	command->has_already_executed = _false;
+	command->position = 0;
+	command->next_node = NULL;
+	command->error_during_creation = _false;
+	return (command);
+}
+
 t_commands	*ft_add_command(t_commands **commands, t_commands *new_node)
 {
-	t_commands	*tmp;
+	t_commands *tmp = *commands;
 
-	tmp = *commands;
-	if (tmp->command_name == NULL)
+	if (tmp == NULL || tmp->arguments == NULL)
 	{
 		*commands = new_node;
-		return (*commands);
+		return (new_node);
 	}
 	while (tmp->next_node)
 		tmp = tmp->next_node;
 	new_node->position = ft_get_numbers_of_commands(*commands);
 	tmp->next_node = new_node;
-	return (*commands);
+	return (new_node);
 }

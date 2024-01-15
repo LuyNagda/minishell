@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/10 07:03:22 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/15 12:28:36 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,12 @@ static void	ft_shell_loop(t_minishell *shell)
 			continue;
 		add_history(shell->sended_line);
 		tokenize_input(shell);
-		on_parse(shell);
-		//post_parsing(shell);
-		//ft_dispatch_command(shell);
+		if(on_parse(shell) == SUCCESS)
+		{
+			post_parsing(shell);
+			ft_dispatch_command(shell);
+		}
+		ft_flush_command_list(shell->commands);
 		ft_flush_tokens(shell->parsing_cmd.tokens);
 	}
 }
@@ -51,7 +54,8 @@ int	main(int argc, char **argv, char **env)
 	shell.env_map = env_map_init(env);
 	ft_shell_loop(&shell);
 	env_map_flush(shell.env_map);
-	ft_flush_tokens(shell.parsing_cmd.tokens);
+	//ft_flush_tokens(shell.parsing_cmd.tokens);
+	ft_flush_command_list(shell.commands);
 	rl_clear_history();
 	rl_clear_message();
 	rl_clear_visible_line();

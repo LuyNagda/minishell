@@ -6,12 +6,12 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 21:40:05 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/10 03:06:06 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/12 02:09:10 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "../../dependencies/libft/.includes/string_utils.h"
+#include "string_utils.h"
 
 /**
  * @brief Calculates the total length of the values in a linked list of tokens.
@@ -32,6 +32,7 @@ size_t ft_tokens_len(t_tokens *tokens)
 		len += ft_strlen(tokens->value);
 		tokens = tokens->next;
 	}
+	return (len);
 }
 
 /**

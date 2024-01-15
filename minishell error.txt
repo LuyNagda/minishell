@@ -1,1 +1,0 @@
- ls -la | cut -d | echo "Salut" | grep "ça va ? | j'ai pas tester de faire >> ca | test > test 1 | file << string | file < string | Tesssst | Fin des tests ' ' "

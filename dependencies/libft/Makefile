@@ -13,7 +13,7 @@
 RM					=	rm -rf
 
 CC					=	gcc
-FLAGS				=	-Wall -Wextra -Werror
+FLAGS				=	-Wall -Wextra -Werror -g3
 NAME				=	libft.a
 
 BUILD_DIRECTORY		= 	./build/

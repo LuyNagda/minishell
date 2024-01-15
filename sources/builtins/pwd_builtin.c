@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../../dependencies/libft/.includes/ft_printf.h"
+#include "minishell.h"
+#include "ft_printf.h"
 
 int	exec_pwd(t_minishell *shell)
 {

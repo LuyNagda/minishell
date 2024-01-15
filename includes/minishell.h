@@ -6,14 +6,14 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/10 07:36:00 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/15 12:16:54 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../dependencies/libft/.includes/boolean.h"
+# include "boolean.h"
 # include <stddef.h>
 
 extern int	g_status_code;
@@ -50,15 +50,12 @@ typedef struct s_tokens
 typedef struct s_parsing_cmd
 {
 	t_tokens	*tokens;
-	char		*latest_command;
 }				t_parsing_cmd;
 
 typedef struct s_commands
 {
 	char				*raw_command;
-	char				*command_name;
 	char				**arguments;
-	char				**mixed;
 	size_t				position;
 	size_t				arguments_amount;
 	t_boolean			has_already_executed;
@@ -165,11 +162,13 @@ size_t		env_map_get_size(t_env_map *env_map);
 /* ******************** COMMANDS ***********************/
 /* *****************************************************/
 
+t_commands *build_command_from_tokens(t_minishell *shell);
 size_t		ft_get_numbers_of_commands(t_commands *commands_list);
 t_commands	*ft_get_command_from_pos(t_commands *command_list, size_t command_node_pos);
 t_commands	*ft_add_command(t_commands **commands, t_commands *new_node);
 
-t_commands	*ft_command_list_init();
+t_commands	*ft_command_init();
+t_commands	*ft_command_new_node(char **args);
 t_commands	*ft_create_command_node(char *cmd);
 void		ft_flush_command_list(t_commands *list);
 
@@ -181,7 +180,7 @@ void		*ft_populate_command_list(t_minishell *shell);
 
 t_parsing_result	pre_parsing(t_minishell *shell);
 t_parsing_result	on_parse(t_minishell *shell);
-void				post_parsing(t_minishell *shell);
+t_parsing_result 	post_parsing(t_minishell *shell);
 
 
 /* *****************************************************/
@@ -191,10 +190,12 @@ void				post_parsing(t_minishell *shell);
 void		tokenize_input (t_minishell *shell);
 t_tokens	*ft_create_token(char *token, t_token_type token_type);
 void		ft_add_back_token(t_tokens **tokens_list, t_tokens *token);
+void		ft_delete_token(t_tokens **head, t_tokens *token);
 void		ft_flush_tokens(t_tokens *tokens);
 size_t		get_current_token_pos(t_tokens *tokens);
 
 char		*rebuild_string_from_token(t_minishell *shell);
+void		append_token(t_tokens *appended, t_tokens *to_append);
 void		ft_concat_quoted_pipes(t_minishell *shell, char *final_str);
 
 size_t		ft_tokens_len(t_tokens *tokens);
@@ -214,7 +215,7 @@ int			ft_quote_is_closed_range(const char *line, size_t start, size_t end);
 int			ft_str_equals(const char *str1, const char *str2);
 int			ft_str_index_of(const char *src, const char *search, size_t *start_at, size_t starting_search);
 int			ft_str_contains(const char *src, const char *search, size_t starting_search);
-char		**ft_memcpy_array(char **src, size_t start);
+char		**ft_memcpy_array(char **src, char **dest, size_t start);
 int			ft_str_starts_with(const char *src, const char *value);
 void		ft_replace_whitespace(char *line, char value);
 char		ft_get_last_char_iw(char *line);
@@ -222,6 +223,7 @@ char		ft_get_first_char_iw(char *line);
 
 char		**trim_command_list(char **command_list);
 void		error_msg(char *string);
+char *build_str_from_array(char **array);
 t_message	ft_init_messages(void);
 
 /* *****************************************************/

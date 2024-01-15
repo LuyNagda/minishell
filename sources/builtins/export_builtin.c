@@ -9,8 +9,8 @@
 /*   Updated: 2024/01/09 21:49:52 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../../dependencies/libft/.includes/ft_printf.h"
-#include "../../includes/minishell.h"
+#include "ft_printf.h"
+#include "minishell.h"
 
 void	exec_export(t_minishell *shell, t_commands *command)
 {

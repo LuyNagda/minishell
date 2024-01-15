@@ -50,7 +50,7 @@ $(LIBFT): force
 	$(MAKE_LIBFT)
 
 $(BUILD_DIRECTORY)%.o: ./sources/%.c Makefile ./includes/*.h
-	$(CC) $(FLAGS) -I ./includes/ $< -o $@
+	$(CC) $(FLAGS) -I ./includes/ -I ./dependencies/libft/.includes/ $< -o $@
 
 $(BUILD_DIRECTORY):
 	mkdir -p $(BUILD_DIRECTORY)exec		\

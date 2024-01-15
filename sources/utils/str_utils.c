@@ -6,14 +6,14 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 10:54:43 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/10 04:23:35 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/15 11:47:35 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../../dependencies/libft/.includes/char_utils.h"
-#include "../../dependencies/libft/.includes/string_utils.h"
-#include "../../dependencies/libft/.includes/memory_utils.h"
+#include "minishell.h"
+#include "char_utils.h"
+#include "string_utils.h"
+#include "memory_utils.h"
 
 /**
  * @brief Compares two strings for equality.
@@ -108,6 +108,33 @@ int	ft_str_index_of(const char *src, const char *search, size_t *start_at, size_
 	return (0);	
 }
 
+char *build_str_from_array(char **array)
+{
+	size_t	array_index;
+	size_t	len;
+	size_t	char_index;
+	char	*string;
+
+	array_index = 0;
+	len = 0;
+	while (array[array_index])
+		len += ft_strlen(array[array_index++]);
+	string = ft_calloc(len + array_index + 1, sizeof(char ));
+	if (!string)
+		return (NULL);
+	array_index = 0;
+	len = 0;
+	while (array[array_index])
+	{
+		char_index = 0;
+		while (array[array_index][char_index])
+			string[len++] = array[array_index][char_index++];
+		string[len++] = ' ';
+		array_index++;
+	}
+	return string;
+}
+
 void	ft_replace_whitespace(char *line, char value)
 {
 	size_t	index;
@@ -189,21 +216,16 @@ int	ft_str_starts_with(const char *src, const char *value)
  * @return A new string array containing the copied elements, or NULL on failure.
  *         The returned array is terminated with a NULL pointer.
  */
-char	**ft_memcpy_array(char **src, size_t start)
+char	**ft_memcpy_array(char **src, char **dest, size_t start)
 {
 	char	*current;
-	char	**dest;
 	size_t	index;
 	size_t	tab_len;
 
-	dest = NULL;
-	if (!src)
+	if (!src || !dest)
 		return (NULL);
 	tab_len = ft_str_tab_len(src);
 	if (tab_len <= 0)
-		return (NULL);
-	dest = ft_calloc(tab_len - start, sizeof (char *));
-	if (!dest)
 		return (NULL);
 	index = 0;
 	while (src[start] && tab_len >= start)
@@ -216,4 +238,16 @@ char	**ft_memcpy_array(char **src, size_t start)
 		index++;
 	}
 	return (dest);
+}
+
+char **ft_increase_string_array(char **src)
+{
+	size_t array_len;
+	char	**array;
+
+	if (!src)
+		return (ft_calloc(2, sizeof (char  *)));
+	array_len = ft_str_tab_len(src);
+	array = ft_calloc(array_len + 2, sizeof (char *));
+	return (array);
 }

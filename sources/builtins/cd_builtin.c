@@ -9,8 +9,8 @@
 /*   Updated: 2024/01/09 20:28:07 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../../dependencies/libft/.includes/ft_printf.h"
-#include "../../includes/minishell.h"
+#include "ft_printf.h"
+#include "minishell.h"
 #include <errno.h>
 #include <unistd.h>
 #include <string.h>

@@ -9,15 +9,15 @@
 /*   Updated: 2024/01/10 03:34:55 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../../includes/minishell.h"
-#include "../../dependencies/libft/.includes/put_utils.h"
-#include "../../dependencies/libft/.includes/char_utils.h"
+#include "minishell.h"
+#include "put_utils.h"
+#include "char_utils.h"
 #include <stdlib.h>
 
-static int	is_only_space(char *line)
+static int is_only_space(char *line)
 {
-	int	index;
-	int	space_amount;
+	int index;
+	int space_amount;
 
 	index = 0;
 	space_amount = 0;
@@ -30,7 +30,7 @@ static int	is_only_space(char *line)
 	return (space_amount == index);
 }
 
-static int	is_valid_line(char *line)
+static int is_valid_line(char *line)
 {
 	return (line && !is_only_space(line) && line[0] != '\0');
 }

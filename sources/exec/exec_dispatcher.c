@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/10 02:03:44 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/15 12:07:43 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 int	is_builtins(t_commands *command)
 {
 	return
-	(ft_str_starts_with(command->command_name, "clear")
-	 || ft_str_starts_with(command->command_name, "cd")
-	 || ft_str_starts_with(command->command_name, "pwd")
-	 || ft_str_starts_with(command->command_name, "exit")
-	 || ft_str_starts_with(command->command_name, "echo")
-	 || ft_str_starts_with(command->command_name, "export")
-	 || ft_str_starts_with(command->command_name, "unset")
-	 || ft_str_starts_with(command->command_name, "env"));
+	(ft_str_starts_with(command->arguments[0], "clear")
+	 || ft_str_starts_with(command->arguments[0], "cd")
+	 || ft_str_starts_with(command->arguments[0], "pwd")
+	 || ft_str_starts_with(command->arguments[0], "exit")
+	 || ft_str_starts_with(command->arguments[0], "echo")
+	 || ft_str_starts_with(command->arguments[0], "export")
+	 || ft_str_starts_with(command->arguments[0], "unset")
+	 || ft_str_starts_with(command->arguments[0], "env"));
 }
 
 void ft_dispatch_command(t_minishell *shell)
@@ -35,7 +35,6 @@ void ft_dispatch_command(t_minishell *shell)
 	{
 		if (tmp->error_during_creation)
 			break;
-		ft_display_commands_list(shell->commands);
 		if (!is_builtins(tmp))
 			exec_cmd(shell, tmp);
 		else
@@ -46,21 +45,21 @@ void ft_dispatch_command(t_minishell *shell)
 
 int	ft_dispatch_builtin(t_minishell *shell, t_commands *command)
 {
-	if (ft_str_equals(command->command_name, "clear"))
+	if (ft_str_equals(command->arguments[0], "clear"))
 		g_status_code = exec_clear();
-	else if (ft_str_equals(command->command_name, "echo"))
+	else if (ft_str_equals(command->arguments[0], "echo"))
 			exec_echo(shell, command);
-	else if (ft_str_equals(command->command_name, "cd"))
+	else if (ft_str_equals(command->arguments[0], "cd"))
 		g_status_code = exec_cd(shell, command);
-	else if (ft_str_equals(command->command_name, "pwd"))
+	else if (ft_str_equals(command->arguments[0], "pwd"))
 		g_status_code = exec_pwd(shell);
-	else if (ft_str_equals(command->command_name, "export"))
+	else if (ft_str_equals(command->arguments[0], "export"))
 			exec_export(shell, command);
-	else if (ft_str_equals(command->command_name, "unset"))
+	else if (ft_str_equals(command->arguments[0], "unset"))
 		g_status_code = exec_unset(shell, command);
-	else if (ft_str_equals(command->command_name, "env"))
+	else if (ft_str_equals(command->arguments[0], "env"))
 		g_status_code = exec_env(shell);
-	else if (ft_str_equals(command->command_name, "exit"))
+	else if (ft_str_equals(command->arguments[0], "exit"))
 		g_status_code = exec_exit(shell);
 	return (g_status_code);
 }

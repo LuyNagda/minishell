@@ -6,13 +6,13 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:19:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/10 17:03:07 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/15 11:09:26 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../../includes/minishell.h"
-#include "../../dependencies/libft/.includes/put_utils.h"
-#include "../../dependencies/libft/.includes/string_utils.h"
-#include "../../dependencies/libft/.includes/ft_printf.h"
+#include "minishell.h"
+#include "put_utils.h"
+#include "string_utils.h"
+#include "ft_printf.h"
 #include <stdlib.h>
 
 /**
@@ -26,12 +26,12 @@
  * @param index The index of the variable in the string.
  * @return 1 if the variable is not within single quotes, 0 otherwise.
  */
-static int is_variable_in_string(const char *str, size_t index)
+static int variable_in_string(const char *str, size_t index)
 {
-	int		inside_single_quotes;
-	int		inside_double_quotes;
-	char	current_quote;
-	size_t	i;
+	int inside_single_quotes;
+	int inside_double_quotes;
+	char current_quote;
+	size_t i;
 
 	inside_single_quotes = 0;
 	inside_double_quotes = 0;
@@ -56,12 +56,6 @@ static int is_variable_in_string(const char *str, size_t index)
 	return (current_quote == 0 || current_quote == '"');
 }
 
-static t_boolean ft_token_is_in_expendable_quote(t_minishell *shell, char *rebuilded_string, size_t token_pos)
-{
-	size_t len = get_index_from_token(shell, token_pos);
-	return (is_variable_in_string(rebuilded_string, len));
-}
-
 static int ft_has_only_whitespace_between_pipes(t_minishell *shell)
 {
 	t_tokens *tmp;
@@ -79,7 +73,8 @@ static int ft_has_only_whitespace_between_pipes(t_minishell *shell)
 				return 1;
 			is_after_pipe = _true;
 			only_space = _true;
-		} else if (is_after_pipe)
+		}
+		else if (is_after_pipe)
 		{
 			if (tmp->type != SPACE)
 				only_space = _false;
@@ -89,7 +84,7 @@ static int ft_has_only_whitespace_between_pipes(t_minishell *shell)
 	return 0;
 }
 
-static t_boolean contains_valid_key(t_minishell *shell, t_tokens *token)
+static int contains_valid_key(t_minishell *shell, t_tokens *token)
 {
 	t_env_map *map;
 	t_tokens *previous;
@@ -97,10 +92,7 @@ static t_boolean contains_valid_key(t_minishell *shell, t_tokens *token)
 	size_t token_pos;
 	char *rebuilded_string;
 
-	if (token->type != WORD)
-		return (_false);
-	map = env_map_find_node(shell->env_map, token->value);
-	if (map == NULL)
+	if (token->type != WORD && token->type != QUOTED)
 		return (_false);
 	nb_dollars = 0;
 	previous = token->previous;
@@ -110,8 +102,11 @@ static t_boolean contains_valid_key(t_minishell *shell, t_tokens *token)
 		return (_false);
 	rebuilded_string = rebuild_string_from_token(shell);
 	token_pos = get_current_token_pos(token);
-	if (!ft_token_is_in_expendable_quote(shell, rebuilded_string, token_pos))
+	if (!variable_in_string(rebuilded_string, get_index_from_token(shell, token_pos)))
 		return (free(rebuilded_string), _false);
+	map = env_map_find_node(shell->env_map, token->value);
+	if (map == NULL)
+		return (3);
 	return (free(rebuilded_string), _true);
 }
 
@@ -120,6 +115,7 @@ static void treat_variable_keys(t_minishell *shell)
 	t_tokens *tmp;
 	t_tokens *prev;
 	t_env_map *env_finded;
+	char *value;
 
 	tmp = shell->parsing_cmd.tokens;
 	while (tmp)
@@ -128,12 +124,32 @@ static void treat_variable_keys(t_minishell *shell)
 		{
 			env_finded = env_map_find_node(shell->env_map, tmp->value);
 			if (env_finded == NULL)
-				continue;
+				value = ft_strdup("");
+			else
+				value = ft_strdup(env_finded->value);
 			prev = tmp->previous;
 			free(prev->value);
-			prev->value = "";
+			ft_delete_token(&shell->parsing_cmd.tokens, prev);
 			free(tmp->value);
-			tmp->value = env_finded->value;
+			tmp->value = value;
+		}
+		tmp = tmp->next;
+	}
+}
+
+static void append_quoted(t_tokens **tokens)
+{
+	t_tokens *tmp;
+
+	tmp = *tokens;
+	while (tmp && tmp->next)
+	{
+		if (tmp->type == QUOTED && tmp->next->type == QUOTED)
+		{
+			append_token(tmp, tmp->next);
+			ft_delete_token(tokens, tmp->next);
+			tmp = *tokens;
+			continue;
 		}
 		tmp = tmp->next;
 	}
@@ -141,11 +157,17 @@ static void treat_variable_keys(t_minishell *shell)
 
 t_parsing_result on_parse(t_minishell *shell)
 {
+	t_tokens	*end_token;
 	if (ft_has_only_whitespace_between_pipes(shell) != 0)
 		return (ft_putstr_fd(shell->messages.whitepipe_error, 2), free(shell->sended_line), INVALID_INPUT);
 	treat_variable_keys(shell);
-	ft_display_tokens(shell->parsing_cmd.tokens);
-
-	//TODO: Build t_command
+	append_quoted(&shell->parsing_cmd.tokens);
+	end_token = ft_create_token(ft_strdup("|"), PIPE);
+	if (!end_token)
+		return (ERROR);
+	ft_add_back_token(&shell->parsing_cmd.tokens, end_token);
+	shell->commands = ft_command_init();
+	if (!shell->commands)
+		return (ERROR);
 	return (SUCCESS);
 }

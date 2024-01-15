@@ -10,16 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../../dependencies/libft/.includes/string_utils.h"
-#include "../../dependencies/libft/.includes/ft_printf.h"
+#include "minishell.h"
+#include "string_utils.h"
+#include "ft_printf.h"
 #include <unistd.h>
 #include <stdlib.h>
 
-char	**convert_path_to_array(t_env_map *env_map)
+char **convert_path_to_array(t_env_map *env_map)
 {
-	char		**path_array;
-	t_env_map	*path;
+	char **path_array;
+	t_env_map *path;
 
 	path = env_map_find_node(env_map, "PATH");
 	if (path == NULL)
@@ -31,11 +31,11 @@ char	**convert_path_to_array(t_env_map *env_map)
 	return (path_array);
 }
 
-char	*find_command(char *command, char **path_array)
+char *find_command(char *command, char **path_array)
 {
-	int		i;
-	char	*path;
-	char	*temp;
+	int i;
+	char *path;
+	char *temp;
 
 	i = 0;
 	path = NULL;

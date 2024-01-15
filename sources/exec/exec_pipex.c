@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../../dependencies/libft/.includes/string_utils.h"
-#include "../../dependencies/libft/.includes/ft_printf.h"
+#include "minishell.h"
+#include "string_utils.h"
+#include "ft_printf.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>

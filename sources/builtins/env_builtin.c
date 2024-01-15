@@ -9,8 +9,8 @@
 /*   Updated: 2024/01/09 20:25:38 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../../includes/minishell.h"
-#include "../../dependencies/libft/.includes/ft_printf.h"
+#include "minishell.h"
+#include "ft_printf.h"
 
 int	exec_env(t_minishell *shell)
 {
