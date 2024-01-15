@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/15 15:27:52 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/15 15:49:40 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,6 @@ void ft_dispatch_command(t_minishell *shell)
 	if (has_error(shell))
 		return ;
 	tmp = shell->commands;
-	//ft_printf("tmp: %d\n", shell->command_amount);
-	//ft_display_commands_list(tmp);
-	ft_printf("builtin: %d\n", shell->is_builtin);
 	if (shell->command_amount == 1)
 	{
 		if (shell->is_builtin)
@@ -62,7 +59,8 @@ void ft_dispatch_command(t_minishell *shell)
 		else
 			exec_cmd(shell, tmp);
 	}
-	//exec_cmd(shell, tmp);
+	else
+		exec_cmd(shell, tmp);
 }
 
 int	ft_dispatch_builtin(t_minishell *shell, t_commands *command)
