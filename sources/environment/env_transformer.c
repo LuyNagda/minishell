@@ -35,9 +35,9 @@ t_env_map	*env_array_to_map(t_minishell *shell, t_env_map **env_map, char **envp
 			break;
 		}
 		if (split[0])
-			key = ft_strdup(split[0]);
+			key = split[0];
 		if (split[1])
-			value = ft_strdup(split[1]);
+			value = split[1];
 		node = ft_create_env_node(key, value, 1, 1);
 		env_map_add_back(env_map, node, 0);
 		ft_free_split(split);

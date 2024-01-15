@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/15 15:36:07 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/15 17:33:27 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ static void	ft_shell_loop(t_minishell *shell)
 		tokenize_input(shell);
 		if(on_parse(shell) == SUCCESS)
 		{
-			post_parsing(shell);
-			ft_dispatch_command(shell);
+			if (post_parsing(shell) == SUCCESS)
+				ft_dispatch_command(shell);
 		}
 		ft_flush_command_list(shell->commands);
 		ft_flush_tokens(shell->parsing_cmd.tokens);
@@ -56,9 +56,7 @@ int	main(int argc, char **argv, char **env)
 		env_array_to_map(&shell, &shell.env_map, env);
 
 	ft_shell_loop(&shell);
-	//env_map_flush(shell.env_map);
-	//ft_flush_tokens(shell.parsing_cmd.tokens);
-	ft_flush_command_list(shell.commands);
+	env_map_flush(shell.env_map);
 	rl_clear_history();
 	rl_clear_message();
 	rl_clear_visible_line();

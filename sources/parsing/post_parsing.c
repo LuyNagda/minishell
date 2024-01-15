@@ -6,7 +6,11 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:15:13 by jbadaire          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/01/15 16:38:42 by lunagda          ###   ########.fr       */
+=======
+/*   Updated: 2024/01/15 15:19:38 by lunagda          ###   ########.fr       */
+>>>>>>> e788e19... fix: (vSKAH): Fix environement issue with free.
 /*                                                                            */
 /* ************************************************************************** */
 
