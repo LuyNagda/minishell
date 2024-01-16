@@ -3,22 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   pwd_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:45 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/09 20:25:45 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/16 14:10:37 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <unistd.h>
 #include "ft_printf.h"
 
 int	exec_pwd(t_minishell *shell)
 {
-	t_env_map	*node;
+	char	cwd[1024];
 
-	node = env_map_find_node(shell->env_map, "PWD");
-	if (node == NULL)
-		return (ft_printf("PWD has been unset.\n"), 1);
-	return (ft_printf("%s\n", node->value), 0);
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+		return (ft_printf("%s\n", cwd), 0);
+	else
+		return (1);
 }
