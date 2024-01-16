@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/15 17:44:27 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/16 13:27:21 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	child_one(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	{
 		if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
 			error_msg("DUP2 failed");
-		close(pipex->c_pipe[1]);
 	}
 	else if (shell->command_amount == 1 && ft_str_contains(command->raw_command, ">", 0))
 	{
@@ -39,11 +38,12 @@ void	child_one(t_minishell *shell, t_commands *command, t_pipex *pipex)
 			error_msg("DUP2 failed");
 		close(pipex->outfile);
 	}
+	close(pipex->c_pipe[1]);
 	if (command->path == NULL)
 		exit(127);
 	if (command->is_builtin)
 		exit(ft_dispatch_builtin(shell, command));
-	if (execve(command->path, command->arguments, 0) == -1)
+	if (execve(command->path, command->arguments, pipex->envp) == -1)
 		ft_printf("%s: %s", strerror(errno), command->arguments[0]);
 	exit(EXIT_FAILURE);
 }
@@ -54,12 +54,13 @@ void	child_middle(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		error_msg("DUP2 failed");
 	if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
 		error_msg("DUP2 failed");
+	close(pipex->o_pipe[0]);
 	close(pipex->c_pipe[1]);
 	if (command->path == NULL)
 		exit(127);
 	if (command->is_builtin)
 		exit(ft_dispatch_builtin(shell, command));
-	if (execve(command->path,command->arguments, 0) == -1)
+	if (execve(command->path,command->arguments, pipex->envp) == -1)
 		ft_printf("%s: %s", strerror(errno), command->arguments[0]);
 	exit(EXIT_FAILURE);
 }
@@ -74,9 +75,9 @@ void	child_last(t_minishell *shell, t_commands *command, t_pipex *pipex)
 			error_msg("DUP2 failed");
 		close(pipex->outfile);
 	}
-	close(pipex->c_pipe[1]);
-	close(pipex->c_pipe[0]);
 	close(pipex->o_pipe[0]);
+    close(pipex->c_pipe[1]);
+    close(pipex->c_pipe[0]);
 	if (command->path == NULL)
 		exit(127);
 	if (command->is_builtin)
@@ -104,18 +105,23 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	//}
 	if (pipe(pipex->c_pipe) == -1)
 		error_msg("Pipe");
-	pipex->sub_process_pid = fork();
-	if (pipex->sub_process_pid < 0)
+	pipex->pid[command->position] = fork();
+	if (pipex->pid[command->position] < 0)
 		error_msg("Fork");
-	if (command->position == 0 && pipex->sub_process_pid == 0)
+	if (command->position == 0 && pipex->pid[command->position] == 0)
+	{
 		child_one(shell, command, pipex);
-	else if ((command->position < shell->command_amount - 1) && pipex->sub_process_pid == 0)
+	}
+	else if ((command->position < shell->command_amount - 1) && pipex->pid[command->position] == 0)
 		child_middle(shell, command, pipex);
-	else if (command->position && (command->position == shell->command_amount - 1) && pipex->sub_process_pid == 0)
-		child_last(shell, command, pipex);		
+	else if (command->position && (command->position == shell->command_amount - 1) && pipex->pid[command->position] == 0)
+		child_last(shell, command, pipex);
 	close(pipex->c_pipe[1]);
-	if (pipex->o_pipe[0])
+	if (pipex->o_pipe[0] != -1)
+	{
 		close(pipex->o_pipe[0]);
+		pipex->o_pipe[0] = -1;
+	}
 	pipex->o_pipe[0] = pipex->c_pipe[0];
 }
 
@@ -123,16 +129,23 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 {
 	t_pipex	pipex;
 
+	pipex.pid = (int *)malloc(sizeof(int) * shell->command_amount);
 	pipex.envp = env_map_to_array(shell->env_map);
 	if (pipex.envp == NULL)
 		return ;
+	pipex.o_pipe[0] = -1;
 	while (commands)
 	{
 		exec_cmd_loop(shell, commands, &pipex);
 		commands = commands->next_node;
 	}
+	pipex.index = 0;
+	while (pipex.index < shell->command_amount)
+	{
+		waitpid(pipex.pid[pipex.index], &pipex.status, 0);
+		pipex.index++;
+	}
 	close(pipex.o_pipe[0]);
-	waitpid(pipex.sub_process_pid, &pipex.status, 0);
 	g_status_code = WEXITSTATUS(pipex.status);
 	ft_free_split(pipex.envp);
 }

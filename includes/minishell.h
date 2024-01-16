@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/15 17:26:56 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/15 18:41:05 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ typedef struct s_pipex
 {
 	int		index;
 	int		status;
-	int		sub_process_pid;
+	int		*pid;
 	int		c_pipe[2];
 	int		o_pipe[2];
 	int		infile;
