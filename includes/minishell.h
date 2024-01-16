@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/15 18:41:05 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/16 13:57:23 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ typedef struct s_minishell
 
 	t_env_map		*env_map;
 	t_boolean		is_builtin;
-
+	char			**envp;
 	t_pipex			*pipex;
 }					t_minishell;
 

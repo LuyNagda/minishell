@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 12:27:00 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/08 17:34:11 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/16 13:57:10 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,7 @@ char **convert_path_to_array(t_env_map *env_map)
 
 	path = env_map_find_node(env_map, "PATH");
 	if (path == NULL)
-	{
-		ft_printf("PATH has been unset. Commands cannot be found.\n");
 		return (NULL);
-	}
 	path_array = ft_split(path->value, ':');
 	return (path_array);
 }

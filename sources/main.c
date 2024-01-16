@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/16 13:27:34 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/16 13:58:20 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,20 @@
 
 int	g_status_code;
 
+static void	throw_env_error(t_minishell *shell)
+{
+	shell->envp = convert_path_to_array(shell->env_map);
+	if (shell->envp == NULL)
+		ft_printf("PATH has been unset. Only clear, echo, exit and env commands can be executed.\n");
+	else
+		ft_free_split(shell->envp);
+}
+
 static void	ft_shell_loop(t_minishell *shell)
 {
 	char	*line;
 
+	throw_env_error(shell);
 	while (shell->is_running)
 	{
 		line = readline(shell->messages.minishell_prefix);
@@ -54,7 +64,6 @@ int	main(int argc, char **argv, char **env)
 	shell.env_map = env_map_init();
 	if (shell.env_map)
 		env_array_to_map(&shell, &shell.env_map, env);
-
 	ft_shell_loop(&shell);
 	env_map_flush(shell.env_map);
 	rl_clear_history();
