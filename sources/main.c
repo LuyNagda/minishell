@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/16 13:58:20 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/16 14:18:13 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	throw_env_error(t_minishell *shell)
 {
 	shell->envp = convert_path_to_array(shell->env_map);
 	if (shell->envp == NULL)
-		ft_printf("PATH has been unset. Only clear, echo, exit and env commands can be executed.\n");
+		ft_printf("PATH has been unset. Only builtin commands can be executed.\n");
 	else
 		ft_free_split(shell->envp);
 }
