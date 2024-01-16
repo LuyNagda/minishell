@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/16 17:17:58 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/16 17:30:06 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,35 +41,25 @@ static void	exec_command(t_minishell *shell, t_commands *command, t_pipex *pipex
 	exit(EXIT_FAILURE);
 }
 
-void	child_one(t_minishell *shell, t_commands *command, t_pipex *pipex)
+void	child(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
-	if (shell->command_amount != 1)
+	if (shell->command_amount != 1 && command->position == 0)
 	{
 		if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
 			error_msg("DUP2 failed");
 	}
-	else if (shell->command_amount == 1 && ft_str_contains(command->raw_command, ">", 0))
+	else if (shell->command_amount != 1 && command->position < shell->command_amount - 1)
 	{
-		if (dup2(pipex->outfile, STDOUT_FILENO) == -1)
+		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
 			error_msg("DUP2 failed");
-		close(pipex->outfile);
+		if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
+			error_msg("DUP2 failed");
 	}
-	exec_command(shell, command, pipex);
-}
-
-void	child_middle(t_minishell *shell, t_commands *command, t_pipex *pipex)
-{
-	if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
-		error_msg("DUP2 failed");
-	if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
-		error_msg("DUP2 failed");
-	exec_command(shell, command, pipex);
-}
-
-void	child_last(t_minishell *shell, t_commands *command, t_pipex *pipex)
-{
-	if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
-		error_msg("DUP2 failed");
+	else if (shell->command_amount != 1 && (command->position == shell->command_amount - 1))
+	{
+		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
+			error_msg("DUP2 failed");
+	}
 	exec_command(shell, command, pipex);
 }
 
@@ -80,12 +70,8 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	pipex->pid[command->position] = fork();
 	if (pipex->pid[command->position] < 0)
 		error_msg("Fork");
-	if (command->position == 0 && pipex->pid[command->position] == 0)
-		child_one(shell, command, pipex);
-	else if ((command->position < shell->command_amount - 1) && pipex->pid[command->position] == 0)
-		child_middle(shell, command, pipex);
-	else if (command->position && (command->position == shell->command_amount - 1) && pipex->pid[command->position] == 0)
-		child_last(shell, command, pipex);
+	if (pipex->pid[command->position] == 0)
+		child(shell, command, pipex);
 	close(pipex->c_pipe[1]);
 	if (pipex->o_pipe[0] != -1 || (command->position == shell->command_amount - 1))
 		close(pipex->o_pipe[0]);
