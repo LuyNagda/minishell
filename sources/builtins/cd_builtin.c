@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:57 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/16 14:17:17 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/16 15:11:12 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static char	*get_cwd_for_cd(void)
 		return (NULL);
 }
 
-int	exec_cd(t_minishell *shell, t_commands *command)
+void	exec_cd(t_minishell *shell, t_commands *command)
 {
 	t_env_map	*node;
 	t_env_map	*oldpwd;
@@ -35,13 +35,13 @@ int	exec_cd(t_minishell *shell, t_commands *command)
 
 	node = env_map_find_node(shell->env_map, "HOME");
 	if (command->arguments_amount > 2)
-		return (ft_printf("cd: too many arguments\n"), 1);
+		ft_printf("cd: too many arguments\n");
 	else if (node != NULL && command->arguments_amount == 1 && chdir(node->value) != 0)
-		return (ft_printf("cd: %s: %s\n", strerror(errno), command->arguments[0]), 127);
+		ft_printf("cd: %s: %s\n", strerror(errno), command->arguments[0]);
 	else if (command->arguments[1])
 	{
 		if (chdir(command->arguments[1]) != 0)
-			return (ft_printf("cd: %s: %s\n", strerror(errno), command->arguments[0]), 1);
+			ft_printf("cd: %s: %s\n", strerror(errno), command->arguments[0]);
 	}
 	oldpwd = env_map_find_node(shell->env_map, "PWD");
 	if (oldpwd)

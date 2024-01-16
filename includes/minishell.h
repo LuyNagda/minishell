@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/16 13:57:23 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/16 15:10:19 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,13 +126,13 @@ typedef struct s_minishell
 
 int			ft_dispatch_builtin(t_minishell *shell, t_commands *command);
 void		exec_export(t_minishell *shell, t_commands *command);
-int			exec_unset(t_minishell *shell, t_commands *command);
+void		exec_unset(t_minishell *shell, t_commands *command);
 void		exec_echo(t_minishell *shell, t_commands *commands);
-int			exec_pwd(t_minishell *shell);
-int			exec_cd(t_minishell *shell, t_commands *command);
-int			exec_env(t_minishell *shell);
-int			exec_exit(t_minishell *shell);
-int			exec_clear(void);
+void		exec_pwd(t_minishell *shell);
+void		exec_cd(t_minishell *shell, t_commands *command);
+void		exec_env(t_minishell *shell);
+void		exec_exit(t_minishell *shell);
+void		exec_clear(void);
 
 /* *****************************************************/
 /* ********************* EXEC **************************/

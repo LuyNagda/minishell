@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/16 13:45:15 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/16 15:06:30 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,20 +84,20 @@ void ft_dispatch_command(t_minishell *shell)
 int	ft_dispatch_builtin(t_minishell *shell, t_commands *command)
 {
 	if (ft_str_equals(command->arguments[0], "clear"))
-		g_status_code = exec_clear();
+		exec_clear();
 	else if (ft_str_equals(command->arguments[0], "echo"))
-			exec_echo(shell, command);
+		exec_echo(shell, command);
 	else if (ft_str_equals(command->arguments[0], "cd"))
-		g_status_code = exec_cd(shell, command);
+		exec_cd(shell, command);
 	else if (ft_str_equals(command->arguments[0], "pwd"))
-		g_status_code = exec_pwd(shell);
+		exec_pwd(shell);
 	else if (ft_str_equals(command->arguments[0], "export"))
-			exec_export(shell, command);
+		exec_export(shell, command);
 	else if (ft_str_equals(command->arguments[0], "unset"))
-		g_status_code = exec_unset(shell, command);
+		exec_unset(shell, command);
 	else if (ft_str_equals(command->arguments[0], "env"))
-		g_status_code = exec_env(shell);
+		exec_env(shell);
 	else if (ft_str_equals(command->arguments[0], "exit"))
-		g_status_code = exec_exit(shell);
+		exec_exit(shell);
 	return (g_status_code);
 }
