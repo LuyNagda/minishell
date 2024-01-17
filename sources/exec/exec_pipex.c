@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/17 17:01:51 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 21:35:33 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <fcntl.h>
-
-//int	g_status_code;
 
 static void	redirections(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
@@ -87,14 +85,14 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		pipex->o_pipe[0] = pipex->c_pipe[0];
 }
 
-int	exec_cmd(t_minishell *shell, t_commands *commands)
+void	exec_cmd(t_minishell *shell, t_commands *commands)
 {
 	t_pipex	pipex;
 
 	pipex.pid = (int *)malloc(sizeof(int) * shell->command_amount);
 	pipex.envp = env_map_to_array(shell->env_map);
 	if (pipex.envp == NULL)
-		return (1);
+		return ;
 	pipex.o_pipe[0] = -1;
 	while (commands)
 	{
@@ -107,7 +105,8 @@ int	exec_cmd(t_minishell *shell, t_commands *commands)
 	pipex.index = 0;
 	while (pipex.index < shell->command_amount)
 		waitpid(pipex.pid[pipex.index++], &pipex.status, 0);
-	g_status_code = WEXITSTATUS(pipex.status);
+	pipex.status_string = ft_itoa(WEXITSTATUS(pipex.status));
+	env_map_replace(shell->env_map, "?", pipex.status_string);
+	free(pipex.status_string);
 	ft_free_split(pipex.envp);
-	return (g_status_code);
 }

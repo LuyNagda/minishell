@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_dispatcher.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 17:20:21 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 21:31:01 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,39 +61,40 @@ int has_redirection(t_commands *command, char character)
 	return (0);
 }
 
-int ft_dispatch_command(t_minishell *shell)
+void	ft_dispatch_command(t_minishell *shell)
 {
 	t_commands	*tmp;
 
 	if (has_error(shell))
-		return (1);
+	{
+		env_map_replace(shell->env_map, "?", "1");
+		return ;
+	}
 	tmp = shell->commands;
 	//ft_printf("command: %s", tmp->raw_command);
 	//ft_display_commands_list(tmp);
 	if (shell->command_amount == 1 && is_builtins(shell->commands) && !(has_redirection(tmp, '>') || has_redirection(tmp, '<')))
-		g_status_code = ft_dispatch_builtin(shell, tmp);
+		ft_dispatch_builtin(shell, tmp);
 	else
-		g_status_code = exec_cmd(shell, tmp);
-	return (g_status_code);
+		exec_cmd(shell, tmp);
 }
 
-int	ft_dispatch_builtin(t_minishell *shell, t_commands *command)
+void	ft_dispatch_builtin(t_minishell *shell, t_commands *command)
 {
 	if (ft_str_equals(command->arguments[0], "clear"))
-		g_status_code = exec_clear();
+		exec_clear(shell);
 	else if (ft_str_equals(command->arguments[0], "echo"))
 		exec_echo(shell, command);
 	else if (ft_str_equals(command->arguments[0], "cd"))
-		g_status_code = exec_cd(shell, command);
+		exec_cd(shell, command);
 	else if (ft_str_equals(command->arguments[0], "pwd"))
-		g_status_code = exec_pwd(shell);
+		exec_pwd(shell);
 	else if (ft_str_equals(command->arguments[0], "export"))
 		exec_export(shell, command);
 	else if (ft_str_equals(command->arguments[0], "unset"))
-		g_status_code = exec_unset(shell, command);
+		exec_unset(shell, command);
 	else if (ft_str_equals(command->arguments[0], "env"))
-		g_status_code = exec_env(shell);
+		exec_env(shell);
 	else if (ft_str_equals(command->arguments[0], "exit"))
-		g_status_code = exec_exit(shell);
-	return (g_status_code);
+		exec_exit(shell);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:23:40 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 17:26:57 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 21:26:14 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,16 @@ static int	check_arg(t_commands *command)
 	return (1);
 }
 
-int	exec_echo(t_minishell *shell, t_commands *command)
+void	exec_echo(t_minishell *shell, t_commands *command)
 {
 	size_t		index;
 
 	if (!command->arguments[1])
-		return (ft_printf("\n"), 0);
-	if (ft_str_equals(command->arguments[1], "$?"))
-		return (ft_printf("%d\n", g_status_code), 0);
+	{
+		ft_printf("\n");
+		env_map_replace(shell->env_map, "?", "0");
+		return ;
+	}
 	if (check_arg(command) == 1)
 		index = 2;
 	else
@@ -48,5 +50,5 @@ int	exec_echo(t_minishell *shell, t_commands *command)
 	}
 	if (check_arg(command) == 0)
 		ft_printf("\n");
-	return (0);
+	env_map_replace(shell->env_map, "?", "0");
 }

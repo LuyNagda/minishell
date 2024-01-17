@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_builtin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:50 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 17:13:24 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 21:37:40 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,11 @@ void	exec_export_part(t_minishell *shell, t_commands *command)
 	env_map_add_back(&shell->env_map, node, 1);
 }
 
-int	exec_export(t_minishell *shell, t_commands *command)
+void	exec_export(t_minishell *shell, t_commands *command)
 {
 	t_env_map 	*node;
 
+	env_map_replace(shell->env_map, "?", "0");
 	if (command->arguments_amount == 1)
 	{
 		node = shell->env_map;
@@ -53,8 +54,7 @@ int	exec_export(t_minishell *shell, t_commands *command)
 			ft_printf("\n");
 			node = node->next_node;
 		}
-		return (0);
+		return ;
 	}
 	exec_export_part(shell, command);
-	return (0);
 }

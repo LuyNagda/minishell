@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   env_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:38 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 17:06:22 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 21:30:20 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "ft_printf.h"
 
-int	exec_env(t_minishell *shell)
+void	exec_env(t_minishell *shell)
 {
 	t_env_map	*head;
 
@@ -24,5 +24,5 @@ int	exec_env(t_minishell *shell)
 			ft_printf("%s=%s\n", head->key, head->value);
 		head = head->next_node;
 	}
-	return (0);
+	env_map_replace(shell->env_map, "?", "0");
 }
