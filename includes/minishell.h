@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 22:24:09 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/17 23:11:44 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,6 @@ void		ft_replace_whitespace(char *line, char value);
 char		ft_get_last_char_iw(char *line);
 char		ft_get_first_char_iw(char *line);
 
-char		**trim_command_list(char **command_list);
 void		error_msg(char *string);
 char *build_str_from_array(char **array);
 t_message	ft_init_messages(void);
