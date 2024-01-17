@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/17 22:23:22 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/18 00:53:44 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	redirections(t_minishell *shell, t_commands *command, t_pipex *pipex
 			error_msg("DUP2 failed");
 		close(command->output_fd);
 	}
-	else if (shell->command_amount != 1 && command->position < shell->command_amount)
+	else if (shell->command_amount != 1 && command->position < shell->command_amount - 1)
 	{
 		if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
 			error_msg("DUP2 failed");
