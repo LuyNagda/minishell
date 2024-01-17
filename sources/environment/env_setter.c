@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:43:18 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 21:50:57 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/17 21:53:53 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,6 @@ t_env_map *env_map_replace_or_add(t_env_map *env_map, char *key, char *value)
 		tmp = tmp->next_node;
 	}
 	node = ft_create_env_node(key, value, 1, 0);
-	env_map_add_back(env_map, node, 1);
+	env_map_add_back(&env_map, node, 1);
 	return (env_map);
 }

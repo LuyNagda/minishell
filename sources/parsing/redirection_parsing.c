@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_parsing.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:42:21 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/17 15:20:23 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 21:54:23 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@ static void	remove_file_from_command(t_commands *command)
 	command->arguments_amount = j - i;
 	j = 0;
 	while (j < i)
-		result[j++] = ft_strdup(tmp[j]);
+	{
+		result[j] = ft_strdup(tmp[j]);
+		j++;
+	}
 	result[j] = 0;
 	ft_free_split(command->arguments);
 	command->arguments = result;
