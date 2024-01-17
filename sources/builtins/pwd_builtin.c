@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:45 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/16 15:12:06 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 16:57:26 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 #include <unistd.h>
 #include "ft_printf.h"
 
-void	exec_pwd(t_minishell *shell)
+int	exec_pwd(t_minishell *shell)
 {
 	char	cwd[1024];
 
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		ft_printf("%s\n", cwd);
+		return (ft_printf("%s\n", cwd), 0);
 	else
-		ft_printf("Error occurred during executing pwd.");
+		return (ft_printf("Error occurred during executing pwd."), 1);
 }

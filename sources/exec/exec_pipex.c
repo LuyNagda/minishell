@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/17 15:40:22 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 17:01:51 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,10 @@ static void	exec_command(t_minishell *shell, t_commands *command, t_pipex *pipex
 	close(pipex->c_pipe[0]);
 	close(pipex->c_pipe[1]);
 	if (command->is_builtin)
-		exit(ft_dispatch_builtin(shell, command));
+	{
+		ft_dispatch_builtin(shell, command);
+		exit(g_status_code);
+	}
 	if (execve(command->path, command->arguments, pipex->envp) == -1)
 	{
 		if (command->path == NULL)
@@ -84,14 +87,14 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		pipex->o_pipe[0] = pipex->c_pipe[0];
 }
 
-void	exec_cmd(t_minishell *shell, t_commands *commands)
+int	exec_cmd(t_minishell *shell, t_commands *commands)
 {
 	t_pipex	pipex;
 
 	pipex.pid = (int *)malloc(sizeof(int) * shell->command_amount);
 	pipex.envp = env_map_to_array(shell->env_map);
 	if (pipex.envp == NULL)
-		return ;
+		return (1);
 	pipex.o_pipe[0] = -1;
 	while (commands)
 	{
@@ -106,4 +109,5 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 		waitpid(pipex.pid[pipex.index++], &pipex.status, 0);
 	g_status_code = WEXITSTATUS(pipex.status);
 	ft_free_split(pipex.envp);
+	return (g_status_code);
 }

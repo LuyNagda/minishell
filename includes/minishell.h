@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 15:38:18 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 17:13:47 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,7 @@ typedef struct s_pipex
 	int		*pid;
 	int		c_pipe[2];
 	int		o_pipe[2];
-	int		infile;
-	int		outfile;
 	char	**envp;
-	char	*path;
-	char	**command_list;
-	char	*temp;
 }			t_pipex;
 
 typedef struct s_minishell
@@ -124,22 +119,22 @@ typedef struct s_minishell
 /* ******************** BUILTIN ************************/
 /* *****************************************************/
 
-int			ft_dispatch_builtin(t_minishell *shell, t_commands *command);
-void		exec_export(t_minishell *shell, t_commands *command);
-void		exec_unset(t_minishell *shell, t_commands *command);
-void		exec_echo(t_minishell *shell, t_commands *commands);
-void		exec_pwd(t_minishell *shell);
-void		exec_cd(t_minishell *shell, t_commands *command);
-void		exec_env(t_minishell *shell);
-void		exec_exit(t_minishell *shell);
-void		exec_clear(void);
+int		ft_dispatch_builtin(t_minishell *shell, t_commands *command);
+int		exec_export(t_minishell *shell, t_commands *command);
+int		exec_unset(t_minishell *shell, t_commands *command);
+int		exec_echo(t_minishell *shell, t_commands *command);
+int		exec_pwd(t_minishell *shell);
+int		exec_cd(t_minishell *shell, t_commands *command);
+int		exec_env(t_minishell *shell);
+int		exec_exit(t_minishell *shell);
+int		exec_clear(void);
 
 /* *****************************************************/
 /* ********************* EXEC **************************/
 /* *****************************************************/
 
-void		ft_dispatch_command(t_minishell *shell);
-void		exec_cmd(t_minishell *shell, t_commands *command);
+int			ft_dispatch_command(t_minishell *shell);
+int			exec_cmd(t_minishell *shell, t_commands *command);
 int			is_builtins(t_commands *command);
 char		**convert_path_to_array(t_env_map *env_map);
 char		*find_command(char *command, char **path_array);

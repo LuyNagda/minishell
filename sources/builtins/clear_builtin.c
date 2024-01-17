@@ -6,13 +6,14 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:26:37 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/16 15:05:55 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 17:05:00 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include "ft_printf.h"
 
-void	exec_clear(void)
+int	exec_clear(void)
 {
-	ft_printf("\ec");
+	return (ft_printf("\ec"), 0);
 }

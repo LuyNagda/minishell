@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:50 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/16 15:09:02 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 17:13:24 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	exec_export_part(t_minishell *shell, t_commands *command)
 	env_map_add_back(&shell->env_map, node, 1);
 }
 
-void	exec_export(t_minishell *shell, t_commands *command)
+int	exec_export(t_minishell *shell, t_commands *command)
 {
 	t_env_map 	*node;
 
@@ -53,7 +53,8 @@ void	exec_export(t_minishell *shell, t_commands *command)
 			ft_printf("\n");
 			node = node->next_node;
 		}
-		return ;
+		return (0);
 	}
 	exec_export_part(shell, command);
+	return (0);
 }

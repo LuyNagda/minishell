@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:23:40 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/16 15:45:04 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 17:26:57 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,39 @@
 #include "ft_printf.h"
 #include "string_utils.h"
 
-static int	check_arg(t_commands *commands)
+static int	check_arg(t_commands *command)
 {
 	int	i;
 
 	i = 0;
-	while (commands->arguments[1][i])
+	while (command->arguments[1][i])
 	{
-		if (!ft_strchr("-n", commands->arguments[1][i]))
+		if (!ft_strchr("-n", command->arguments[1][i]))
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-void	exec_echo(t_minishell *shell, t_commands *commands)
+int	exec_echo(t_minishell *shell, t_commands *command)
 {
 	size_t		index;
 
-	if (check_arg(commands) == 1)
+	if (!command->arguments[1])
+		return (ft_printf("\n"), 0);
+	if (ft_str_equals(command->arguments[1], "$?"))
+		return (ft_printf("%d\n", g_status_code), 0);
+	if (check_arg(command) == 1)
 		index = 2;
 	else
 		index = 1;
-	while (commands->arguments[index])
+	while (command->arguments[index])
 	{
-		ft_printf("%s", commands->arguments[index++]);
-		if (commands->arguments[index])
+		ft_printf("%s", command->arguments[index++]);
+		if (command->arguments[index])
 				ft_printf(" ");
 	}
-	if (check_arg(commands) == 0)
+	if (check_arg(command) == 0)
 		ft_printf("\n");
-	commands->has_already_executed = _true;
+	return (0);
 }

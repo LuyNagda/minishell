@@ -6,14 +6,14 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:38 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/16 15:12:28 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 17:06:22 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "ft_printf.h"
 
-void	exec_env(t_minishell *shell)
+int	exec_env(t_minishell *shell)
 {
 	t_env_map	*head;
 
@@ -24,4 +24,5 @@ void	exec_env(t_minishell *shell)
 			ft_printf("%s=%s\n", head->key, head->value);
 		head = head->next_node;
 	}
+	return (0);
 }
