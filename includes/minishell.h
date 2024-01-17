@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/16 15:10:19 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 15:38:18 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_commands
 	size_t				arguments_amount;
 	t_boolean			has_already_executed;
 	t_boolean			error_during_creation;
-	t_boolean			is_builtin;
+	int					is_builtin;
 
 	int input_fd;
 	int output_fd;
@@ -115,7 +115,7 @@ typedef struct s_minishell
 	size_t			command_amount;
 
 	t_env_map		*env_map;
-	t_boolean		is_builtin;
+	int				is_builtin;
 	char			**envp;
 	t_pipex			*pipex;
 }					t_minishell;
@@ -188,7 +188,8 @@ t_parsing_result	pre_parsing(t_minishell *shell);
 t_parsing_result	on_parse(t_minishell *shell);
 t_parsing_result 	post_parsing(t_minishell *shell);
 int 				has_redirection(t_commands *command, char character);
-
+void				out_redirection_parsing(t_commands *commands);
+	
 /* *****************************************************/
 /* ******************** TOKENS *************************/
 /* *****************************************************/

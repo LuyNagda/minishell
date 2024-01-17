@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 19:26:42 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/16 13:53:03 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 15:32:32 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ t_commands	*ft_command_new_node(t_env_map *map, char **args)
 	command->position = 0;
 	command->next_node = NULL;
 	command->error_during_creation = _false;
+	command->is_builtin = is_builtins(command);
 	if (path_array)
 	{
 		if (is_builtins(command))

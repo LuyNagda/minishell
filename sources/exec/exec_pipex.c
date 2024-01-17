@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/16 17:30:06 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 15:40:22 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,27 @@
 #include <fcntl.h>
 
 //int	g_status_code;
+
+static void	redirections(t_minishell *shell, t_commands *command, t_pipex *pipex)
+{
+	if (command->position > 0)
+	{
+		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
+			error_msg("DUP2 failed");
+	}
+	if (has_redirection(command, '>'))
+	{
+		out_redirection_parsing(command);
+		if (dup2(command->output_fd, STDOUT_FILENO) == -1)
+			error_msg("DUP2 failed");
+		close(command->output_fd);
+	}
+	else if (shell->command_amount != 1 && command->position < shell->command_amount)
+	{
+		if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
+			error_msg("DUP2 failed");
+	}
+}
 
 static void	exec_command(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
@@ -43,23 +64,7 @@ static void	exec_command(t_minishell *shell, t_commands *command, t_pipex *pipex
 
 void	child(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
-	if (shell->command_amount != 1 && command->position == 0)
-	{
-		if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
-			error_msg("DUP2 failed");
-	}
-	else if (shell->command_amount != 1 && command->position < shell->command_amount - 1)
-	{
-		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
-			error_msg("DUP2 failed");
-		if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
-			error_msg("DUP2 failed");
-	}
-	else if (shell->command_amount != 1 && (command->position == shell->command_amount - 1))
-	{
-		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
-			error_msg("DUP2 failed");
-	}
+	redirections(shell, command, pipex);
 	exec_command(shell, command, pipex);
 }
 

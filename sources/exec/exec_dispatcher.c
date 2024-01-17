@@ -6,11 +6,11 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/16 15:06:30 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/17 15:47:49 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 #include "ft_printf.h"
 
 int	is_builtins(t_commands *command)
@@ -70,13 +70,8 @@ void ft_dispatch_command(t_minishell *shell)
 	tmp = shell->commands;
 	//ft_printf("command: %s", tmp->raw_command);
 	//ft_display_commands_list(tmp);
-	if (shell->command_amount == 1 && !(has_redirection(tmp, '>') || has_redirection(tmp, '<')))
-	{
-		if (shell->is_builtin)
-			ft_dispatch_builtin(shell, tmp);
-		else
-			exec_cmd(shell, tmp);
-	}
+	if (shell->command_amount == 1 && is_builtins(shell->commands) && !(has_redirection(tmp, '>') || has_redirection(tmp, '<')))
+		ft_dispatch_builtin(shell, tmp);
 	else
 		exec_cmd(shell, tmp);
 }
