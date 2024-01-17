@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/17 21:35:33 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/17 22:23:22 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	exec_command(t_minishell *shell, t_commands *command, t_pipex *pipex
 	if (command->is_builtin)
 	{
 		ft_dispatch_builtin(shell, command);
-		exit(g_status_code);
+		exit(127);
 	}
 	if (execve(command->path, command->arguments, pipex->envp) == -1)
 	{

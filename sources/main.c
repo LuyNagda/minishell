@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 21:30:08 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/17 22:24:13 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 #include "string_utils.h"
 #include "ft_printf.h"
 
-int	g_status_code;
-
 static void	throw_env_error(t_minishell *shell)
 {
 	shell->envp = convert_path_to_array(shell->env_map);
@@ -29,7 +27,7 @@ static void	throw_env_error(t_minishell *shell)
 		ft_free_split(shell->envp);
 }
 
-static int	ft_shell_loop(t_minishell *shell)
+static void	ft_shell_loop(t_minishell *shell)
 {
 	char	*line;
 
@@ -51,7 +49,6 @@ static int	ft_shell_loop(t_minishell *shell)
 		ft_flush_command_list(shell->commands);
 		ft_flush_tokens(shell->parsing_cmd.tokens);
 	}
-	return (g_status_code);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -67,9 +64,9 @@ int	main(int argc, char **argv, char **env)
 		env_array_to_map(&shell, &shell.env_map, env);
 	ft_shell_loop(&shell);
 	env_map_flush(shell.env_map);
-	//rl_clear_history();
-	//rl_clear_message();
-	//rl_clear_visible_line();
-	//rl_clear_pending_input();
-	return (g_status_code);
+	rl_clear_history();
+	rl_clear_message();
+	rl_clear_visible_line();
+	rl_clear_pending_input();
+	return (0);
 }

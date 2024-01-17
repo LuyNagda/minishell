@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 21:51:11 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/17 22:24:09 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 # include "boolean.h"
 # include <stddef.h>
-
-extern int	g_status_code;
 
 typedef enum e_token
 {
