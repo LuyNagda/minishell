@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:50 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 21:37:40 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/17 21:52:26 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	exec_export(t_minishell *shell, t_commands *command)
 {
 	t_env_map 	*node;
 
-	env_map_replace(shell->env_map, "?", "0");
+	env_map_replace_or_add(shell->env_map, "?", "0");
 	if (command->arguments_amount == 1)
 	{
 		node = shell->env_map;

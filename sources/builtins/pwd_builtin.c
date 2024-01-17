@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:45 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 21:30:41 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/17 21:52:30 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ void	exec_pwd(t_minishell *shell)
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
 		ft_printf("%s\n", cwd);
-		env_map_replace(shell->env_map, "?", "0");
+		env_map_replace_or_add(shell->env_map, "?", "0");
 	}
 	else
 	{
 		ft_printf("Error occurred during executing pwd.");
-		env_map_replace(shell->env_map, "?", "1");
+		env_map_replace_or_add(shell->env_map, "?", "1");
 	}
 }

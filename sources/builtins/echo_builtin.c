@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:23:40 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 21:26:14 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/17 21:52:05 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	exec_echo(t_minishell *shell, t_commands *command)
 	if (!command->arguments[1])
 	{
 		ft_printf("\n");
-		env_map_replace(shell->env_map, "?", "0");
+		env_map_replace_or_add(shell->env_map, "?", "0");
 		return ;
 	}
 	if (check_arg(command) == 1)
@@ -50,5 +50,5 @@ void	exec_echo(t_minishell *shell, t_commands *command)
 	}
 	if (check_arg(command) == 0)
 		ft_printf("\n");
-	env_map_replace(shell->env_map, "?", "0");
+	env_map_replace_or_add(shell->env_map, "?", "0");
 }

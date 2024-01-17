@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 21:35:07 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/17 21:51:11 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ t_env_map	*env_map_remove_from_key(t_env_map *env_map, char *key);
 t_env_map	*env_map_replace(t_env_map *env_map, char *key, char *value);
 t_env_map	*env_map_find_node(t_env_map *env_map, char *key);
 t_env_map	*env_array_to_map(t_minishell *shell, t_env_map **env_map, char **env);
+t_env_map 	*env_map_replace_or_add(t_env_map *env_map, char *key, char *value);
 
 char		**env_map_to_array(t_env_map *env_map);
 char		*env_map_get_key(t_env_map *env_map, size_t node_pos);

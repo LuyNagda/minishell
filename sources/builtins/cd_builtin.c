@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:57 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 21:37:15 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/17 21:51:54 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	exec_cd(t_minishell *shell, t_commands *command)
 	t_env_map	*oldpwd;
 	t_env_map	*pwd;
 
-	env_map_replace(shell->env_map, "?", "0");
+	env_map_replace_or_add(shell->env_map, "?", "0");
 	node = env_map_find_node(shell->env_map, "HOME");
 	if (command->arguments_amount > 2)
 		err_msg(shell, command, "cd: too many arguments\n");
@@ -55,7 +55,7 @@ void	exec_cd(t_minishell *shell, t_commands *command)
 	}
 	oldpwd = env_map_find_node(shell->env_map, "PWD");
 	if (oldpwd)
-		env_map_replace(shell->env_map, "OLDPWD", oldpwd->value);
-	env_map_replace(shell->env_map, "PWD", get_cwd_for_cd());
+		env_map_replace_or_add(shell->env_map, "OLDPWD", oldpwd->value);
+	env_map_replace_or_add(shell->env_map, "PWD", get_cwd_for_cd());
 }
 

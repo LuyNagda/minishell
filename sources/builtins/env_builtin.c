@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:38 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 21:30:20 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/17 21:52:10 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,5 @@ void	exec_env(t_minishell *shell)
 			ft_printf("%s=%s\n", head->key, head->value);
 		head = head->next_node;
 	}
-	env_map_replace(shell->env_map, "?", "0");
+	env_map_replace_or_add(shell->env_map, "?", "0");
 }
