@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 23:11:44 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/18 13:05:32 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ t_parsing_result	pre_parsing(t_minishell *shell);
 t_parsing_result	on_parse(t_minishell *shell);
 t_parsing_result 	post_parsing(t_minishell *shell);
 int 				has_redirection(t_commands *command, char character);
-void				out_redirection_parsing(t_commands *commands);
+void				redirection_parsing(t_commands *commands, char *character);
 	
 /* *****************************************************/
 /* ******************** TOKENS *************************/

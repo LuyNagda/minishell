@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/18 09:33:57 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/18 13:13:39 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,21 @@
 // Gestion de toutes les redirections (duplication des pipes, output_fd avec STDIN/STDOUT)
 static void	redirections(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
-	if (command->position > 0)
+	if (command->position > 0 && !command->input_fd)
 	{
 		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
 			error_msg("DUP2 failed");
 	}
+	if (has_redirection(command, '<'))
+	{
+		redirection_parsing(command, "<");
+		if (dup2(command->input_fd, STDIN_FILENO) == -1)
+			error_msg("DUP2 failed");
+		close(command->input_fd);
+	}
 	if (has_redirection(command, '>'))
 	{
-		out_redirection_parsing(command);
+		redirection_parsing(command, ">");
 		if (dup2(command->output_fd, STDOUT_FILENO) == -1)
 			error_msg("DUP2 failed");
 		close(command->output_fd);
