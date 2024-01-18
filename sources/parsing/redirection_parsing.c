@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:42:21 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/18 09:38:10 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/18 09:59:34 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	count_redirection(t_commands *command, char *character)
 
 // Removing the file from command arguments once it's opened
 // Suppression du fichier des arguments de commande une fois qu'il a été ouvert
-static void	remove_file_from_command(t_commands *command)
+static void	remove_file_from_command(t_commands *command, char *character)
 {
 	int		i;
 	int		j;
@@ -50,7 +50,7 @@ static void	remove_file_from_command(t_commands *command)
 
 	i = 0;
 	tmp = command->arguments;
-	while (tmp[i] && ft_strncmp(tmp[i], ">", 1))
+	while (tmp[i] && ft_strncmp(tmp[i], character, 1))
 		i++;
 	j = i;
 	while (tmp[i])
@@ -105,7 +105,7 @@ void	out_redirection_parsing(t_commands *command)
 				tmp->output_fd = open(tmp->arguments[++i], O_CREAT | O_RDWR | O_TRUNC, 0777);
 			else if (redirection == 2)
 				tmp->output_fd = open(tmp->arguments[++i], O_WRONLY | O_APPEND | O_CREAT, 0777);
-			remove_file_from_command(tmp);
+			remove_file_from_command(tmp, ">");
 		}
 		if (count > 1)
 			close(command->output_fd);
