@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/18 13:13:39 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/18 15:27:10 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,30 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+#include <readline/readline.h>
 
 // Managing all the redirection (duplicating pipes, output_fd with STDIN/STDOUT)
 // Gestion de toutes les redirections (duplication des pipes, output_fd avec STDIN/STDOUT)
 static void	redirections(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
+	char	*line;
+
+	if (has_redirection(command, '<') == 2)
+	{
+		redirection_parsing(command, "<");
+		line = readline("$>");
+		while (!ft_str_equals(command->here_doc, line))
+		{
+			ft_putstr_fd(line, command->input_fd);
+			ft_putstr_fd("\n", command->input_fd);
+			free(line);
+			line = readline("$>");
+		}
+		free(line);
+		if (dup2(command->input_fd, STDIN_FILENO) == -1)
+			error_msg("DUP2 failed");
+		close(command->input_fd);
+	}
 	if (command->position > 0 && !command->input_fd)
 	{
 		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
@@ -33,9 +52,17 @@ static void	redirections(t_minishell *shell, t_commands *command, t_pipex *pipex
 	if (has_redirection(command, '<'))
 	{
 		redirection_parsing(command, "<");
-		if (dup2(command->input_fd, STDIN_FILENO) == -1)
-			error_msg("DUP2 failed");
-		close(command->input_fd);
+		if (command->input_fd > 0)
+		{
+			if (dup2(command->input_fd, STDIN_FILENO) == -1)
+				error_msg("DUP2 failed");
+			close(command->input_fd);
+		}
+		else
+		{
+			printf("bash: syntax error near unexpected token `newline'\n");
+			exit(EXIT_FAILURE);
+		}
 	}
 	if (has_redirection(command, '>'))
 	{
@@ -68,10 +95,13 @@ static void	exec_command(t_minishell *shell, t_commands *command, t_pipex *pipex
 	}
 	if (execve(command->path, command->arguments, pipex->envp) == -1)
 	{
-		if (command->path == NULL)
-			ft_printf("command not found: %s\n", command->arguments[0]);
-		else
-			ft_printf("%s: %s\n", strerror(errno), command->arguments[0]);
+		if (command->arguments_amount > 0)
+		{
+			if (command->path == NULL)
+				ft_printf("command not found: %s\n", command->arguments[0]);
+			else
+				ft_printf("%s: %s\n", strerror(errno), command->arguments[0]);
+		}
 	}
 	exit(EXIT_FAILURE);
 }

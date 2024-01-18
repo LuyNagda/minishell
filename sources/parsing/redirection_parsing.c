@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:42:21 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/18 13:09:34 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/18 15:24:56 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include "minishell.h"
 #include "string_utils.h"
 #include <stdio.h>
+#include <errno.h>
+#include <string.h>
 
 // Counting the number of redirections in the command
 // Compter le nombre de redirections dans la commande
@@ -63,11 +65,23 @@ static void	remove_file_from_command(t_commands *command, char *character)
 		result[i] = ft_strdup(tmp[i]);
 		i++;
 	}
-	while (tmp[j + 2])
+	if (command->here_doc)
 	{
-		result[i] = ft_strdup(tmp[j + 2]);
-		i++;
-		j++;
+		while (tmp[j + 1])
+		{
+			result[i] = ft_strdup(tmp[j + 1]);
+			i++;
+			j++;
+		}
+	}
+	else
+	{
+		while (tmp[j + 2])
+		{
+			result[i] = ft_strdup(tmp[j + 2]);
+			i++;
+			j++;
+		}
 	}
 	result[i] = 0;
 	ft_free_split(command->arguments);
@@ -98,6 +112,7 @@ void	redirection_parsing(t_commands *command, char *character)
 	int			i;
 	int			count;
 	t_commands	*tmp;
+	char		*line;
 
 	tmp = command;
 	count = count_redirection(tmp, character);
@@ -119,9 +134,19 @@ void	redirection_parsing(t_commands *command, char *character)
 			else
 			{
 				if (redirection == 1)
+				{
 					tmp->input_fd = open(tmp->arguments[++i], O_RDONLY);
+					if (tmp->input_fd < 0)
+					{
+						printf("%s: %s\n", strerror(errno), tmp->arguments[i]);
+						exit(EXIT_FAILURE);
+					}
+				}
 				else
-					tmp->input_fd = 0;
+				{
+					tmp->input_fd = open(tmp->arguments[++i], O_RDWR | O_CREAT | O_TRUNC, 0777);;
+					tmp->here_doc = ft_strdup(tmp->arguments[i]);
+				}
 			}
 			remove_file_from_command(tmp, character);
 		}
