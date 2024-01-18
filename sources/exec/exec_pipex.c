@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/18 15:51:16 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/18 16:07:57 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@
 #include <fcntl.h>
 #include <readline/readline.h>
 
-// Managing all the redirection (duplicating pipes, output_fd with STDIN/STDOUT)
-// Gestion de toutes les redirections (duplication des pipes, output_fd avec STDIN/STDOUT)
-static void	redirections(t_minishell *shell, t_commands *command, t_pipex *pipex)
+static void	here_doc(t_commands *command)
 {
 	char	*line;
 
@@ -44,11 +42,10 @@ static void	redirections(t_minishell *shell, t_commands *command, t_pipex *pipex
 			error_msg("DUP2 failed");
 		close(command->input_fd);
 	}
-	if (command->position > 0 && !command->input_fd)
-	{
-		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
-			error_msg("DUP2 failed");
-	}
+}
+
+static void	normal_redirections(t_commands *command)
+{
 	if (has_redirection(command, '<'))
 	{
 		redirection_parsing(command, "<");
@@ -64,6 +61,19 @@ static void	redirections(t_minishell *shell, t_commands *command, t_pipex *pipex
 			exit(EXIT_FAILURE);
 		}
 	}
+}
+
+// Managing all the redirection (duplicating pipes, output_fd with STDIN/STDOUT)
+// Gestion de toutes les redirections (duplication des pipes, output_fd avec STDIN/STDOUT)
+static void	redirections(t_minishell *shell, t_commands *command, t_pipex *pipex)
+{
+	here_doc(command);
+	if (command->position > 0 && !command->input_fd)
+	{
+		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
+			error_msg("DUP2 failed");
+	}
+	normal_redirections(command);
 	if (has_redirection(command, '>'))
 	{
 		redirection_parsing(command, ">");
@@ -106,12 +116,6 @@ static void	exec_command(t_minishell *shell, t_commands *command, t_pipex *pipex
 	exit(EXIT_FAILURE);
 }
 
-void	child(t_minishell *shell, t_commands *command, t_pipex *pipex)
-{
-	redirections(shell, command, pipex);
-	exec_command(shell, command, pipex);
-}
-
 // Initialising pipe and child. Child is initialised in the relating pid to his position.
 // Closing current pipe 1 in the parent as it is not required once we write to it.
 // Closing old pipe 0 when the command is not the first command or is the last command
@@ -128,7 +132,10 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	if (pipex->pid[command->position] < 0)
 		error_msg("Fork");
 	if (pipex->pid[command->position] == 0)
-		child(shell, command, pipex);
+	{
+		redirections(shell, command, pipex);
+		exec_command(shell, command, pipex);
+	}
 	close(pipex->c_pipe[1]);
 	if (pipex->o_pipe[0] != -1 && (command->position == shell->command_amount - 1))
 		close(pipex->o_pipe[0]);
@@ -168,5 +175,6 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 	pipex.status_string = ft_itoa(WEXITSTATUS(pipex.status));
 	env_map_replace(shell->env_map, "?", pipex.status_string);
 	free(pipex.status_string);
+	free(pipex.pid);
 	ft_free_split(pipex.envp);
 }
