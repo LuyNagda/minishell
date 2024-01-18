@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/18 00:53:44 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/18 09:33:57 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
+// Managing all the redirection (duplicating pipes, output_fd with STDIN/STDOUT)
+// Gestion de toutes les redirections (duplication des pipes, output_fd avec STDIN/STDOUT)
 static void	redirections(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
 	if (command->position > 0)
@@ -42,6 +44,10 @@ static void	redirections(t_minishell *shell, t_commands *command, t_pipex *pipex
 	}
 }
 
+// Closing all the open pipes in child, checking if the command is builtin then running the builtin
+// if not built_in, we execve the command passed as argument and give out appropriate error if fails.
+// Fermeture de tous les pipes ouverts dans l'enfant, vérification si la commande est intégrée et exécution de l'intégration.
+// si ce n'est pas le cas, nous exécutons la commande passée en argument et affichons l'erreur appropriée en cas d'échec.
 static void	exec_command(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
 	if (command->position != 0)
@@ -69,6 +75,14 @@ void	child(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	exec_command(shell, command, pipex);
 }
 
+// Initialising pipe and child. Child is initialised in the relating pid to his position.
+// Closing current pipe 1 in the parent as it is not required once we write to it.
+// Closing old pipe 0 when the command is not the first command or is the last command
+// Lastly, assinging the current pipe 0 to the old pipe 0 to store it's value for next child
+// Initialisation du tuyau et de l'enfant. L'enfant est initialisé dans le pid correspondant à sa position.
+// Fermeture du tuyau 1 dans le parent car il n'est pas nécessaire une fois que l'on a écrit dessus.
+// Fermeture de l'ancien tuyau 0 lorsque la commande n'est pas la première ou la dernière.
+// Enfin, on assigne le current pipe 0 à l'old pipe 0 pour stocker sa valeur pour le prochain enfant.
 void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
 	if (pipe(pipex->c_pipe) == -1)
@@ -85,6 +99,14 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		pipex->o_pipe[0] = pipex->c_pipe[0];
 }
 
+// Mallocing the pid with number of commands, assigning envp and initialising old pipe
+// loop commands and run the function until the last command in the list
+// close all the pipes used. After, waiting for all the children and getting status
+// converting status code to string and assigning the status code
+// Mallocing du pid avec le nombre de commandes, attribution de l'envp et initialisation de l'ancien pipe
+// boucler les commandes et exécuter la fonction jusqu'à la dernière commande de la liste
+// fermer tous les tuyaux utilisés. Ensuite, attente de tous les enfants et obtention du statut
+// conversion du code d'état en chaîne de caractères et attribution du code d'état
 void	exec_cmd(t_minishell *shell, t_commands *commands)
 {
 	t_pipex	pipex;
