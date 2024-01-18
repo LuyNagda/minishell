@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_parsing.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:42:21 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/18 15:24:56 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/18 20:34:06 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,23 @@ static void	remove_file_from_command(t_commands *command, char *character)
 	j = i;
 	while (tmp[i])
 		i++;
-	result = (char **)malloc(sizeof(char *) * (i - 1));
-	command->arguments_amount = i - 2;
+	if (has_redirection(command, '<') == 2)
+	{
+		result = (char **)malloc(sizeof(char *) * (i));
+		command->arguments_amount = i - 1;
+	}
+	else
+	{
+		result = (char **)malloc(sizeof(char *) * (i - 1));
+		command->arguments_amount = i - 2;
+	}
 	i = 0;
 	while (i < j)
 	{
 		result[i] = ft_strdup(tmp[i]);
 		i++;
 	}
-	if (command->here_doc)
+	if (has_redirection(command, '<') == 2)
 	{
 		while (tmp[j + 1])
 		{
