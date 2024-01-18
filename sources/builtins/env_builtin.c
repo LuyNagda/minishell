@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:38 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 21:52:10 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:54:25 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	exec_env(t_minishell *shell)
 	head = shell->env_map;
 	while (head)
 	{
-		if (head->has_equal)
+		if (head->has_equal && !ft_str_equals(head->key, "?"))
 			ft_printf("%s=%s\n", head->key, head->value);
 		head = head->next_node;
 	}
