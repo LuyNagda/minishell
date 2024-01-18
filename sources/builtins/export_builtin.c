@@ -6,13 +6,13 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:50 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 21:52:26 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/18 20:09:09 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "ft_printf.h"
 #include "string_utils.h"
+#include <stdio.h>
 
 void	exec_export_part(t_minishell *shell, t_commands *command)
 {
@@ -48,10 +48,13 @@ void	exec_export(t_minishell *shell, t_commands *command)
 		node = shell->env_map;
 		while (node)
 		{
-			ft_printf("declare -x %s", node->key);
-			if (node->has_equal)
-				ft_printf("=\"%s\"", node->value);
-			ft_printf("\n");
+			if (!ft_str_equals(node->key, "?"))
+			{
+				printf("declare -x %s", node->key);
+				if (node->has_equal)
+					printf("=\"%s\"", node->value);
+				printf("\n");
+			}
 			node = node->next_node;
 		}
 		return ;
