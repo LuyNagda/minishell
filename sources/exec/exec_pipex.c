@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/18 15:27:10 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/18 15:51:16 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static void	redirections(t_minishell *shell, t_commands *command, t_pipex *pipex
 // si ce n'est pas le cas, nous exécutons la commande passée en argument et affichons l'erreur appropriée en cas d'échec.
 static void	exec_command(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
-	if (command->position != 0)
+	if (command->position != 0 && pipex->o_pipe[0] != -1)
 		close(pipex->o_pipe[0]);
 	close(pipex->c_pipe[0]);
 	close(pipex->c_pipe[1]);
@@ -130,7 +130,7 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	if (pipex->pid[command->position] == 0)
 		child(shell, command, pipex);
 	close(pipex->c_pipe[1]);
-	if (pipex->o_pipe[0] != -1 || (command->position == shell->command_amount - 1))
+	if (pipex->o_pipe[0] != -1 && (command->position == shell->command_amount - 1))
 		close(pipex->o_pipe[0]);
 	if (!(command->position == shell->command_amount - 1))
 		pipex->o_pipe[0] = pipex->c_pipe[0];
@@ -158,7 +158,8 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 		exec_cmd_loop(shell, commands, &pipex);
 		commands = commands->next_node;
 	}
-	close(pipex.o_pipe[0]);
+	if (pipex.o_pipe[0] != -1)
+		close(pipex.o_pipe[0]);
 	close(pipex.c_pipe[0]);
 	close(pipex.c_pipe[1]);
 	pipex.index = 0;
