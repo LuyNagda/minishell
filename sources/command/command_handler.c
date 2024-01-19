@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_handler.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 19:26:42 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 15:32:32 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/19 10:33:28 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,10 @@ t_commands	*ft_command_init()
 	list->position = 0;
 	list->next_node = NULL;
 	list->error_during_creation = _false;
+	list->input_fd = 0;
+	list->output_fd = 0;
+	list->is_builtin = 0;
+	list->here_doc = NULL;
 	return (list);
 }
 
@@ -81,14 +85,12 @@ t_commands	*ft_command_new_node(t_env_map *map, char **args)
 	command->next_node = NULL;
 	command->error_during_creation = _false;
 	command->is_builtin = is_builtins(command);
+	if (is_builtins(command))
+		command->path = ft_strdup("builtin");
+	else if (path_array)
+		command->path = find_command(args[0], path_array);
 	if (path_array)
-	{
-		if (is_builtins(command))
-			command->path = ft_strdup("builtin");
-		else
-			command->path = find_command(args[0], path_array);
 		ft_free_split(path_array);
-	}
 	return (command);
 }
 

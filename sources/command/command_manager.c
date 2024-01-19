@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_manager.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 19:26:51 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 15:31:00 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/19 10:34:58 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,10 @@ void	ft_flush_command_list(t_commands *list)
 			free(list->raw_command);
 		if (list->arguments)
 			ft_free_split(list->arguments);
+		if (list->path)
+			free(list->path);
+		if (list->here_doc)
+			free(list->here_doc);
 		free(list);
 		list = tmp;
 	}
