@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/18 00:32:39 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/22 09:51:13 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ static void	ft_shell_loop(t_minishell *shell)
 		}
 		ft_flush_command_list(shell->commands);
 		ft_flush_tokens(shell->parsing_cmd.tokens);
+		if (shell->sended_line)
+			free(shell->sended_line);
 	}
 }
 
