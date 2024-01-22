@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/22 15:54:40 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/22 16:54:58 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,14 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <readline/readline.h>
+
+void	free_and_exit(t_minishell *shell, t_pipex *pipex)
+{
+	ft_flush_command_list(shell->commands);
+	ft_flush_tokens(shell->parsing_cmd.tokens);
+	ft_free_split(pipex->envp);
+	exit(EXIT_FAILURE);
+}
 
 static void	here_doc(t_minishell *shell, t_commands *command)
 {
@@ -100,21 +108,16 @@ static void	exec_command(t_minishell *shell, t_commands *command, t_pipex *pipex
 		ft_dispatch_builtin(shell, command);
 		exit(127);
 	}
-	if (execve(command->path, command->arguments, pipex->envp) == -1)
+	if (command->arguments_amount > 0 && command->path == NULL)
 	{
-		if (command->arguments_amount > 0)
-		{
-			if (command->path == NULL)
-			{
-				ft_putstr_fd("command not found: ", 2);
-				ft_putstr_fd(command->arguments[0], 2);
-				ft_putstr_fd("\n", 2);
-			}
-			else
-				error_msg(command->arguments[0]);
-		}
+		ft_putstr_fd("command not found: ", 2);
+		ft_putstr_fd(command->arguments[0], 2);
+		ft_putstr_fd("\n", 2);
+		free_and_exit(shell, pipex);
 	}
-	exit(EXIT_FAILURE);
+	execve(command->path, command->arguments, pipex->envp);
+	perror(command->arguments[0]);
+	free_and_exit(shell, pipex);
 }
 
 // Initialising pipe and child. Child is initialised in the relating pid to his position.
