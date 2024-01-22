@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/19 10:52:40 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/22 11:59:17 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,7 @@ static void	normal_redirections(t_commands *command)
 			close(command->input_fd);
 		}
 		else
-		{
-			printf("bash: syntax error near unexpected token `newline'\n");
-			exit(EXIT_FAILURE);
-		}
+			error_msg("bash");
 	}
 }
 
@@ -108,9 +105,13 @@ static void	exec_command(t_minishell *shell, t_commands *command, t_pipex *pipex
 		if (command->arguments_amount > 0)
 		{
 			if (command->path == NULL)
-				ft_printf("command not found: %s\n", command->arguments[0]);
+			{
+				ft_putstr_fd("command not found: ", 2);
+				ft_putstr_fd(command->arguments[0], 2);
+				ft_putstr_fd("\n", 2);
+			}
 			else
-				ft_printf("%s: %s\n", strerror(errno), command->arguments[0]);
+				error_msg(command->arguments[0]);
 		}
 	}
 	exit(EXIT_FAILURE);
