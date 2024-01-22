@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 19:26:42 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/22 14:56:05 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/22 15:56:02 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ t_commands	*ft_command_init()
 t_commands	*ft_command_new_node(t_env_map *map, char **args)
 {
 	t_commands	*command;
-	char 		**path_array;
 
 	command = ft_calloc(1, sizeof(t_commands));
 	if (!command)
@@ -86,7 +85,7 @@ t_commands	*ft_command_new_node(t_env_map *map, char **args)
 	command->is_builtin = is_builtins(command);
 	if (is_builtins(command))
 		command->path = ft_strdup("builtin");
-	else if (path_array)
+	else
 		command->path = find_command(map, args[0]);
 	return (command);
 }

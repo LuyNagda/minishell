@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/22 15:01:22 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/22 15:54:40 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,9 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		exec_command(shell, command, pipex);
 	}
 	close(pipex->c_pipe[1]);
-	if (pipex->o_pipe[0] != -1 || (command->position == shell->command_amount - 1))
+	if (pipex->o_pipe[0] != -1 && (command->position == shell->command_amount - 1))
+		close(pipex->o_pipe[0]);
+	else if (pipex->o_pipe[0] != -1)
 		close(pipex->o_pipe[0]);
 	if (!(command->position == shell->command_amount - 1))
 		pipex->o_pipe[0] = pipex->c_pipe[0];
