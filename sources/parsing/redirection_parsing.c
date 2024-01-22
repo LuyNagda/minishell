@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_parsing.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:42:21 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/18 20:34:06 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/22 14:58:34 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,55 +43,29 @@ static int	count_redirection(t_commands *command, char *character)
 
 // Removing the file from command arguments once it's opened
 // Suppression du fichier des arguments de commande une fois qu'il a été ouvert
-static void	remove_file_from_command(t_commands *command, char *character)
+static void	remove_file_from_command(t_commands *command, char *character, int i)
 {
-	int		i;
 	int		j;
 	char	**tmp;
 	char	**result;
 
-	i = 0;
 	tmp = command->arguments;
-	while (tmp[i] && ft_strncmp(tmp[i], character, 1))
+	j = ft_str_tab_len(tmp);
+	result = (char **)malloc(sizeof(char *) * (j - 1));
+	command->arguments_amount = j - 2;
+	j = 0;
+	while (j < i)
+	{
+		result[j] = ft_strdup(tmp[j]);
+		j++;
+	}
+	while (tmp[i + 2])
+	{
+		result[i] = ft_strdup(tmp[i + 2]);
 		i++;
-	j = i;
-	while (tmp[i])
-		i++;
-	if (has_redirection(command, '<') == 2)
-	{
-		result = (char **)malloc(sizeof(char *) * (i));
-		command->arguments_amount = i - 1;
+		j++;
 	}
-	else
-	{
-		result = (char **)malloc(sizeof(char *) * (i - 1));
-		command->arguments_amount = i - 2;
-	}
-	i = 0;
-	while (i < j)
-	{
-		result[i] = ft_strdup(tmp[i]);
-		i++;
-	}
-	if (has_redirection(command, '<') == 2)
-	{
-		while (tmp[j + 1])
-		{
-			result[i] = ft_strdup(tmp[j + 1]);
-			i++;
-			j++;
-		}
-	}
-	else
-	{
-		while (tmp[j + 2])
-		{
-			result[i] = ft_strdup(tmp[j + 2]);
-			i++;
-			j++;
-		}
-	}
-	result[i] = 0;
+	result[j] = 0;
 	ft_free_split(command->arguments);
 	command->arguments = result;
 }
@@ -114,13 +88,12 @@ static int	has_multiple_redirection(t_commands *command, char *character)
 // Ouvrir le fichier avec append if ">>" else open with truncate
 // Suppression du fichier ouvert de la liste des arguments
 // Fermer le fd si le fichier n'est pas la dernière redirection
-void	redirection_parsing(t_commands *command, char *character)
+void	redirection_parsing(t_minishell *shell, t_commands *command, char *character)
 {
 	int			redirection;
 	int			i;
 	int			count;
 	t_commands	*tmp;
-	char		*line;
 
 	tmp = command;
 	count = count_redirection(tmp, character);
@@ -150,16 +123,19 @@ void	redirection_parsing(t_commands *command, char *character)
 						exit(EXIT_FAILURE);
 					}
 				}
-				else
-				{
-					tmp->input_fd = open(tmp->arguments[++i], O_RDWR | O_CREAT | O_TRUNC, 0777);;
-					tmp->here_doc = ft_strdup(tmp->arguments[i]);
-				}
 			}
-			remove_file_from_command(tmp, character);
+			remove_file_from_command(tmp, character, i - 1);
 		}
 		if (count > 1)
-			close(command->output_fd);
+		{
+			if (command->output_fd)
+				close(command->output_fd);
+			if (command->input_fd)
+				close(command->input_fd);
+		}
 		count--;
 	}
+	if (command->path)
+		free(command->path);
+	command->path = find_command(shell->env_map, command->arguments[0]);
 }

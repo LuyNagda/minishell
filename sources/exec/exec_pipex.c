@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/22 11:59:17 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/22 15:01:22 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@
 #include <fcntl.h>
 #include <readline/readline.h>
 
-static void	here_doc(t_commands *command)
+static void	here_doc(t_minishell *shell, t_commands *command)
 {
 	char	*line;
 
-	if (has_redirection(command, '<') == 2)
+	if (has_heredoc(command, "<<"))
 	{
-		redirection_parsing(command, "<");
+		heredoc_parsing(shell, command, "<<");
 		line = readline("$>");
 		while (!ft_str_equals(command->here_doc, line))
 		{
@@ -44,11 +44,11 @@ static void	here_doc(t_commands *command)
 	}
 }
 
-static void	normal_redirections(t_commands *command)
+static void	normal_redirections(t_minishell *shell, t_commands *command)
 {
 	if (has_redirection(command, '<'))
 	{
-		redirection_parsing(command, "<");
+		redirection_parsing(shell, command, "<");
 		if (command->input_fd > 0)
 		{
 			if (dup2(command->input_fd, STDIN_FILENO) == -1)
@@ -64,16 +64,16 @@ static void	normal_redirections(t_commands *command)
 // Gestion de toutes les redirections (duplication des pipes, output_fd avec STDIN/STDOUT)
 static void	redirections(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
-	here_doc(command);
+	here_doc(shell, command);
+	normal_redirections(shell, command);
 	if (command->position > 0 && !command->input_fd)
 	{
 		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
 			error_msg("DUP2 failed");
 	}
-	normal_redirections(command);
 	if (has_redirection(command, '>'))
 	{
-		redirection_parsing(command, ">");
+		redirection_parsing(shell, command, ">");
 		if (dup2(command->output_fd, STDOUT_FILENO) == -1)
 			error_msg("DUP2 failed");
 		close(command->output_fd);

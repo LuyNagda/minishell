@@ -26,6 +26,7 @@ FILES =	main.c							\
 		parsing/post_parsing.c			\
 		parsing/pre_parsing.c			\
 		parsing/redirection_parsing.c	\
+		parsing/check_heredoc.c			\
 		tokens/tokenizer.c				\
 		tokens/tokens_handler.c			\
 		tokens/tokens_concat.c			\
