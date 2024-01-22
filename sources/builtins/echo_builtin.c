@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:23:40 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/17 21:52:05 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/22 13:05:31 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,24 @@
 static int	check_arg(t_commands *command)
 {
 	int	i;
+	int	j;
 
-	i = 0;
-	while (command->arguments[1][i])
+	i = 1;
+	while (command->arguments[i])
 	{
-		if (!ft_strchr("-n", command->arguments[1][i]))
-			return (0);
+		j = 1;
+		while (command->arguments[i][j])
+		{
+			if (command->arguments[i][0] == '-')
+			{	
+				if (!ft_strchr("n", command->arguments[i][j]))
+					return (i);
+			}
+			j++;
+		}
 		i++;
 	}
-	return (1);
+	return (i);
 }
 
 void	exec_echo(t_minishell *shell, t_commands *command)
@@ -38,8 +47,8 @@ void	exec_echo(t_minishell *shell, t_commands *command)
 		env_map_replace_or_add(shell->env_map, "?", "0");
 		return ;
 	}
-	if (check_arg(command) == 1)
-		index = 2;
+	if (check_arg(command) > 1)
+		index = check_arg(command);
 	else
 		index = 1;
 	while (command->arguments[index])
@@ -48,7 +57,7 @@ void	exec_echo(t_minishell *shell, t_commands *command)
 		if (command->arguments[index])
 				ft_printf(" ");
 	}
-	if (check_arg(command) == 0)
+	if (check_arg(command) == 1)
 		ft_printf("\n");
 	env_map_replace_or_add(shell->env_map, "?", "0");
 }

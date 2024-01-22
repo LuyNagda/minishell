@@ -6,13 +6,14 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:50 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/22 12:28:21 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/22 12:53:05 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "string_utils.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void	exec_export_part(t_minishell *shell, t_commands *command)
 {
