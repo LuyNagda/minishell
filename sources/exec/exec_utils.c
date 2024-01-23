@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 14:50:02 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/23 17:34:10 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ void	free_and_exit(t_minishell *shell, t_pipex *pipex)
 {
 	ft_flush_command_list(shell->commands);
 	ft_flush_tokens(shell->parsing_cmd.tokens);
+	env_map_flush(shell->env_map);
 	ft_free_split(pipex->envp);
+	free(shell->sended_line);
 	exit(EXIT_FAILURE);
 }
 

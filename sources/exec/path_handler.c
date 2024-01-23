@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 12:27:00 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 14:14:06 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/23 17:35:16 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,5 @@ char	*find_command(t_env_map *map, char *command)
 		free(path);
 		i++;
 	}
-	return (NULL);
+	return (ft_free_split(path_array), NULL);
 }
