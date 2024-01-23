@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:19:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/15 11:09:26 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/23 09:28:42 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -166,8 +166,8 @@ t_parsing_result on_parse(t_minishell *shell)
 	if (!end_token)
 		return (ERROR);
 	ft_add_back_token(&shell->parsing_cmd.tokens, end_token);
-	shell->commands = ft_command_init();
-	if (!shell->commands)
-		return (ERROR);
+//	shell->commands = ft_command_init();
+//	if (!shell->commands)
+//		return (ERROR);
 	return (SUCCESS);
 }
