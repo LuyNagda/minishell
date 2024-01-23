@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:50 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 14:08:09 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/23 16:46:00 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,40 @@ static char	**get_export_values(t_commands *command)
 		export[2] = 0;
 	}
 	else
+	{
 		export = ft_split(command->arguments[1], '=');
+		if (!export[1])
+		{
+			ft_free_split(export);
+			export = (char **)malloc(sizeof(char *) * 3);
+			export[0] = ft_strdup(command->arguments[1]);
+			export[1] = NULL;
+			export[2] = 0;
+		}
+	}
 	return (export);
+}
+
+static int	export_if_no_equal(t_minishell *shell, char **export)
+{
+	t_env_map	*node;
+
+	if (!export[1])
+	{
+		node = env_map_find_node(shell->env_map, export[0]);
+		if (node != NULL)
+		{
+			env_map_replace(shell->env_map, export[0], export[1]);
+			node->has_equal = 0;
+			ft_free_split(export);
+			return (1);
+		}
+		node = ft_create_env_node(export[0], "NULL", 0, 0);
+		env_map_add_back(&shell->env_map, node, 0);
+		ft_free_split(export);
+		return (1);
+	}
+	return (0);
 }
 
 static void	exec_export_part(t_minishell *shell, t_commands *command)
@@ -37,13 +69,8 @@ static void	exec_export_part(t_minishell *shell, t_commands *command)
 	char		**export;
 
 	export = get_export_values(command);
-	if (!export[1])
-	{
-		node = ft_create_env_node(export[0], "NULL", 0, 0);
-		env_map_add_back(&shell->env_map, node, 0);
-		ft_free_split(export);
+	if (export_if_no_equal(shell, export))
 		return ;
-	}
 	node = env_map_find_node(shell->env_map, export[0]);
 	if (node != NULL)
 	{
@@ -54,16 +81,19 @@ static void	exec_export_part(t_minishell *shell, t_commands *command)
 	}
 	node = ft_create_env_node(export[0], export[1], 1, 0);
 	env_map_add_back(&shell->env_map, node, 0);
+	ft_free_split(export);
 }
 
 void	exec_export(t_minishell *shell, t_commands *command)
 {
 	t_env_map	*node;
+	t_env_map	*duplicate;
 
 	env_map_replace_or_add(shell->env_map, "?", "0");
 	if (command->arguments_amount == 1)
 	{
-		node = shell->env_map;
+		duplicate = duplicate_list(shell->env_map);
+		node = merge_sort(duplicate);
 		while (node)
 		{
 			if (!ft_str_equals(node->key, "?"))

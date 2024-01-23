@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 15:19:10 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/23 16:48:28 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,6 +241,8 @@ char				ft_get_first_char_iw(char *line);
 void				error_msg(char *string);
 char				*build_str_from_array(char **array);
 t_message			ft_init_messages(void);
+t_env_map			*duplicate_list(t_env_map *head);
+t_env_map			*merge_sort(t_env_map *head);
 
 /* *****************************************************/
 /* ********************* DEBUG *************************/

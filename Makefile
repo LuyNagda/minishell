@@ -37,6 +37,7 @@ FILES =	main.c							\
 		utils/str_utils_2.c				\
 		utils/messages_utils.c			\
 		utils/debug.c					\
+		utils/merge_sort.c				\
 
 BUILD_DIRECTORY = ./build/
 
