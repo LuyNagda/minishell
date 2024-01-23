@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:13:33 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/22 15:04:11 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/23 13:05:44 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ void	heredoc_parsing(t_minishell *shell, t_commands *command, char *here_doc)
 	{
 		while (tmp->arguments[i] && !ft_str_equals(tmp->arguments[i], here_doc))
 			i++;
-		tmp->input_fd = open(tmp->arguments[++i], O_RDWR | O_CREAT | O_TRUNC, 0777);
-		tmp->here_doc = ft_strdup(tmp->arguments[i]);
+		tmp->input_fd = open(".here_doc", O_RDWR | O_CREAT | O_TRUNC, 0777);
+		tmp->here_doc = ft_strdup(tmp->arguments[++i]);
 		remove_heredoc_from_command(tmp, here_doc, i - 1);
 	}
 	if (command->path)

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/22 16:54:58 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/23 13:06:49 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ static void	here_doc(t_minishell *shell, t_commands *command)
 			line = readline("$>");
 		}
 		free(line);
+		close(command->input_fd);
+		command->input_fd = open(".here_doc", O_RDONLY);
 		if (dup2(command->input_fd, STDIN_FILENO) == -1)
 			error_msg("DUP2 failed");
 		close(command->input_fd);
