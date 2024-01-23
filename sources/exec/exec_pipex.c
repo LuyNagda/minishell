@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/19 10:52:40 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/22 16:54:58 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,21 @@
 #include <fcntl.h>
 #include <readline/readline.h>
 
-static void	here_doc(t_commands *command)
+void	free_and_exit(t_minishell *shell, t_pipex *pipex)
+{
+	ft_flush_command_list(shell->commands);
+	ft_flush_tokens(shell->parsing_cmd.tokens);
+	ft_free_split(pipex->envp);
+	exit(EXIT_FAILURE);
+}
+
+static void	here_doc(t_minishell *shell, t_commands *command)
 {
 	char	*line;
 
-	if (has_redirection(command, '<') == 2)
+	if (has_heredoc(command, "<<"))
 	{
-		redirection_parsing(command, "<");
+		heredoc_parsing(shell, command, "<<");
 		line = readline("$>");
 		while (!ft_str_equals(command->here_doc, line))
 		{
@@ -44,11 +52,11 @@ static void	here_doc(t_commands *command)
 	}
 }
 
-static void	normal_redirections(t_commands *command)
+static void	normal_redirections(t_minishell *shell, t_commands *command)
 {
 	if (has_redirection(command, '<'))
 	{
-		redirection_parsing(command, "<");
+		redirection_parsing(shell, command, "<");
 		if (command->input_fd > 0)
 		{
 			if (dup2(command->input_fd, STDIN_FILENO) == -1)
@@ -56,10 +64,7 @@ static void	normal_redirections(t_commands *command)
 			close(command->input_fd);
 		}
 		else
-		{
-			printf("bash: syntax error near unexpected token `newline'\n");
-			exit(EXIT_FAILURE);
-		}
+			error_msg("bash");
 	}
 }
 
@@ -67,16 +72,16 @@ static void	normal_redirections(t_commands *command)
 // Gestion de toutes les redirections (duplication des pipes, output_fd avec STDIN/STDOUT)
 static void	redirections(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
-	here_doc(command);
+	here_doc(shell, command);
+	normal_redirections(shell, command);
 	if (command->position > 0 && !command->input_fd)
 	{
 		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
 			error_msg("DUP2 failed");
 	}
-	normal_redirections(command);
 	if (has_redirection(command, '>'))
 	{
-		redirection_parsing(command, ">");
+		redirection_parsing(shell, command, ">");
 		if (dup2(command->output_fd, STDOUT_FILENO) == -1)
 			error_msg("DUP2 failed");
 		close(command->output_fd);
@@ -103,17 +108,16 @@ static void	exec_command(t_minishell *shell, t_commands *command, t_pipex *pipex
 		ft_dispatch_builtin(shell, command);
 		exit(127);
 	}
-	if (execve(command->path, command->arguments, pipex->envp) == -1)
+	if (command->arguments_amount > 0 && command->path == NULL)
 	{
-		if (command->arguments_amount > 0)
-		{
-			if (command->path == NULL)
-				ft_printf("command not found: %s\n", command->arguments[0]);
-			else
-				ft_printf("%s: %s\n", strerror(errno), command->arguments[0]);
-		}
+		ft_putstr_fd("command not found: ", 2);
+		ft_putstr_fd(command->arguments[0], 2);
+		ft_putstr_fd("\n", 2);
+		free_and_exit(shell, pipex);
 	}
-	exit(EXIT_FAILURE);
+	execve(command->path, command->arguments, pipex->envp);
+	perror(command->arguments[0]);
+	free_and_exit(shell, pipex);
 }
 
 // Initialising pipe and child. Child is initialised in the relating pid to his position.
@@ -137,7 +141,9 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		exec_command(shell, command, pipex);
 	}
 	close(pipex->c_pipe[1]);
-	if (pipex->o_pipe[0] != -1 || (command->position == shell->command_amount - 1))
+	if (pipex->o_pipe[0] != -1 && (command->position == shell->command_amount - 1))
+		close(pipex->o_pipe[0]);
+	else if (pipex->o_pipe[0] != -1)
 		close(pipex->o_pipe[0]);
 	if (!(command->position == shell->command_amount - 1))
 		pipex->o_pipe[0] = pipex->c_pipe[0];

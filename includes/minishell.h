@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/18 14:59:53 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/22 15:01:03 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ void		ft_dispatch_command(t_minishell *shell);
 void		exec_cmd(t_minishell *shell, t_commands *command);
 int			is_builtins(t_commands *command);
 char		**convert_path_to_array(t_env_map *env_map);
-char		*find_command(char *command, char **path_array);
+char		*find_command(t_env_map *map, char *command);
 void		exec_redirection(t_minishell *shell, char *line);
 
 /* *****************************************************/
@@ -184,8 +184,10 @@ t_parsing_result	pre_parsing(t_minishell *shell);
 t_parsing_result	on_parse(t_minishell *shell);
 t_parsing_result 	post_parsing(t_minishell *shell);
 int 				has_redirection(t_commands *command, char character);
-void				redirection_parsing(t_commands *commands, char *character);
-	
+void				redirection_parsing(t_minishell *shell, t_commands *commands, char *character);
+void				heredoc_parsing(t_minishell *shell, t_commands *command, char *here_doc);
+int					has_heredoc(t_commands *command, char *here_doc);
+
 /* *****************************************************/
 /* ******************** TOKENS *************************/
 /* *****************************************************/

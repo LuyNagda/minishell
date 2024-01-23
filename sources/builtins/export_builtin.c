@@ -3,22 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   export_builtin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:50 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/18 20:09:09 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/22 12:53:05 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "string_utils.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void	exec_export_part(t_minishell *shell, t_commands *command)
 {
 	t_env_map	*node;
 	char		**export;
+	char		*key;
+	char		*value;
 
+	if (command->arguments[2])
+	{
+		key = ft_strtrim(command->arguments[1], "=");
+		value = ft_strtrim(command->arguments[2], "\"");
+		node = ft_create_env_node(key, value, 1, 0);
+		env_map_add_back(&shell->env_map, node, 1);
+		free(key);
+		free(value);
+		return ;
+	}
 	export = ft_split(command->arguments[1], '=');
 	if (!export[1])
 	{

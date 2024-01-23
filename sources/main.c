@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
 /*   Updated: 2024/01/23 09:31:05 by jbadaire         ###   ########.fr       */
@@ -17,6 +17,24 @@
 #include <readline/history.h>
 #include "string_utils.h"
 #include "ft_printf.h"
+
+static int	check_for_out_of_bounds(char *line)
+{
+	int	i;
+	unsigned char c;
+
+	i = 0;
+	if (!line[i])
+		return (1);
+	while (line[i])
+	{
+		c = (unsigned char) line[i];
+		if (c < 0 || c > 127)
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 static void	throw_env_error(t_minishell *shell)
 {
@@ -36,6 +54,8 @@ static void	ft_shell_loop(t_minishell *shell)
 	{
 		shell->commands = NULL;
 		line = readline(shell->messages.minishell_prefix);
+		if (check_for_out_of_bounds(line))
+			return ;
 		shell->sended_line = ft_strtrim(line, " ");
 		free(line);
 		if (pre_parsing(shell) != SUCCESS)
