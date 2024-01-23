@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/22 09:51:13 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/23 09:31:05 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ static void	ft_shell_loop(t_minishell *shell)
 
 	throw_env_error(shell);
 	while (shell->is_running)
-	{	
+	{
+		shell->commands = NULL;
 		line = readline(shell->messages.minishell_prefix);
 		shell->sended_line = ft_strtrim(line, " ");
 		free(line);
@@ -45,8 +46,8 @@ static void	ft_shell_loop(t_minishell *shell)
 		{
 			if (post_parsing(shell) == SUCCESS)
 				ft_dispatch_command(shell);
+			ft_flush_command_list(shell->commands);
 		}
-		ft_flush_command_list(shell->commands);
 		ft_flush_tokens(shell->parsing_cmd.tokens);
 		if (shell->sended_line)
 			free(shell->sended_line);

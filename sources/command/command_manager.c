@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 19:26:51 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/22 09:45:46 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/23 09:16:22 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_commands *build_command_from_tokens(t_minishell *shell)
 			builded = ft_command_new_node(shell->env_map, args);
 			if (!builded)
 				return (ft_free_split(args), NULL);
-			ft_add_command(&shell->commands, builded);
+			ft_add_command(shell, builded);
 			args = NULL;
 		}
 		tmp = tmp->next;

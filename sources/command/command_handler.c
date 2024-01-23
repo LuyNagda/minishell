@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 19:26:42 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/19 10:33:28 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/23 09:30:32 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,18 +94,19 @@ t_commands	*ft_command_new_node(t_env_map *map, char **args)
 	return (command);
 }
 
-t_commands	*ft_add_command(t_commands **commands, t_commands *new_node)
+t_commands	*ft_add_command(t_minishell *shell, t_commands *new_node)
 {
-	t_commands *tmp = *commands;
+	t_commands *tmp;
 
-	if (tmp == NULL || tmp->arguments == NULL)
+	if (!shell->commands)
 	{
-		*commands = new_node;
+		shell->commands = new_node;
 		return (new_node);
 	}
+	tmp = shell->commands;
 	while (tmp->next_node)
 		tmp = tmp->next_node;
-	new_node->position = ft_get_numbers_of_commands(*commands);
+	new_node->position = ft_get_numbers_of_commands(shell->commands);
 	tmp->next_node = new_node;
 	return (new_node);
 }

@@ -167,7 +167,7 @@ size_t		env_map_get_size(t_env_map *env_map);
 t_commands *build_command_from_tokens(t_minishell *shell);
 size_t		ft_get_numbers_of_commands(t_commands *commands_list);
 t_commands	*ft_get_command_from_pos(t_commands *command_list, size_t command_node_pos);
-t_commands	*ft_add_command(t_commands **commands, t_commands *new_node);
+t_commands	*ft_add_command(t_minishell *shell, t_commands *new_node);
 
 t_commands	*ft_command_init();
 t_commands	*ft_command_new_node(t_env_map *map, char **args);
