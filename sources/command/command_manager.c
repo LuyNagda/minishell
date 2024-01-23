@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_manager.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 19:26:51 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 09:16:22 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/23 14:10:19 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 #include "memory_utils.h"
 #include "stdlib.h"
 
-t_commands *build_command_from_tokens(t_minishell *shell)
+t_commands	*build_command_from_tokens(t_minishell *shell)
 {
-	t_tokens *tmp;
-	t_commands *builded;
-	size_t arg_index;
-	char **args;
+	t_tokens	*tmp;
+	t_commands	*builded;
+	size_t		arg_index;
+	char		**args;
 
 	tmp = shell->parsing_cmd.tokens;
 	args = NULL;
@@ -29,13 +29,14 @@ t_commands *build_command_from_tokens(t_minishell *shell)
 		if (!args)
 		{
 			arg_index = 0;
-			args = ft_calloc((ft_get_tokens_amount(shell->parsing_cmd.tokens) + 1), sizeof(char *));
-			continue;
+			args = ft_calloc((ft_get_tokens_amount(shell->parsing_cmd.tokens)
+						+ 1), sizeof(char *));
+			continue ;
 		}
 		if (tmp->type == SPACE)
 		{
 			tmp = tmp->next;
-			continue;
+			continue ;
 		}
 		if (tmp->value && tmp->type != PIPE)
 			args[arg_index++] = ft_strdup(tmp->value);

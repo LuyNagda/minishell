@@ -6,10 +6,9 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:42:21 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/22 14:58:34 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/23 15:18:22 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -17,81 +16,62 @@
 #include <stdio.h>
 #include "minishell.h"
 #include "string_utils.h"
-#include <stdio.h>
 #include <errno.h>
 #include <string.h>
 
-// Counting the number of redirections in the command
-// Compter le nombre de redirections dans la commande
-static int	count_redirection(t_commands *command, char *character)
+static void	out_redirection(t_commands *tmp, int redirection, int i)
 {
-	int		i;
-	int		count;
-	char	**tmp;
+	if (redirection == 1)
+		tmp->output_fd = open(tmp->arguments[++i],
+				O_CREAT | O_RDWR | O_TRUNC, 0777);
+	else
+		tmp->output_fd = open(tmp->arguments[++i],
+				O_WRONLY | O_APPEND | O_CREAT, 0777);
+}
+
+static void	in_redirection(t_commands *tmp, int redirection, int i)
+{
+	if (redirection == 1)
+	{
+		tmp->input_fd = open(tmp->arguments[++i], O_RDONLY);
+		if (tmp->input_fd < 0)
+		{
+			printf("%s: %s\n", strerror(errno), tmp->arguments[i]);
+			exit(EXIT_FAILURE);
+		}
+	}
+}
+
+static void	main_parsing(t_commands *tmp, int redirection,
+			char *character, int count)
+{
+	int	i;
 
 	i = 0;
-	count = 0;
-	tmp = command->arguments;
-	while (tmp[i])
+	if (redirection)
 	{
-		if (!ft_strncmp(tmp[i], character, 1))
-			count++;
-		i++;
+		while (tmp->arguments[i]
+			&& ft_strncmp(tmp->arguments[i], character, 1))
+			i++;
+		if (!ft_strncmp(">", character, 1))
+			out_redirection(tmp, redirection, i);
+		else
+			in_redirection(tmp, redirection, i);
+		remove_file_from_command(tmp, character, i);
+		if (count > 1)
+		{
+			if (tmp->output_fd)
+				close(tmp->output_fd);
+			if (tmp->input_fd)
+				close(tmp->input_fd);
+		}
 	}
-	return (count);
 }
 
-// Removing the file from command arguments once it's opened
-// Suppression du fichier des arguments de commande une fois qu'il a été ouvert
-static void	remove_file_from_command(t_commands *command, char *character, int i)
-{
-	int		j;
-	char	**tmp;
-	char	**result;
-
-	tmp = command->arguments;
-	j = ft_str_tab_len(tmp);
-	result = (char **)malloc(sizeof(char *) * (j - 1));
-	command->arguments_amount = j - 2;
-	j = 0;
-	while (j < i)
-	{
-		result[j] = ft_strdup(tmp[j]);
-		j++;
-	}
-	while (tmp[i + 2])
-	{
-		result[i] = ft_strdup(tmp[i + 2]);
-		i++;
-		j++;
-	}
-	result[j] = 0;
-	ft_free_split(command->arguments);
-	command->arguments = result;
-}
-
-static int	has_multiple_redirection(t_commands *command, char *character)
-{
-	if (!ft_strncmp(">", character, 1))
-		return (has_redirection(command, '>'));
-	else
-		return (has_redirection(command, '<'));
-}
-
-// Getting the count of redirections and looping for that many times
-// Check for which redirection and increment i to the redirection
-// Open the file with append if ">>" else open with truncate
-// Removing the opened file from the argument list
-// Closing the fd if the file is not the last redirection
-// Obtenir le nombre de redirections et tourner en boucle autant de fois que nécessaire
-// Vérifier pour quelle redirection et incrémenter i à la redirection
-// Ouvrir le fichier avec append if ">>" else open with truncate
-// Suppression du fichier ouvert de la liste des arguments
-// Fermer le fd si le fichier n'est pas la dernière redirection
-void	redirection_parsing(t_minishell *shell, t_commands *command, char *character)
+void	redirection_parsing(t_minishell *shell,
+	t_commands *command, char *character)
 {
 	int			redirection;
-	int			i;
 	int			count;
 	t_commands	*tmp;
 
@@ -99,40 +79,8 @@ void	redirection_parsing(t_minishell *shell, t_commands *command, char *characte
 	count = count_redirection(tmp, character);
 	while (count)
 	{
-		i = 0;
 		redirection = has_multiple_redirection(tmp, character);
-		if (redirection)
-		{
-			while (tmp->arguments[i] && ft_strncmp(tmp->arguments[i], character, 1))
-				i++;
-			if (!ft_strncmp(">", character, 1))
-			{
-				if (redirection == 1)
-					tmp->output_fd = open(tmp->arguments[++i], O_CREAT | O_RDWR | O_TRUNC, 0777);
-				else
-					tmp->output_fd = open(tmp->arguments[++i], O_WRONLY | O_APPEND | O_CREAT, 0777);
-			}
-			else
-			{
-				if (redirection == 1)
-				{
-					tmp->input_fd = open(tmp->arguments[++i], O_RDONLY);
-					if (tmp->input_fd < 0)
-					{
-						printf("%s: %s\n", strerror(errno), tmp->arguments[i]);
-						exit(EXIT_FAILURE);
-					}
-				}
-			}
-			remove_file_from_command(tmp, character, i - 1);
-		}
-		if (count > 1)
-		{
-			if (command->output_fd)
-				close(command->output_fd);
-			if (command->input_fd)
-				close(command->input_fd);
-		}
+		main_parsing(tmp, redirection, character, count);
 		count--;
 	}
 	if (command->path)

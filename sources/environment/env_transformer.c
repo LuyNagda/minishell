@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_transformer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:46:17 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/12/04 22:04:06 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/23 14:12:29 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 #include "../dependencies/libft/.includes/memory_utils.h"
 #include <stdlib.h>
 
-t_env_map	*env_array_to_map(t_minishell *shell, t_env_map **env_map, char **envp)
+t_env_map	*env_array_to_map(t_minishell *shell,
+				t_env_map **env_map, char **envp)
 {
 	size_t		index;
 	char		**split;
@@ -32,7 +33,7 @@ t_env_map	*env_array_to_map(t_minishell *shell, t_env_map **env_map, char **envp
 		if (!split)
 		{
 			shell->is_running = 0;
-			break;
+			break ;
 		}
 		if (split[0])
 			key = split[0];

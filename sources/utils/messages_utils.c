@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   messages_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 17:38:28 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/12/04 20:50:33 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/23 14:53:22 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ t_message	ft_init_messages(void)
 
 	messages.minishell_prefix = "\033[0;32m➜ \033[1;36m minishell :\033[0m ";
 	messages.pipe_syntax_error = "⛔ Syntax error near unexpected token '|'\n";
-	messages.double_pipe_error = "⛔ Syntax error near unexpected token '||' (Unsupported)\n";
+	messages.double_pipe_error = "⛔ Syntax error near unexpected token "
+		"'||' (Unsupported)\n";
 	messages.quote_not_closed = "⛔ Quote is not closed.\n";
-	messages.whitepipe_error = "⛔ Syntax error near unexpected token '|'. (WhitePipe) \n";
+	messages.whitepipe_error = "⛔ Syntax error near unexpected token "
+		"'|'. (WhitePipe) \n";
 	return (messages);
 }

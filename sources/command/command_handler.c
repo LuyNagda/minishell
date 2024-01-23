@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 19:26:42 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 09:30:32 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/23 14:09:15 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "memory_utils.h"
 #include "ft_printf.h"
 #include "stdlib.h"
-
 
 size_t	ft_get_numbers_of_commands(t_commands *commands_list)
 {
@@ -30,7 +29,8 @@ size_t	ft_get_numbers_of_commands(t_commands *commands_list)
 	return (length);
 }
 
-t_commands	*ft_get_command_from_pos(t_commands *command_list, size_t command_node_pos)
+t_commands	*ft_get_command_from_pos(t_commands *command_list,
+			size_t command_node_pos)
 {
 	size_t	i;
 
@@ -45,7 +45,7 @@ t_commands	*ft_get_command_from_pos(t_commands *command_list, size_t command_nod
 	return (command_list);
 }
 
-t_commands	*ft_command_init()
+t_commands	*ft_command_init(void)
 {
 	t_commands	*list;
 
@@ -92,7 +92,7 @@ t_commands	*ft_command_new_node(t_env_map *map, char **args)
 
 t_commands	*ft_add_command(t_minishell *shell, t_commands *new_node)
 {
-	t_commands *tmp;
+	t_commands	*tmp;
 
 	if (!shell->commands)
 	{

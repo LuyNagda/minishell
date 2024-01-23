@@ -1,37 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   on_parsing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:19:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 09:28:42 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/23 15:06:48 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minishell.h"
 #include "put_utils.h"
 #include "string_utils.h"
 #include "ft_printf.h"
 #include <stdlib.h>
 
-/**
- * @brief Checks if a variable in a string is not within single quotes.
- *
- * This function determines whether a variable in a string, indicated by the
- * given index, is not within single quotes. It considers escaped quotes and
- * tracks the current quote status to make the decision.
- *
- * @param str The input string.
- * @param index The index of the variable in the string.
- * @return 1 if the variable is not within single quotes, 0 otherwise.
- */
-static int variable_in_string(const char *str, size_t index)
+static int	variable_in_string(const char *str, size_t index)
 {
-	int inside_single_quotes;
-	int inside_double_quotes;
-	char current_quote;
-	size_t i;
+	int		inside_single_quotes;
+	int		inside_double_quotes;
+	char	current_quote;
+	size_t	i;
 
 	inside_single_quotes = 0;
 	inside_double_quotes = 0;
@@ -56,11 +46,11 @@ static int variable_in_string(const char *str, size_t index)
 	return (current_quote == 0 || current_quote == '"');
 }
 
-static int ft_has_only_whitespace_between_pipes(t_minishell *shell)
+static int	ft_has_only_whitespace_between_pipes(t_minishell *shell)
 {
-	t_tokens *tmp;
-	t_boolean is_after_pipe;
-	t_boolean only_space;
+	t_tokens	*tmp;
+	t_boolean	is_after_pipe;
+	t_boolean	only_space;
 
 	is_after_pipe = _false;
 	only_space = _true;
@@ -70,7 +60,7 @@ static int ft_has_only_whitespace_between_pipes(t_minishell *shell)
 		if (tmp->type == PIPE)
 		{
 			if (only_space && is_after_pipe)
-				return 1;
+				return (1);
 			is_after_pipe = _true;
 			only_space = _true;
 		}
@@ -81,28 +71,30 @@ static int ft_has_only_whitespace_between_pipes(t_minishell *shell)
 		}
 		tmp = tmp->next;
 	}
-	return 0;
+	return (0);
 }
 
-static int contains_valid_key(t_minishell *shell, t_tokens *token)
+static int	contains_valid_key(t_minishell *shell, t_tokens *token)
 {
-	t_env_map *map;
-	t_tokens *previous;
-	size_t nb_dollars;
-	size_t token_pos;
-	char *rebuilded_string;
+	t_env_map	*map;
+	t_tokens	*previous;
+	size_t		nb_dollars;
+	size_t		token_pos;
+	char		*rebuilded_string;
 
 	if (token->type != WORD && token->type != QUOTED)
 		return (_false);
 	nb_dollars = 0;
 	previous = token->previous;
-	while (previous && previous->value && previous->value[0] == '$' && ++nb_dollars)
+	while (previous && previous->value
+		&& previous->value[0] == '$' && ++nb_dollars)
 		previous = previous->previous;
 	if (nb_dollars != 1)
 		return (_false);
 	rebuilded_string = rebuild_string_from_token(shell);
 	token_pos = get_current_token_pos(token);
-	if (!variable_in_string(rebuilded_string, get_index_from_token(shell, token_pos)))
+	if (!variable_in_string(rebuilded_string,
+			get_index_from_token(shell, token_pos)))
 		return (free(rebuilded_string), _false);
 	map = env_map_find_node(shell->env_map, token->value);
 	if (map == NULL)
@@ -110,12 +102,12 @@ static int contains_valid_key(t_minishell *shell, t_tokens *token)
 	return (free(rebuilded_string), _true);
 }
 
-static void treat_variable_keys(t_minishell *shell)
+static void	treat_variable_keys(t_minishell *shell)
 {
-	t_tokens *tmp;
-	t_tokens *prev;
-	t_env_map *env_finded;
-	char *value;
+	t_tokens	*tmp;
+	t_tokens	*prev;
+	t_env_map	*env_finded;
+	char		*value;
 
 	tmp = shell->parsing_cmd.tokens;
 	while (tmp)
@@ -137,9 +129,9 @@ static void treat_variable_keys(t_minishell *shell)
 	}
 }
 
-static void append_quoted(t_tokens **tokens)
+static void	append_quoted(t_tokens **tokens)
 {
-	t_tokens *tmp;
+	t_tokens	*tmp;
 
 	tmp = *tokens;
 	while (tmp && tmp->next)
@@ -149,15 +141,16 @@ static void append_quoted(t_tokens **tokens)
 			append_token(tmp, tmp->next);
 			ft_delete_token(tokens, tmp->next);
 			tmp = *tokens;
-			continue;
+			continue ;
 		}
 		tmp = tmp->next;
 	}
 }
 
-t_parsing_result on_parse(t_minishell *shell)
+t_parsing_result	on_parse(t_minishell *shell)
 {
 	t_tokens	*end_token;
+
 	if (ft_has_only_whitespace_between_pipes(shell) != 0)
 		return (ft_putstr_fd(shell->messages.whitepipe_error, 2), free(shell->sended_line), INVALID_INPUT);
 	treat_variable_keys(shell);

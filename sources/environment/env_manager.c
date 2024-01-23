@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_manager.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:43:45 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/15 17:32:58 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/23 14:11:11 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "stdlib.h"
 #include "ft_printf.h"
 
-t_env_map	*env_map_init()
+t_env_map	*env_map_init(void)
 {
 	t_env_map	*env_map;
 
@@ -35,7 +35,8 @@ t_env_map	*env_map_init()
 	return (env_map);
 }
 
-t_env_map	*ft_create_env_node(char *key, char *value, int has_equals, int is_system)
+t_env_map	*ft_create_env_node(char *key, char *value,
+				int has_equals, int is_system)
 {
 	t_env_map	*new_node;
 

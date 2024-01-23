@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   quote_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 12:28:58 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/10 10:10:32 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/23 14:56:50 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int ft_quote_is_closed(const char *line)
+int	ft_quote_is_closed(const char *line)
 {
 	size_t	index;
 	int		open;
@@ -35,9 +35,9 @@ int ft_quote_is_closed(const char *line)
 		index++;
 	}
 	if (open == 0)
-		return 1;
+		return (1);
 	else
-		return 0;
+		return (0);
 }
 
 int	ft_index_is_in_quotes(const char *line, size_t pos)
@@ -63,7 +63,7 @@ int	ft_index_is_in_quotes(const char *line, size_t pos)
 		index++;
 	}
 	if (open == 0)
-		return 0;
+		return (0);
 	else
-		return 1;
+		return (1);
 }

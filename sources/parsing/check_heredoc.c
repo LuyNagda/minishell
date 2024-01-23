@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:13:33 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/23 13:05:44 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/23 15:03:34 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 int	has_heredoc(t_commands *command, char *here_doc)
 {
-	size_t index;
+	size_t	index;
 
 	index = 0;
 	while (command->arguments[index])
@@ -30,7 +30,8 @@ int	has_heredoc(t_commands *command, char *here_doc)
 	return (0);
 }
 
-static void	remove_heredoc_from_command(t_commands *command, char *here_doc, int i)
+static void	remove_heredoc_from_command(t_commands *command,
+			char *here_doc, int i)
 {
 	int		j;
 	char	**tmp;

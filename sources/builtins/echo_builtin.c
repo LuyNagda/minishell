@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:23:40 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 13:24:35 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/23 13:46:48 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	check_arg(t_commands *command)
 		while (command->arguments[i][0])
 		{
 			if (command->arguments[i][0] == '-')
-			{	
+			{
 				if (!ft_strchr("n", command->arguments[i][j]))
 					return (i);
 			}
@@ -57,7 +57,7 @@ void	exec_echo(t_minishell *shell, t_commands *command)
 	{
 		printf("%s", command->arguments[index++]);
 		if (command->arguments[index])
-				ft_printf(" ");
+			printf(" ");
 	}
 	if (check_arg(command) == 1)
 		printf("\n");

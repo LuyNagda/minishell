@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:50 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/22 12:53:05 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/23 14:08:09 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void	exec_export_part(t_minishell *shell, t_commands *command)
+static char	**get_export_values(t_commands *command)
 {
-	t_env_map	*node;
-	char		**export;
-	char		*key;
-	char		*value;
+	char	**export;
 
 	if (command->arguments[2])
 	{
-		key = ft_strtrim(command->arguments[1], "=");
-		value = ft_strtrim(command->arguments[2], "\"");
-		node = ft_create_env_node(key, value, 1, 0);
-		env_map_add_back(&shell->env_map, node, 1);
-		free(key);
-		free(value);
-		return ;
+		export = (char **)malloc(sizeof(char *) * 3);
+		export[0] = ft_strtrim(command->arguments[1], "=");
+		export[1] = ft_strtrim(command->arguments[2], "\"");
+		export[2] = 0;
 	}
-	export = ft_split(command->arguments[1], '=');
+	else
+		export = ft_split(command->arguments[1], '=');
+	return (export);
+}
+
+static void	exec_export_part(t_minishell *shell, t_commands *command)
+{
+	t_env_map	*node;
+	char		**export;
+
+	export = get_export_values(command);
 	if (!export[1])
 	{
 		node = ft_create_env_node(export[0], "NULL", 0, 0);
-		env_map_add_back(&shell->env_map, node, 1);
+		env_map_add_back(&shell->env_map, node, 0);
 		ft_free_split(export);
 		return ;
 	}
@@ -44,16 +48,17 @@ void	exec_export_part(t_minishell *shell, t_commands *command)
 	if (node != NULL)
 	{
 		env_map_replace(shell->env_map, export[0], export[1]);
+		node->has_equal = 1;
 		ft_free_split(export);
 		return ;
 	}
 	node = ft_create_env_node(export[0], export[1], 1, 0);
-	env_map_add_back(&shell->env_map, node, 1);
+	env_map_add_back(&shell->env_map, node, 0);
 }
 
 void	exec_export(t_minishell *shell, t_commands *command)
 {
-	t_env_map 	*node;
+	t_env_map	*node;
 
 	env_map_replace_or_add(shell->env_map, "?", "0");
 	if (command->arguments_amount == 1)

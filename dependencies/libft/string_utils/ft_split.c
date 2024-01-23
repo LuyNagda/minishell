@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 23:30:20 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/09 16:44:17 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/23 13:32:36 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ void	ft_free_split(char **words_list)
 	free(words_list);
 }
 
-static char	**fill_array(const char *string, char delimiter, char **words_list, size_t words)
+static char	**fill_array(const char *string, char delimiter,
+		char **words_list, size_t words)
 {
 	size_t		index;
 	size_t		delimiters;
@@ -62,7 +63,8 @@ static char	**fill_array(const char *string, char delimiter, char **words_list, 
 		can_read = index + sep_i < ft_strlen(string);
 		if (string[index] != delimiter && can_read)
 		{
-			while (can_read && string[index + sep_i] && string[index + sep_i] != delimiter)
+			while (can_read && string[index + sep_i]
+				&& string[index + sep_i] != delimiter)
 				can_read = index + sep_i++ < ft_strlen(string);
 			words_list[delimiters] = ft_substr(string, index, sep_i);
 			if (!words_list[delimiters])

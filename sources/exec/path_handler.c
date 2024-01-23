@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 12:27:00 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/22 14:56:37 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/23 14:14:06 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-char **convert_path_to_array(t_env_map *env_map)
+char	**convert_path_to_array(t_env_map *env_map)
 {
-	char **path_array;
-	t_env_map *path;
+	char		**path_array;
+	t_env_map	*path;
 
 	path = env_map_find_node(env_map, "PATH");
 	if (path == NULL)
@@ -28,12 +28,12 @@ char **convert_path_to_array(t_env_map *env_map)
 	return (path_array);
 }
 
-char *find_command(t_env_map *map, char *command)
+char	*find_command(t_env_map *map, char *command)
 {
-	int i;
-	char *path;
-	char **path_array;
-	char *temp;
+	int		i;
+	char	*path;
+	char	**path_array;
+	char	*temp;
 
 	i = 0;
 	path_array = convert_path_to_array(map);
