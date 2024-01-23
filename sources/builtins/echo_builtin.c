@@ -6,12 +6,12 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:23:40 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/22 13:05:31 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/23 13:24:35 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "ft_printf.h"
+#include <stdio.h>
 #include "string_utils.h"
 
 static int	check_arg(t_commands *command)
@@ -23,13 +23,15 @@ static int	check_arg(t_commands *command)
 	while (command->arguments[i])
 	{
 		j = 1;
-		while (command->arguments[i][j])
+		while (command->arguments[i][0])
 		{
 			if (command->arguments[i][0] == '-')
 			{	
 				if (!ft_strchr("n", command->arguments[i][j]))
 					return (i);
 			}
+			else
+				return (i);
 			j++;
 		}
 		i++;
@@ -41,9 +43,9 @@ void	exec_echo(t_minishell *shell, t_commands *command)
 {
 	size_t		index;
 
-	if (!command->arguments[1])
+	if (command->arguments_amount == 1)
 	{
-		ft_printf("\n");
+		printf("\n");
 		env_map_replace_or_add(shell->env_map, "?", "0");
 		return ;
 	}
@@ -53,11 +55,11 @@ void	exec_echo(t_minishell *shell, t_commands *command)
 		index = 1;
 	while (command->arguments[index])
 	{
-		ft_printf("%s", command->arguments[index++]);
+		printf("%s", command->arguments[index++]);
 		if (command->arguments[index])
 				ft_printf(" ");
 	}
 	if (check_arg(command) == 1)
-		ft_printf("\n");
+		printf("\n");
 	env_map_replace_or_add(shell->env_map, "?", "0");
 }
