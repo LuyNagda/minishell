@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 14:37:32 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/24 14:20:30 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,5 @@ void	ft_dispatch_builtin(t_minishell *shell, t_commands *command)
 	else if (ft_str_equals(command->arguments[0], "env"))
 		exec_env(shell);
 	else if (ft_str_equals(command->arguments[0], "exit"))
-		exec_exit(shell);
+		exec_exit(shell, command);
 }

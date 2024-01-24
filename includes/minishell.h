@@ -125,7 +125,7 @@ void				exec_echo(t_minishell *shell, t_commands *command);
 void				exec_pwd(t_minishell *shell);
 void				exec_cd(t_minishell *shell, t_commands *command);
 void				exec_env(t_minishell *shell);
-void				exec_exit(t_minishell *shell);
+void				exec_exit(t_minishell *shell, t_commands *command);
 void				exec_clear(t_minishell *shell);
 
 /* *****************************************************/
@@ -173,7 +173,7 @@ size_t				ft_get_numbers_of_commands(t_commands *commands_list);
 t_commands			*ft_get_command_from_pos(t_commands *command_list,
 						size_t command_node_pos);
 t_commands			*ft_add_command(t_minishell *shell, t_commands *new_node);
-t_commands			*ft_command_init(void);
+size_t				ft_get_arguments_amount(t_commands *command);
 t_commands			*ft_command_new_node(t_env_map *map, char **args);
 t_commands			*ft_create_command_node(char *cmd);
 void				ft_flush_command_list(t_commands *list);
