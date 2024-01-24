@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:42:21 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/23 15:18:22 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/24 18:39:48 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ static void	out_redirection(t_commands *tmp, int redirection, int i)
 	else
 		tmp->output_fd = open(tmp->arguments[++i],
 				O_WRONLY | O_APPEND | O_CREAT, 0777);
+	if (tmp->output_fd < 0)
+		error_msg(tmp->arguments[i]);
 }
 
 static void	in_redirection(t_commands *tmp, int redirection, int i)
@@ -35,10 +37,7 @@ static void	in_redirection(t_commands *tmp, int redirection, int i)
 	{
 		tmp->input_fd = open(tmp->arguments[++i], O_RDONLY);
 		if (tmp->input_fd < 0)
-		{
-			printf("%s: %s\n", strerror(errno), tmp->arguments[i]);
-			exit(EXIT_FAILURE);
-		}
+			error_msg(tmp->arguments[i]);
 	}
 }
 
