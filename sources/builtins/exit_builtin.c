@@ -66,6 +66,7 @@ void exec_exit(t_minishell *shell, t_commands *command)
 	else if (ft_get_arguments_amount(command) > 2)
 	{
 		ft_printf("minishell: exit: too many arguments\n");
+		env_map_replace_or_add(shell->env_map, "?", "1");
 		return;
 	}
 	if (ft_get_arguments_amount(command) == 1)
