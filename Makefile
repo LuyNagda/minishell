@@ -5,7 +5,6 @@ LIBFT = ./dependencies/libft/build/libft.a
 
 FILES =	main.c							\
 		builtins/cd_builtin.c			\
-		builtins/clear_builtin.c		\
 		builtins/echo_builtin.c			\
 		builtins/env_builtin.c			\
 		builtins/exit_builtin.c			\
