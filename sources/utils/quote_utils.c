@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 12:28:58 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 14:56:50 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/23 18:11:39 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ int	ft_index_is_in_quotes(const char *line, size_t pos)
 
 	index = 0;
 	open = 0;
+	if (!line)
+		return (0);
 	while (line[index] && pos != index)
 	{
 		if (open == 0)

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:43:45 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 14:11:11 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/24 12:45:20 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ t_env_map	*ft_create_env_node(char *key, char *value,
 	new_node->key = NULL;
 	new_node->value = NULL;
 	new_node->key = ft_strdup(key);
-	if (!new_node->key)
-		return (NULL);
+	//if (!new_node->key)
+	//	return (NULL);
 	new_node->value = ft_strdup(value);
-	if (!new_node->value)
-		return (NULL);
+	//if (!new_node->value)
+	//	return (NULL);
 	new_node->has_equal = has_equals;
 	new_node->is_system = is_system;
 	new_node->is_immutable = 0;

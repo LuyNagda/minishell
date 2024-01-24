@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 16:48:28 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/24 14:21:15 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,7 @@ int					count_redirection(t_commands *command, char *character);
 void				remove_file_from_command(t_commands *command,
 						char *character, int i);
 int					has_multiple_redirection(t_commands *command, char *character);
+char				**get_export_values(t_commands *command, int *i, int *has_equal);
 
 /* *****************************************************/
 /* ******************** TOKENS *************************/
@@ -243,6 +244,7 @@ char				*build_str_from_array(char **array);
 t_message			ft_init_messages(void);
 t_env_map			*duplicate_list(t_env_map *head);
 t_env_map			*merge_sort(t_env_map *head);
+void				free_duplicate_env(t_env_map *head);
 
 /* *****************************************************/
 /* ********************* DEBUG *************************/

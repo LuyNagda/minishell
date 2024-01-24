@@ -10,6 +10,7 @@ FILES =	main.c							\
 		builtins/env_builtin.c			\
 		builtins/exit_builtin.c			\
 		builtins/export_builtin.c		\
+		builtins/get_export_values.c	\
 		builtins/unset_builtin.c		\
 		builtins/pwd_builtin.c			\
 		command/command_handler.c		\
