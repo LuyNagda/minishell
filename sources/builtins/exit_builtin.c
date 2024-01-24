@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/24 14:45:12 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/24 15:19:31 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static t_boolean has_only_digits(char *str)
 	index = 0;
 	while (str[index])
 	{
-		if (!ft_is_digit(str[index]) && (str[index] == '-' && index != 0) && (str[index] == '+' && index != 0))
+		if (!ft_is_digit(str[index]) && ((str[index] != '-' && index != 0) || (str[index] != '+' && index != 0)))
 			return (_false);
 		index++;
 	}
