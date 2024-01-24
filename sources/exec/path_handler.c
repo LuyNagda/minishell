@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 12:27:00 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 17:35:16 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/24 18:17:55 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*find_command(t_env_map *map, char *command)
 	i = 0;
 	path_array = convert_path_to_array(map);
 	if (!path_array)
-		path_array = malloc(sizeof(char **));
+		return (NULL);
 	path = NULL;
 	if (access(command, F_OK) == 0 && access(command, X_OK) == 0)
 		return (ft_free_split(path_array), ft_strdup(command));

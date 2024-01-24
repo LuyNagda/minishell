@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 18:22:07 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/24 18:14:14 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 
 int	is_builtins(t_commands *command)
 {
-	return (ft_str_starts_with(command->arguments[0], "clear")
-		|| ft_str_starts_with(command->arguments[0], "cd")
+	return (ft_str_starts_with(command->arguments[0], "cd")
 		|| ft_str_starts_with(command->arguments[0], "pwd")
 		|| ft_str_starts_with(command->arguments[0], "exit")
 		|| ft_str_starts_with(command->arguments[0], "echo")
