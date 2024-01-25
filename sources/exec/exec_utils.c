@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/24 18:41:45 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/25 16:35:55 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	here_doc(t_minishell *shell, t_commands *command)
 {
 	char	*line;
 
-	if (has_heredoc(command, "<<"))
+	if (has_heredoc(command, "<<") && command->arguments_amount != 1)
 	{
 		heredoc_parsing(shell, command, "<<");
 		line = readline("$>");
@@ -59,6 +59,8 @@ void	here_doc(t_minishell *shell, t_commands *command)
 			error_msg("DUP2 failed");
 		close(command->input_fd);
 	}
+	else
+		error_msg("bash");
 }
 
 void	normal_redirections(t_minishell *shell, t_commands *command)
