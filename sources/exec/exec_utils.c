@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/25 16:35:55 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/01/26 13:38:41 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,18 @@ void	free_and_exit(t_minishell *shell, t_pipex *pipex)
 	ft_flush_tokens(shell->parsing_cmd.tokens);
 	env_map_flush(shell->env_map);
 	ft_free_split(pipex->envp);
+	free(pipex->pid);
 	free(shell->sended_line);
 	exit(EXIT_FAILURE);
 }
 
-void	here_doc(t_minishell *shell, t_commands *command)
+void	here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
 	char	*line;
 
 	if (has_heredoc(command, "<<") && command->arguments_amount != 1)
 	{
-		heredoc_parsing(shell, command, "<<");
+		heredoc_parsing(shell, command, "<<", pipex);
 		line = readline("$>");
 		while (!ft_str_equals(command->here_doc, line))
 		{
@@ -54,16 +55,17 @@ void	here_doc(t_minishell *shell, t_commands *command)
 		close(command->input_fd);
 		command->input_fd = open(".here_doc", O_RDONLY);
 		if (command->input_fd < 0)
-			error_msg("here_doc");
+		{
+			perror("here_doc");
+			free_and_exit(shell, pipex);
+		}
 		if (dup2(command->input_fd, STDIN_FILENO) == -1)
 			error_msg("DUP2 failed");
 		close(command->input_fd);
 	}
-	else
-		error_msg("bash");
 }
 
-void	normal_redirections(t_minishell *shell, t_commands *command)
+void	normal_redirections(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
 	if (has_redirection(command, '<'))
 	{
@@ -75,6 +77,9 @@ void	normal_redirections(t_minishell *shell, t_commands *command)
 			close(command->input_fd);
 		}
 		else
-			error_msg("bash");
+		{
+			perror("bash");
+			free_and_exit(shell, pipex);
+		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:13:33 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/23 15:03:34 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 13:23:41 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	remove_heredoc_from_command(t_commands *command,
 	command->arguments = result;
 }
 
-void	heredoc_parsing(t_minishell *shell, t_commands *command, char *here_doc)
+void	heredoc_parsing(t_minishell *shell, t_commands *command, char *here_doc, t_pipex *pipex)
 {
 	int			redirection;
 	int			i;
@@ -72,10 +72,18 @@ void	heredoc_parsing(t_minishell *shell, t_commands *command, char *here_doc)
 		while (tmp->arguments[i] && !ft_str_equals(tmp->arguments[i], here_doc))
 			i++;
 		tmp->input_fd = open(".here_doc", O_RDWR | O_CREAT | O_TRUNC, 0777);
+		if (tmp->input_fd < 0)
+		{
+			perror("here_doc");
+			free_and_exit(shell, pipex);
+		}
 		tmp->here_doc = ft_strdup(tmp->arguments[++i]);
 		remove_heredoc_from_command(tmp, here_doc, i - 1);
 	}
-	if (command->path)
-		free(command->path);
-	command->path = find_command(shell->env_map, command->arguments[0]);
+	if (command->arguments_amount > 0)
+	{
+		if (command->path)
+			free(command->path);
+		command->path = find_command(shell->env_map, command->arguments[0]);
+	}
 }

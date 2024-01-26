@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/24 18:36:57 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 13:39:03 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,8 @@ int					is_builtins(t_commands *command);
 char				**convert_path_to_array(t_env_map *env_map);
 char				*find_command(t_env_map *map, char *command);
 void				free_and_exit(t_minishell *shell, t_pipex *pipex);
-void				here_doc(t_minishell *shell, t_commands *command);
-void				normal_redirections(t_minishell *shell, t_commands *command);
+void				here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex);
+void				normal_redirections(t_minishell *shell, t_commands *command, t_pipex *pipex);
 
 /* *****************************************************/
 /* ********************** ENV **************************/
@@ -189,7 +189,7 @@ int					has_redirection(t_commands *command, char character);
 void				redirection_parsing(t_minishell *shell,
 						t_commands *commands, char *character);
 void				heredoc_parsing(t_minishell *shell,
-						t_commands *command, char *here_doc);
+						t_commands *command, char *here_doc, t_pipex *pipex);
 int					has_heredoc(t_commands *command, char *here_doc);
 int					count_redirection(t_commands *command, char *character);
 void				remove_file_from_command(t_commands *command,

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/26 13:23:59 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 13:38:51 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	redirections(t_minishell *shell,
 			t_commands *command, t_pipex *pipex)
 {
 	here_doc(shell, command, pipex);
-	normal_redirections(shell, command);
+	normal_redirections(shell, command, pipex);
 	if (command->arguments_amount == 0)
 		free_and_exit(shell, pipex);
 	if (command->position > 0 && !command->input_fd)
@@ -119,4 +119,5 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 	free(pipex.status_string);
 	free(pipex.pid);
 	ft_free_split(pipex.envp);
+	unlink(".here_doc");
 }

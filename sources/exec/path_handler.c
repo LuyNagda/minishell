@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 12:27:00 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/24 18:17:55 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/26 13:26:44 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,12 @@ char	*find_command(t_env_map *map, char *command)
 	if (!path_array)
 		return (NULL);
 	path = NULL;
-	if (access(command, F_OK) == 0 && access(command, X_OK) == 0)
-		return (ft_free_split(path_array), ft_strdup(command));
+	if (ft_str_contains(command, "/", 0))
+	{
+		if (access(command, F_OK) == 0 && access(command, X_OK) == 0)
+			return (ft_free_split(path_array), ft_strdup(command));
+		return (ft_free_split(path_array), NULL);
+	}
 	while (path_array[i])
 	{
 		temp = ft_strjoin(path_array[i], "/");

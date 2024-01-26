@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:42:21 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/24 18:39:48 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 13:40:04 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ static void	out_redirection(t_commands *tmp, int redirection, int i)
 	else
 		tmp->output_fd = open(tmp->arguments[++i],
 				O_WRONLY | O_APPEND | O_CREAT, 0777);
-	if (tmp->output_fd < 0)
-		error_msg(tmp->arguments[i]);
 }
 
 static void	in_redirection(t_commands *tmp, int redirection, int i)
@@ -36,8 +34,6 @@ static void	in_redirection(t_commands *tmp, int redirection, int i)
 	if (redirection == 1)
 	{
 		tmp->input_fd = open(tmp->arguments[++i], O_RDONLY);
-		if (tmp->input_fd < 0)
-			error_msg(tmp->arguments[i]);
 	}
 }
 
@@ -82,7 +78,10 @@ void	redirection_parsing(t_minishell *shell,
 		main_parsing(tmp, redirection, character, count);
 		count--;
 	}
-	if (command->path)
-		free(command->path);
-	command->path = find_command(shell->env_map, command->arguments[0]);
+	if (command->arguments_amount > 0)
+	{
+		if (command->path)
+			free(command->path);
+		command->path = find_command(shell->env_map, command->arguments[0]);
+	}
 }
