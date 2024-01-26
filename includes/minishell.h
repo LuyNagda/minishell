@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/26 13:47:37 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 14:28:49 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,9 @@ typedef struct s_commands
 	t_boolean			error_during_creation;
 	int					is_builtin;
 	int					input_fd;
+	char				*infile;
 	int					output_fd;
+	char				*outfile;
 	char				*here_doc;
 	struct s_commands	*next_node;
 }						t_commands;
@@ -187,7 +189,7 @@ t_parsing_result	on_parse(t_minishell *shell);
 t_parsing_result	post_parsing(t_minishell *shell);
 int					has_redirection(t_commands *command, char character);
 void				redirection_parsing(t_minishell *shell,
-						t_commands *commands, char *character);
+						t_commands *commands, char *character, t_pipex *pipex);
 void				heredoc_parsing(t_minishell *shell,
 						t_commands *command, char *here_doc, t_pipex *pipex);
 int					has_heredoc(t_commands *command, char *here_doc);

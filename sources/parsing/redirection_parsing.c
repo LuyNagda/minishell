@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:42:21 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/26 13:47:59 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 14:38:28 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static void	out_redirection(t_commands *tmp, int redirection, int i)
 	else
 		tmp->output_fd = open(tmp->arguments[++i],
 				O_WRONLY | O_APPEND | O_CREAT, 0777);
+	tmp->outfile = tmp->arguments[i];
 }
 
 static void	in_redirection(t_commands *tmp, int redirection, int i)
@@ -34,15 +35,18 @@ static void	in_redirection(t_commands *tmp, int redirection, int i)
 	if (redirection == 1)
 	{
 		tmp->input_fd = open(tmp->arguments[++i], O_RDONLY);
+		tmp->infile = tmp->arguments[i];
 	}
 }
 
-static void	main_parsing(t_commands *tmp, int redirection,
-			char *character, int count)
+static void	main_parsing(t_minishell *shell, t_commands *tmp,
+			t_pipex *pipex, char *character)
 {
 	int	i;
+	int	redirection;
 
 	i = 0;
+	redirection = has_multiple_redirection(tmp, character);
 	if (redirection)
 	{
 		while (tmp->arguments[i]
@@ -52,21 +56,21 @@ static void	main_parsing(t_commands *tmp, int redirection,
 			out_redirection(tmp, redirection, i);
 		else
 			in_redirection(tmp, redirection, i);
-		remove_file_from_command(tmp, character, i);
-		if (count > 1)
+		if (tmp->input_fd < 0 || tmp->outfile < 0)
 		{
-			if (tmp->output_fd)
-				close(tmp->output_fd);
-			if (tmp->input_fd)
-				close(tmp->input_fd);
+			if (tmp->input_fd < 0)
+				perror(tmp->infile);
+			if (tmp->outfile < 0)
+				perror(tmp->outfile);
+			free_and_exit(shell, pipex);
 		}
+		remove_file_from_command(tmp, character, i);
 	}
 }
 
 void	redirection_parsing(t_minishell *shell,
-	t_commands *command, char *character)
+	t_commands *command, char *character, t_pipex *pipex)
 {
-	int			redirection;
 	int			count;
 	t_commands	*tmp;
 
@@ -74,8 +78,14 @@ void	redirection_parsing(t_minishell *shell,
 	count = count_redirection(tmp, character);
 	while (count)
 	{
-		redirection = has_multiple_redirection(tmp, character);
-		main_parsing(tmp, redirection, character, count);
+		main_parsing(shell, tmp, pipex, character);
+		if (count > 1)
+		{
+			if (tmp->output_fd)
+				close(tmp->output_fd);
+			if (tmp->input_fd)
+				close(tmp->input_fd);
+		}
 		count--;
 	}
 	add_back_command_path(shell, command);

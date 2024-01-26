@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/26 13:51:18 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 14:29:07 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	normal_redirections(t_minishell *shell,
 {
 	if (has_redirection(command, '<'))
 	{
-		redirection_parsing(shell, command, "<");
+		redirection_parsing(shell, command, "<", pipex);
 		if (command->input_fd > 0)
 		{
 			if (dup2(command->input_fd, STDIN_FILENO) == -1)

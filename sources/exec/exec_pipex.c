@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/26 13:38:51 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 14:40:56 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	redirections(t_minishell *shell,
 	}
 	if (has_redirection(command, '>'))
 	{
-		redirection_parsing(shell, command, ">");
+		redirection_parsing(shell, command, ">", pipex);
 		if (dup2(command->output_fd, STDOUT_FILENO) == -1)
 			error_msg("DUP2 failed");
 		close(command->output_fd);
@@ -59,11 +59,12 @@ static void	exec_command(t_minishell *shell,
 		ft_dispatch_builtin(shell, command);
 		exit(127);
 	}
+	if (command->arguments_amount == 0)
+		free_and_exit(shell, pipex);
 	if (command->arguments_amount > 0 && command->path == NULL)
 	{
-		ft_putstr_fd("command not found: ", 2);
 		ft_putstr_fd(command->arguments[0], 2);
-		ft_putstr_fd("\n", 2);
+		ft_putstr_fd(": command not found\n", 2);
 		free_and_exit(shell, pipex);
 	}
 	execve(command->path, command->arguments, pipex->envp);
