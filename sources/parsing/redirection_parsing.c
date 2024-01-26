@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:42:21 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/26 14:38:28 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 15:31:17 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <stdio.h>
 #include "minishell.h"
 #include "string_utils.h"
-#include <errno.h>
 #include <string.h>
 
 static void	out_redirection(t_commands *tmp, int redirection, int i)
@@ -62,7 +61,7 @@ static void	main_parsing(t_minishell *shell, t_commands *tmp,
 				perror(tmp->infile);
 			if (tmp->outfile < 0)
 				perror(tmp->outfile);
-			free_and_exit(shell, pipex);
+			free_and_exit(shell, pipex, 126);
 		}
 		remove_file_from_command(tmp, character, i);
 	}

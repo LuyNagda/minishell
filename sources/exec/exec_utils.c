@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/26 14:29:07 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 15:30:43 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <readline/readline.h>
+#include <errno.h>
 
 void	error_msg(char *string)
 {
@@ -25,7 +26,7 @@ void	error_msg(char *string)
 	exit(EXIT_FAILURE);
 }
 
-void	free_and_exit(t_minishell *shell, t_pipex *pipex)
+void	free_and_exit(t_minishell *shell, t_pipex *pipex, int code)
 {
 	ft_flush_command_list(shell->commands);
 	ft_flush_tokens(shell->parsing_cmd.tokens);
@@ -33,7 +34,7 @@ void	free_and_exit(t_minishell *shell, t_pipex *pipex)
 	ft_free_split(pipex->envp);
 	free(pipex->pid);
 	free(shell->sended_line);
-	exit(EXIT_FAILURE);
+	exit(code);
 }
 
 void	here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex)
@@ -57,7 +58,7 @@ void	here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		if (command->input_fd < 0)
 		{
 			perror("here_doc");
-			free_and_exit(shell, pipex);
+			free_and_exit(shell, pipex, 126);
 		}
 		if (dup2(command->input_fd, STDIN_FILENO) == -1)
 			error_msg("DUP2 failed");
@@ -80,7 +81,7 @@ void	normal_redirections(t_minishell *shell,
 		else
 		{
 			perror("bash");
-			free_and_exit(shell, pipex);
+			free_and_exit(shell, pipex, errno);
 		}
 	}
 }

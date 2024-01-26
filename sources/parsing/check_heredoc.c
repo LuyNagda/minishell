@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:13:33 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/26 13:54:04 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 15:31:26 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	heredoc_parsing(t_minishell *shell,
 		if (tmp->input_fd < 0)
 		{
 			perror("here_doc");
-			free_and_exit(shell, pipex);
+			free_and_exit(shell, pipex, 126);
 		}
 		tmp->here_doc = ft_strdup(tmp->arguments[++i]);
 		remove_heredoc_from_command(tmp, here_doc, i - 1);
