@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/26 13:38:41 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 13:51:18 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ void	here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	}
 }
 
-void	normal_redirections(t_minishell *shell, t_commands *command, t_pipex *pipex)
+void	normal_redirections(t_minishell *shell,
+		t_commands *command, t_pipex *pipex)
 {
 	if (has_redirection(command, '<'))
 	{

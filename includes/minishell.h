@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/26 13:39:03 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 13:47:37 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,7 @@ void				remove_file_from_command(t_commands *command,
 						char *character, int i);
 int					has_multiple_redirection(t_commands *command, char *character);
 char				**get_export_values(t_commands *command, int *i, int *has_equal);
+void				add_back_command_path(t_minishell *shell, t_commands *command);
 
 /* *****************************************************/
 /* ******************** TOKENS *************************/

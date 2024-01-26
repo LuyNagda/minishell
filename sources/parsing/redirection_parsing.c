@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:42:21 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/26 13:40:04 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 13:47:59 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,5 @@ void	redirection_parsing(t_minishell *shell,
 		main_parsing(tmp, redirection, character, count);
 		count--;
 	}
-	if (command->arguments_amount > 0)
-	{
-		if (command->path)
-			free(command->path);
-		command->path = find_command(shell->env_map, command->arguments[0]);
-	}
+	add_back_command_path(shell, command);
 }

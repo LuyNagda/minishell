@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:13:33 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/26 13:23:41 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 13:54:04 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ static void	remove_heredoc_from_command(t_commands *command,
 	command->arguments = result;
 }
 
-void	heredoc_parsing(t_minishell *shell, t_commands *command, char *here_doc, t_pipex *pipex)
+void	heredoc_parsing(t_minishell *shell,
+		t_commands *command, char *here_doc, t_pipex *pipex)
 {
 	int			redirection;
 	int			i;
@@ -80,10 +81,5 @@ void	heredoc_parsing(t_minishell *shell, t_commands *command, char *here_doc, t_
 		tmp->here_doc = ft_strdup(tmp->arguments[++i]);
 		remove_heredoc_from_command(tmp, here_doc, i - 1);
 	}
-	if (command->arguments_amount > 0)
-	{
-		if (command->path)
-			free(command->path);
-		command->path = find_command(shell->env_map, command->arguments[0]);
-	}
+	add_back_command_path(shell, command);
 }
