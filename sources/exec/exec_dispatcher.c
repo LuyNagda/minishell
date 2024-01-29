@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/24 18:14:14 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/24 18:36:38 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,7 @@ void	ft_dispatch_command(t_minishell *shell)
 
 void	ft_dispatch_builtin(t_minishell *shell, t_commands *command)
 {
-	if (ft_str_equals(command->arguments[0], "clear"))
-		exec_clear(shell);
-	else if (ft_str_equals(command->arguments[0], "echo"))
+	if (ft_str_equals(command->arguments[0], "echo"))
 		exec_echo(shell, command);
 	else if (ft_str_equals(command->arguments[0], "cd"))
 		exec_cd(shell, command);
