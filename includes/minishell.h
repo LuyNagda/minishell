@@ -145,7 +145,7 @@ void				normal_redirections(t_minishell *shell, t_commands *command);
 /* ********************** ENV **************************/
 /* *****************************************************/
 
-t_env_map			*env_map_init(void);
+void				env_map_init(t_minishell *shell);
 t_env_map			*ft_create_env_node(char *k, char *v,
 						int has_equals, int is_system);
 t_env_map			*env_map_add_back(t_env_map **env_map,

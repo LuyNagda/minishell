@@ -15,24 +15,14 @@
 #include "stdlib.h"
 #include "ft_printf.h"
 
-t_env_map	*env_map_init(void)
+void	env_map_init(t_minishell *shell)
 {
-	t_env_map	*env_map;
+	t_env_map	*node;
 
-	env_map = malloc(sizeof(t_env_map));
-	if (!env_map)
-		return (NULL);
-	env_map->is_system = _true;
-	env_map->has_equal = _true;
-	env_map->is_immutable = _true;
-	env_map->key = ft_strdup("?");
-	if (!env_map->key)
-		return (NULL);
-	env_map->value = ft_strdup("0");
-	if (!env_map->value)
-		return (NULL);
-	env_map->next_node = NULL;
-	return (env_map);
+	shell->env_map = NULL;
+	node = ft_create_env_node("?", "0", _true, _true);
+	if (node)
+		env_map_add_back(&shell->env_map, node, 1);
 }
 
 t_env_map	*ft_create_env_node(char *key, char *value,
