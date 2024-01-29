@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:43:18 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 14:12:12 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/29 09:53:38 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_env_map	*env_map_add_back(t_env_map **env_map,
 	tmp = *env_map;
 	if (is_immutable)
 		new_node->is_immutable = 1;
-	if (tmp->key == NULL && tmp->value == NULL)
+	if (tmp == NULL)
 	{
 		*env_map = new_node;
 		return (*env_map);
@@ -36,24 +36,27 @@ t_env_map	*env_map_add_back(t_env_map **env_map,
 
 t_env_map	*env_map_remove_from_key(t_env_map *env_map, char *key)
 {
-	t_env_map	*tmp;
-	t_env_map	*last_node;
+	t_env_map	*previous_node;
+	t_env_map	*current_node;
 
 	if (!env_map)
 		return (NULL);
-	tmp = env_map;
-	while (tmp->next_node->next_node)
+	previous_node = env_map;
+	current_node = env_map;
+	while (current_node)
 	{
-		if (ft_str_equals(tmp->next_node->key, key))
+		if (ft_str_equals(current_node->key, key))
 		{
-			if (tmp->next_node->is_immutable)
+			if (current_node->is_immutable)
 				return (NULL);
-			last_node = tmp->next_node;
-			tmp->next_node = tmp->next_node->next_node;
-			free(last_node);
-			return (env_map);
+			if (current_node->value)
+				free(current_node->value);
+			if (current_node->key)
+				free(current_node->key);
+			previous_node->next_node = current_node->next_node;
+			return (free(current_node), env_map);
 		}
-		tmp = tmp->next_node;
+		current_node = current_node->next_node;
 	}
 	return (env_map);
 }
@@ -85,18 +88,12 @@ t_env_map	*env_map_replace_or_add(t_env_map *env_map, char *key, char *value)
 
 	if (!env_map)
 		return (NULL);
-	tmp = env_map;
-	while (tmp)
+	tmp = env_map_replace(env_map, key, value);
+	if (tmp == NULL)
 	{
-		if (ft_str_equals(tmp->key, key))
-		{
-			free(tmp->value);
-			tmp->value = ft_strdup(value);
-			return (env_map);
-		}
-		tmp = tmp->next_node;
+		node = ft_create_env_node(key, value, 1, 0);
+		env_map_add_back(&env_map, node, 1);
+		return (env_map);
 	}
-	node = ft_create_env_node(key, value, 1, 0);
-	env_map_add_back(&env_map, node, 1);
-	return (env_map);
+	return (tmp);
 }

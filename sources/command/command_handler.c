@@ -45,25 +45,14 @@ t_commands	*ft_get_command_from_pos(t_commands *command_list,
 	return (command_list);
 }
 
-t_commands	*ft_command_init(void)
+size_t	ft_get_arguments_amount(t_commands *command)
 {
-	t_commands	*list;
+	size_t	i;
 
-	list = malloc(sizeof(t_commands));
-	if (!list)
-		return (NULL);
-	list->raw_command = NULL;
-	list->arguments = NULL;
-	list->arguments_amount = 0;
-	list->has_already_executed = _false;
-	list->position = 0;
-	list->next_node = NULL;
-	list->error_during_creation = _false;
-	list->input_fd = 0;
-	list->output_fd = 0;
-	list->is_builtin = 0;
-	list->here_doc = NULL;
-	return (list);
+	i = 0;
+	while (command->arguments[i])
+		i++;
+	return (i);
 }
 
 t_commands	*ft_command_new_node(t_env_map *map, char **args)
