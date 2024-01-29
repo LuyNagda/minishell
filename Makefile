@@ -22,12 +22,13 @@ FILES =	main.c							\
 		exec/exec_pipex.c				\
 		exec/path_handler.c				\
 		exec/exec_utils.c				\
+		exec/heredoc_utils.c			\
 		parsing/on_parsing.c			\
 		parsing/post_parsing.c			\
 		parsing/pre_parsing.c			\
 		parsing/redirection_parsing.c	\
 		parsing/redirection_parsing_2.c	\
-		parsing/check_heredoc.c			\
+		parsing/heredoc_parsing.c		\
 		tokens/tokenizer.c				\
 		tokens/tokens_handler.c			\
 		tokens/tokens_concat.c			\
