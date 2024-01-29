@@ -15,8 +15,7 @@
 
 int	is_builtins(t_commands *command)
 {
-	return (ft_str_starts_with(command->arguments[0], "clear")
-		|| ft_str_starts_with(command->arguments[0], "cd")
+	return (ft_str_starts_with(command->arguments[0], "cd")
 		|| ft_str_starts_with(command->arguments[0], "pwd")
 		|| ft_str_starts_with(command->arguments[0], "exit")
 		|| ft_str_starts_with(command->arguments[0], "echo")
@@ -84,9 +83,7 @@ void	ft_dispatch_command(t_minishell *shell)
 
 void	ft_dispatch_builtin(t_minishell *shell, t_commands *command)
 {
-	if (ft_str_equals(command->arguments[0], "clear"))
-		exec_clear(shell);
-	else if (ft_str_equals(command->arguments[0], "echo"))
+	if (ft_str_equals(command->arguments[0], "echo"))
 		exec_echo(shell, command);
 	else if (ft_str_equals(command->arguments[0], "cd"))
 		exec_cd(shell, command);

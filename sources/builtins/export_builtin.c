@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:50 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 17:46:27 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/24 16:52:37 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,84 +15,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static char	**get_export_values(t_commands *command, int *i)
-{
-	char	**export;
-
-	if (!(command->arguments[*i]))
-		return (NULL);
-	if (ft_str_contains(command->arguments[*i], "=",
-		ft_strlen(command->arguments[*i]) - 1)
-		&& ft_str_contains(command->arguments[*i + 1], "\"", 0))
-	{
-		export = (char **)malloc(sizeof(char *) * 3);
-		export[0] = ft_strtrim(command->arguments[*i], "=");
-		export[1] = ft_strtrim(command->arguments[*i + 1], "\"");
-		export[2] = 0;
-		*i = *i + 2;
-	}
-	else
-	{
-		export = ft_split(command->arguments[*i], '=');
-		if (!export[1])
-		{
-			ft_free_split(export);
-			export = (char **)malloc(sizeof(char *) * 3);
-			export[0] = ft_strdup(command->arguments[*i]);
-			export[1] = NULL;
-			export[2] = 0;
-		}
-		*i = *i + 1;
-	}
-	return (export);
-}
-
-static int	export_if_no_equal(t_minishell *shell, char **export)
-{
-	t_env_map	*node;
-
-	if (!export[1])
-	{
-		node = env_map_find_node(shell->env_map, export[0]);
-		if (node != NULL)
-		{
-			env_map_replace(shell->env_map, export[0], export[1]);
-			node->has_equal = 0;
-			ft_free_split(export);
-			return (1);
-		}
-		node = ft_create_env_node(export[0], "NULL", 0, 0);
-		env_map_add_back(&shell->env_map, node, 0);
-		ft_free_split(export);
-		return (1);
-	}
-	return (0);
-}
-
-static void	exec_export_part(t_minishell *shell, t_commands *command)
+static void	export_vars(t_minishell *shell, t_commands *command)
 {
 	t_env_map	*node;
 	char		**export;
 	int			i;
+	int			has_equal;
 
 	i = 1;
+	has_equal = 0;
 	while (i <= command->arguments_amount)
 	{
-		export = get_export_values(command, &i);
+		export = get_export_values(command, &i, &has_equal);
 		if (!export)
 			break ;
-		if (export_if_no_equal(shell, export))
-			continue ;
 		node = env_map_find_node(shell->env_map, export[0]);
-		if (node != NULL)
+		if (node != NULL && has_equal)
 		{
 			env_map_replace(shell->env_map, export[0], export[1]);
-			node->has_equal = 1;
+			node->has_equal = has_equal;
 			ft_free_split(export);
 			continue ;
 		}
-		node = ft_create_env_node(export[0], export[1], 1, 0);
-		env_map_add_back(&shell->env_map, node, 0);
+		if (node == NULL)
+		{
+			node = ft_create_env_node(export[0], export[1], has_equal, 0);
+			env_map_add_back(&shell->env_map, node, 0);
+		}
 		ft_free_split(export);
 	}
 }
@@ -118,7 +67,8 @@ void	exec_export(t_minishell *shell, t_commands *command)
 			}
 			node = node->next_node;
 		}
+		free_duplicate_env(duplicate);
 		return ;
 	}
-	exec_export_part(shell, command);
+	export_vars(shell, command);
 }

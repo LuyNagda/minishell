@@ -54,6 +54,8 @@ static void	ft_shell_loop(t_minishell *shell)
 	{
 		shell->commands = NULL;
 		line = readline(shell->messages.minishell_prefix);
+		if (!line)
+			break ;
 		if (check_for_out_of_bounds(line))
 			return ;
 		shell->sended_line = ft_strtrim(line, " ");

@@ -5,11 +5,11 @@ LIBFT = ./dependencies/libft/build/libft.a
 
 FILES =	main.c							\
 		builtins/cd_builtin.c			\
-		builtins/clear_builtin.c		\
 		builtins/echo_builtin.c			\
 		builtins/env_builtin.c			\
 		builtins/exit_builtin.c			\
 		builtins/export_builtin.c		\
+		builtins/get_export_values.c	\
 		builtins/unset_builtin.c		\
 		builtins/pwd_builtin.c			\
 		command/command_handler.c		\

@@ -6,13 +6,27 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 16:46:19 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/23 16:49:25 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/24 14:10:58 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "string_utils.h"
 #include <stdlib.h>
+
+void	free_duplicate_env(t_env_map *head)
+{
+	t_env_map	*current;
+	t_env_map	*next;
+
+	current = head;
+	while (current != NULL)
+	{
+		next = current->next_node;
+		free(current);
+		current = next;
+	}
+}
 
 static void	assign_values(t_env_map *current, t_env_map *original)
 {

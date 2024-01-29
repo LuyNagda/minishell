@@ -3,17 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parsing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:15:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 15:08:24 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/27 10:13:37 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "put_utils.h"
 #include "char_utils.h"
+#include "string_utils.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 static int	is_only_space(char *line)
 {
@@ -40,7 +42,7 @@ t_parsing_result	pre_parsing(t_minishell *shell)
 {
 	if (!shell->sended_line || !is_valid_line(shell->sended_line))
 		return (free(shell->sended_line), INVALID_INPUT);
-	if (ft_str_contains(shell->sended_line, "||", 0))
+	if (!ft_string_in_quotes(ft_strchr(shell->sended_line, '\"')) && ft_str_contains(shell->sended_line, "||", 0))
 		return (ft_putstr_fd(shell->messages.double_pipe_error, 2),
 			free(shell->sended_line), INVALID_INPUT);
 	if (ft_get_first_char_iw(shell->sended_line) == '|'

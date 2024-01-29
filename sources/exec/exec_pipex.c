@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/23 14:45:04 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 15:31:40 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,16 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
-#include <errno.h>
 #include <string.h>
 #include <sys/wait.h>
 
 static void	redirections(t_minishell *shell,
 			t_commands *command, t_pipex *pipex)
 {
-	here_doc(shell, command);
-	normal_redirections(shell, command);
+	here_doc(shell, command, pipex);
+	normal_redirections(shell, command, pipex);
+	if (command->arguments_amount == 0)
+		free_and_exit(shell, pipex, 0);
 	if (command->position > 0 && !command->input_fd)
 	{
 		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
@@ -32,7 +33,7 @@ static void	redirections(t_minishell *shell,
 	}
 	if (has_redirection(command, '>'))
 	{
-		redirection_parsing(shell, command, ">");
+		redirection_parsing(shell, command, ">", pipex);
 		if (dup2(command->output_fd, STDOUT_FILENO) == -1)
 			error_msg("DUP2 failed");
 		close(command->output_fd);
@@ -57,16 +58,17 @@ static void	exec_command(t_minishell *shell,
 		ft_dispatch_builtin(shell, command);
 		exit(127);
 	}
+	if (command->arguments_amount == 0)
+		free_and_exit(shell, pipex, 0);
 	if (command->arguments_amount > 0 && command->path == NULL)
 	{
-		ft_putstr_fd("command not found: ", 2);
 		ft_putstr_fd(command->arguments[0], 2);
-		ft_putstr_fd("\n", 2);
-		free_and_exit(shell, pipex);
+		ft_putstr_fd(": command not found\n", 2);
+		free_and_exit(shell, pipex, 127);
 	}
 	execve(command->path, command->arguments, pipex->envp);
 	perror(command->arguments[0]);
-	free_and_exit(shell, pipex);
+	free_and_exit(shell, pipex, 1);
 }
 
 void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
@@ -117,4 +119,5 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 	free(pipex.status_string);
 	free(pipex.pid);
 	ft_free_split(pipex.envp);
+	unlink(".here_doc");
 }

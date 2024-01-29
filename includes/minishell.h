@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 16:48:28 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/26 15:25:21 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,9 @@ typedef struct s_commands
 	t_boolean			error_during_creation;
 	int					is_builtin;
 	int					input_fd;
+	char				*infile;
 	int					output_fd;
+	char				*outfile;
 	char				*here_doc;
 	struct s_commands	*next_node;
 }						t_commands;
@@ -137,9 +139,9 @@ void				exec_cmd(t_minishell *shell, t_commands *command);
 int					is_builtins(t_commands *command);
 char				**convert_path_to_array(t_env_map *env_map);
 char				*find_command(t_env_map *map, char *command);
-void				free_and_exit(t_minishell *shell, t_pipex *pipex);
-void				here_doc(t_minishell *shell, t_commands *command);
-void				normal_redirections(t_minishell *shell, t_commands *command);
+void				free_and_exit(t_minishell *shell, t_pipex *pipex, int code);
+void				here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex);
+void				normal_redirections(t_minishell *shell, t_commands *command, t_pipex *pipex);
 
 /* *****************************************************/
 /* ********************** ENV **************************/
@@ -188,14 +190,16 @@ t_parsing_result	on_parse(t_minishell *shell);
 t_parsing_result	post_parsing(t_minishell *shell);
 int					has_redirection(t_commands *command, char character);
 void				redirection_parsing(t_minishell *shell,
-						t_commands *commands, char *character);
+						t_commands *commands, char *character, t_pipex *pipex);
 void				heredoc_parsing(t_minishell *shell,
-						t_commands *command, char *here_doc);
+						t_commands *command, char *here_doc, t_pipex *pipex);
 int					has_heredoc(t_commands *command, char *here_doc);
 int					count_redirection(t_commands *command, char *character);
 void				remove_file_from_command(t_commands *command,
 						char *character, int i);
 int					has_multiple_redirection(t_commands *command, char *character);
+char				**get_export_values(t_commands *command, int *i, int *has_equal);
+void				add_back_command_path(t_minishell *shell, t_commands *command);
 
 /* *****************************************************/
 /* ******************** TOKENS *************************/
@@ -243,6 +247,7 @@ char				*build_str_from_array(char **array);
 t_message			ft_init_messages(void);
 t_env_map			*duplicate_list(t_env_map *head);
 t_env_map			*merge_sort(t_env_map *head);
+void				free_duplicate_env(t_env_map *head);
 
 /* *****************************************************/
 /* ********************* DEBUG *************************/
