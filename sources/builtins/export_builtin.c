@@ -6,14 +6,53 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:50 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/24 16:52:37 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/29 15:35:31 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "char_utils.h"
 #include "string_utils.h"
+#include "put_utils.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+static int	ft_str_contains_any(char *key, char *charset)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (key[i])
+	{
+		j = 0;
+		while (charset[j])
+		{
+			if (key[i] == charset[j])
+				return (1);
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
+static int	var_name_check(char **export)
+{
+	if ((ft_is_alpha(export[0][0]) || export[0][0] == '_') && !ft_str_contains_any(export[0], "-!#$%^&*()\"\'?><.~`"))
+		return (0);
+	return (ft_putendl_fd("shit var name", 2), 1);
+}
+
+static void	export_new_var(t_minishell *shell, t_env_map *node, char **export, int has_equal)
+{
+	if (node == NULL)
+	{
+		node = ft_create_env_node(export[0], export[1], has_equal, 0);
+		env_map_add_back(&shell->env_map, node, 0);
+	}
+	ft_free_split(export);
+}
 
 static void	export_vars(t_minishell *shell, t_commands *command)
 {
@@ -29,6 +68,8 @@ static void	export_vars(t_minishell *shell, t_commands *command)
 		export = get_export_values(command, &i, &has_equal);
 		if (!export)
 			break ;
+		if (var_name_check(export))
+			return ;
 		node = env_map_find_node(shell->env_map, export[0]);
 		if (node != NULL && has_equal)
 		{
@@ -37,12 +78,7 @@ static void	export_vars(t_minishell *shell, t_commands *command)
 			ft_free_split(export);
 			continue ;
 		}
-		if (node == NULL)
-		{
-			node = ft_create_env_node(export[0], export[1], has_equal, 0);
-			env_map_add_back(&shell->env_map, node, 0);
-		}
-		ft_free_split(export);
+		export_new_var(shell, node, export, has_equal);
 	}
 }
 
