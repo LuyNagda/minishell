@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:13:33 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/26 15:31:26 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/30 17:54:42 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ void	heredoc_parsing(t_minishell *shell,
 			free_and_exit(shell, pipex, 126);
 		}
 		tmp->here_doc = ft_strdup(tmp->arguments[++i]);
+		dprintf(2, tmp->here_doc);
+		dprintf(2, "\n");
 		remove_heredoc_from_command(tmp, here_doc, i - 1);
 	}
 	add_back_command_path(shell, command);

@@ -6,9 +6,10 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:19:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 15:06:48 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/30 16:59:48 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include <stdio.h>
 
 #include "minishell.h"
 #include "put_utils.h"
@@ -154,7 +155,10 @@ t_parsing_result	on_parse(t_minishell *shell)
 	if (ft_has_only_whitespace_between_pipes(shell) != 0)
 		return (ft_putstr_fd(shell->messages.whitepipe_error, 2), free(shell->sended_line), INVALID_INPUT);
 	treat_variable_keys(shell);
+	//ft_display_tokens(shell->parsing_cmd.tokens);
 	append_quoted(&shell->parsing_cmd.tokens);
+	//printf("\n\n\n");
+	//ft_display_tokens(shell->parsing_cmd.tokens);
 	end_token = ft_create_token(ft_strdup("|"), PIPE);
 	if (!end_token)
 		return (ERROR);
