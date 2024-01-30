@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/30 11:06:35 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/30 14:30:35 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <char_utils.h>
@@ -38,27 +38,6 @@ void	free_and_exit(t_minishell *shell, t_pipex *pipex, int code)
 	exit(code);
 }
 
-size_t	ft_strlen_diff(char *str1, char *str2)
-{
-	size_t len_1;
-	size_t len_2;
-
-	if (!str1 || !str2)
-		return 0;
-	len_1 = 0;
-	len_2 = 0;
-	while (str1[len_1])
-		len_1++;
-	while (str2[len_2])
-		len_2++;
-	if (len_1 > len_2)
-		return (len_1 - len_2);
-	if (len_2 > len_1)
-		return (len_2 - len_1);
-	return (0);
-}
-
-
 char	*expand_line(char *line, t_env_map *map, int must_expanded)
 {
 	size_t	index;
@@ -68,7 +47,7 @@ char	*expand_line(char *line, t_env_map *map, int must_expanded)
 	char	*after_key;
 
 	index = 0;
-	if (!ft_str_contains(line, "$", 0))
+	if (!ft_str_contains(line, "$", 0) || !must_expanded)
 		return (line);
 	while (line && line[index])
 	{
@@ -113,25 +92,39 @@ char	*expand_line(char *line, t_env_map *map, int must_expanded)
 		}
 		index++;
 	}
-	return (line);
+	return line;
+}
+
+
+t_boolean contains_quotes(char *delimiter)
+{
+	size_t	index;
+
+	index = 0;
+	while (delimiter[index])
+	{
+		if (delimiter[index] == '\'' || delimiter[index] == '"')
+			return (_true);
+		index++;
+	}
+	return (_false);
 }
 
 
 void	here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
 	char	*line;
-
 	if (has_heredoc(command, "<<") && command->arguments_amount != 1)
 	{
 		heredoc_parsing(shell, command, "<<", pipex);
 		line = readline("$>");
-		line = expand_line(line, shell->env_map, 1);
+		line = expand_line(line, shell->env_map, !contains_quotes(command->here_doc));
 		while (!ft_str_equals(command->here_doc, line))
 		{
 			ft_putstr_fd(line, command->input_fd);
 			ft_putstr_fd("\n", command->input_fd);
 			line = readline("$>");
-			line = expand_line(line, shell->env_map, 1);
+			line = expand_line(line, shell->env_map, !contains_quotes(command->here_doc));
 		}
 		free(line);
 		close(command->input_fd);

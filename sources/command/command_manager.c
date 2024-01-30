@@ -68,6 +68,8 @@ void	ft_flush_command_list(t_commands *list)
 			free(list->path);
 		if (list->here_doc)
 			free(list->here_doc);
+		if (list->args_quoted)
+			free(list->args_quoted);
 		free(list);
 		list = tmp;
 	}

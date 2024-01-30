@@ -54,6 +54,7 @@ typedef struct s_commands
 {
 	char				*raw_command;
 	char				**arguments;
+	int					*args_quoted;
 	char				*path;
 	size_t				position;
 	size_t				arguments_amount;
