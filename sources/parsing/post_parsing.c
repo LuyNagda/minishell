@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 17:42:42 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/30 17:41:09 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/31 16:54:38 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -56,34 +56,13 @@ static t_parsing_result remove_quotes(t_minishell *shell)
 	return (SUCCESS);
 }
 
-static void merge_quotes(t_commands *commands)
-{
-	t_commands *tmp;
-	size_t index;
-
-	tmp = commands;
-	while (tmp)
-	{
-		index = 0;
-		while (tmp->arguments[index])
-		{
-			if (ft_str_equals(tmp->arguments[index], "\"") || ft_str_equals(tmp->arguments[index], "\'"))
-			{
-
-			}
-			index++;
-		}
-		tmp = tmp->next_node;
-	}
-}
-
 t_parsing_result post_parsing(t_minishell *shell)
 {
 	if (!build_command_from_tokens(shell))
 		return (ERROR);
 	//remove_quotes(shell);
-	//ft_display_tokens(shell->parsing_cmd.tokens);
-	//ft_display_commands_list(shell->commands);
+	ft_display_tokens(shell->parsing_cmd.tokens);
+	ft_display_commands_list(shell->commands);
 	shell->command_amount = ft_get_numbers_of_commands(shell->commands);
 	return (SUCCESS);
 }

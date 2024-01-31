@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:19:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/30 16:59:48 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/31 19:10:47 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -137,7 +137,8 @@ static void	append_quoted(t_tokens **tokens)
 	tmp = *tokens;
 	while (tmp && tmp->next)
 	{
-		if (tmp->type == QUOTED && tmp->next->type == QUOTED)
+		if ((tmp->type == QUOTED || tmp->type == SIMPLE_QUOTE || tmp->type == DOUBLE_QUOTE) &&\
+			(tmp->next->type == QUOTED || tmp->next->type == SIMPLE_QUOTE || tmp->next->type == DOUBLE_QUOTE))
 		{
 			append_token(tmp, tmp->next);
 			ft_delete_token(tokens, tmp->next);

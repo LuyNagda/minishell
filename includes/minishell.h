@@ -27,7 +27,8 @@ typedef enum e_token
 	REDIRECT_OUT_DOUBLE = 7,
 	DOUBLE_QUOTE = 8,
 	SIMPLE_QUOTE = 9,
-	QUOTED = 10
+	QUOTED = 10,
+	INTERO
 }	t_token_type;
 
 typedef enum e_parsing_result
@@ -231,8 +232,6 @@ int					ft_quote_is_closed(const char *line);
 int					ft_index_is_in_quote(const char *line,
 						size_t pos, char quote);
 int					ft_index_is_in_quotes(const char *line, size_t pos);
-int					ft_quote_is_closed_range(const char *line, size_t start,
-						size_t end);
 int					ft_str_equals(const char *str1, const char *str2);
 int					ft_str_index_of(const char *src, const char *search,
 						size_t *start_at, size_t starting_search);

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 12:28:58 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 18:11:39 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/31 14:49:40 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -50,23 +50,20 @@ int	ft_index_is_in_quotes(const char *line, size_t pos)
 	open = 0;
 	if (!line)
 		return (0);
-	while (line[index] && pos != index)
+	while (line[index])
 	{
-		if (open == 0)
+		if (open == 0 && index != pos)
 		{
 			if (line[index] == '\"')
 				open = 1;
 			else if (line[index] == '\'')
 				open = 2;
 		}
-		else if (open == 1 && line[index] == '\"')
+		else if ((open == 1 && line[index] == '\"') || (open == 2 && line[index] == '\''))
 			open = 0;
-		else if (open == 2 && line[index] == '\'')
-			open = 0;
+		if (index == pos)
+			break ;
 		index++;
 	}
-	if (open == 0)
-		return (0);
-	else
-		return (1);
+	return (open != 0);
 }
