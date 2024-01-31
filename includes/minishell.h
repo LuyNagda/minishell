@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/29 14:03:40 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/31 13:00:04 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct s_commands
 	char				*infile;
 	int					output_fd;
 	char				*outfile;
-	char				*here_doc;
+	char				**here_doc;
 	struct s_commands	*next_node;
 }						t_commands;
 
