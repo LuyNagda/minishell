@@ -6,13 +6,14 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/29 18:07:58 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/31 14:02:56 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "string_utils.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 void	error_msg(char *string)
 {
