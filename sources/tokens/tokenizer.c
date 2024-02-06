@@ -85,7 +85,8 @@ static void ft_post_process_token_type(t_tokens *tmp, t_minishell *shell)
 		}
 		tmp = tmp->next;
 	}
-	if (rebuilded)free(rebuilded);
+	if (rebuilded)
+		free(rebuilded);
 }
 
 static void ft_split_to_tokens(t_minishell *shell, size_t cur_pos, int tmp)

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 17:42:42 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/31 16:54:38 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/06 11:28:40 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -14,32 +14,57 @@
 #include <string_utils.h>
 #include "minishell.h"
 
-static t_boolean is_quoted(char *str, char quote)
+
+
+static void remove_string_index(char *str, size_t index)
 {
-	if (!str)
-		return (_false);
-	if (str[0] == quote)
-		return (str[ft_strlen(str) - 1] == quote);
-	return (_false);
+	char *without = ft_substr(str, 0, index);
+	char *tmp = ft_strdup(str + index + 1);
+	ft_strlcpy(str, without, index + 1);
+	ft_strlcpy(str + index, tmp, ft_strlen(tmp) + 1);
+	free(tmp);
+	free(without);
 }
 
 static void remove_quotes_loop(t_commands *commands)
 {
-	size_t index;
-	char *arg;
-	char *tmp;
+	size_t	args_index;
+	size_t	str_index;
+	int		quote_type;
 
-	index = 0;
-	while (commands->arguments[index])
+	args_index = 0;
+	while (commands->arguments[args_index])
 	{
-		arg = commands->arguments[index];
-		if (is_quoted(arg, '\'') || is_quoted(arg, '"'))
+		if (!ft_str_contains(commands->arguments[args_index], "'", 0) &&\
+			!ft_str_contains(commands->arguments[args_index], "\"", 0))
 		{
-			tmp = ft_substr(arg, 1, ft_strlen(arg) - 2);
-			free(commands->arguments[index]);
-			commands->arguments[index] = tmp;
+			args_index++;
+			continue;
 		}
-		index++;
+		str_index = 0;
+		quote_type = 0;
+		while (commands->arguments[args_index][str_index])
+		{
+			char c = commands->arguments[args_index][str_index];
+			if ((quote_type == 0 || quote_type == 1) && c == '\'')
+			{
+				if (quote_type == 1)
+					quote_type = 0;
+				else
+					quote_type = 1;
+				remove_string_index(commands->arguments[args_index], str_index);
+			}
+			else if ((quote_type == 0 || quote_type == 2) && c == '"')
+			{
+				if (quote_type == 2)
+					quote_type = 0;
+				else
+					quote_type = 2;
+				remove_string_index(commands->arguments[args_index], str_index);
+			}
+			str_index++;
+		}
+		args_index++;
 	}
 }
 
@@ -60,7 +85,7 @@ t_parsing_result post_parsing(t_minishell *shell)
 {
 	if (!build_command_from_tokens(shell))
 		return (ERROR);
-	//remove_quotes(shell);
+	remove_quotes(shell);
 	ft_display_tokens(shell->parsing_cmd.tokens);
 	ft_display_commands_list(shell->commands);
 	shell->command_amount = ft_get_numbers_of_commands(shell->commands);

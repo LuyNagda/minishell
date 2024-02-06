@@ -28,7 +28,7 @@ typedef enum e_token
 	DOUBLE_QUOTE = 8,
 	SIMPLE_QUOTE = 9,
 	QUOTED = 10,
-	INTERO
+	INTERO = 11
 }	t_token_type;
 
 typedef enum e_parsing_result

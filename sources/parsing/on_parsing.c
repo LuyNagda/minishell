@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:19:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/31 19:10:47 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/06 13:22:47 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -14,7 +14,6 @@
 #include "minishell.h"
 #include "put_utils.h"
 #include "string_utils.h"
-#include "ft_printf.h"
 #include <stdlib.h>
 
 static int	variable_in_string(const char *str, size_t index)
@@ -83,7 +82,7 @@ static int	contains_valid_key(t_minishell *shell, t_tokens *token)
 	size_t		token_pos;
 	char		*rebuilded_string;
 
-	if (token->type != WORD && token->type != QUOTED)
+	if (token->type != WORD && token->type != QUOTED && token->type != INTERO)
 		return (_false);
 	nb_dollars = 0;
 	previous = token->previous;
@@ -93,13 +92,11 @@ static int	contains_valid_key(t_minishell *shell, t_tokens *token)
 	if (nb_dollars != 1)
 		return (_false);
 	rebuilded_string = rebuild_string_from_token(shell);
+	if (rebuilded_string == NULL)
+		return (_false);
 	token_pos = get_current_token_pos(token);
-	if (!variable_in_string(rebuilded_string,
-			get_index_from_token(shell, token_pos)))
+	if (!variable_in_string(rebuilded_string, get_index_from_token(shell, token_pos)))
 		return (free(rebuilded_string), _false);
-	map = env_map_find_node(shell->env_map, token->value);
-	if (map == NULL)
-		return (3);
 	return (free(rebuilded_string), _true);
 }
 
@@ -115,11 +112,18 @@ static void	treat_variable_keys(t_minishell *shell)
 	{
 		if (contains_valid_key(shell, tmp))
 		{
-			env_finded = env_map_find_node(shell->env_map, tmp->value);
-			if (env_finded == NULL)
-				value = ft_strdup("");
+			if (ft_str_starts_with(tmp->value, "?"))
+			{
+				value = ft_strjoin(env_map_find_node(shell->env_map, "?")->value, tmp->value + 1);
+			}
 			else
-				value = ft_strdup(env_finded->value);
+			{
+				env_finded = env_map_find_node(shell->env_map, tmp->value);
+				if (env_finded == NULL)
+					value = ft_strdup("");
+				else
+					value = ft_strdup(env_finded->value);
+			}
 			prev = tmp->previous;
 			free(prev->value);
 			ft_delete_token(&shell->parsing_cmd.tokens, prev);
@@ -137,8 +141,10 @@ static void	append_quoted(t_tokens **tokens)
 	tmp = *tokens;
 	while (tmp && tmp->next)
 	{
-		if ((tmp->type == QUOTED || tmp->type == SIMPLE_QUOTE || tmp->type == DOUBLE_QUOTE) &&\
-			(tmp->next->type == QUOTED || tmp->next->type == SIMPLE_QUOTE || tmp->next->type == DOUBLE_QUOTE))
+		if ((tmp->type == QUOTED || tmp->type == SIMPLE_QUOTE ||\
+			tmp->type == DOUBLE_QUOTE || tmp->type == WORD) &&\
+			(tmp->next->type == QUOTED || tmp->next->type == SIMPLE_QUOTE ||\
+				tmp->next->type == DOUBLE_QUOTE || tmp->next->type == WORD))
 		{
 			append_token(tmp, tmp->next);
 			ft_delete_token(tokens, tmp->next);
@@ -156,16 +162,10 @@ t_parsing_result	on_parse(t_minishell *shell)
 	if (ft_has_only_whitespace_between_pipes(shell) != 0)
 		return (ft_putstr_fd(shell->messages.whitepipe_error, 2), free(shell->sended_line), INVALID_INPUT);
 	treat_variable_keys(shell);
-	//ft_display_tokens(shell->parsing_cmd.tokens);
 	append_quoted(&shell->parsing_cmd.tokens);
-	//printf("\n\n\n");
-	//ft_display_tokens(shell->parsing_cmd.tokens);
 	end_token = ft_create_token(ft_strdup("|"), PIPE);
 	if (!end_token)
 		return (ERROR);
 	ft_add_back_token(&shell->parsing_cmd.tokens, end_token);
-//	shell->commands = ft_command_init();
-//	if (!shell->commands)
-//		return (ERROR);
 	return (SUCCESS);
 }
