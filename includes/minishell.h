@@ -28,6 +28,7 @@ typedef enum e_token
 	DOUBLE_QUOTE = 8,
 	SIMPLE_QUOTE = 9,
 	QUOTED = 10,
+	ENV_VALUE = 12,
 	INTERO = 11
 }	t_token_type;
 

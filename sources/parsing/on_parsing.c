@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:19:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/06 13:22:47 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/06 17:29:20 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -106,6 +106,7 @@ static void	treat_variable_keys(t_minishell *shell)
 	t_tokens	*prev;
 	t_env_map	*env_finded;
 	char		*value;
+	char		*trim;
 
 	tmp = shell->parsing_cmd.tokens;
 	while (tmp)
@@ -113,22 +114,29 @@ static void	treat_variable_keys(t_minishell *shell)
 		if (contains_valid_key(shell, tmp))
 		{
 			if (ft_str_starts_with(tmp->value, "?"))
-			{
 				value = ft_strjoin(env_map_find_node(shell->env_map, "?")->value, tmp->value + 1);
-			}
 			else
 			{
 				env_finded = env_map_find_node(shell->env_map, tmp->value);
 				if (env_finded == NULL)
 					value = ft_strdup("");
 				else
+				{
 					value = ft_strdup(env_finded->value);
+					if (tmp->type != QUOTED)
+					{
+						trim = ft_strtrim(value, " ");
+						free(value);
+						value = trim;
+					}
+				}
 			}
 			prev = tmp->previous;
 			free(prev->value);
 			ft_delete_token(&shell->parsing_cmd.tokens, prev);
 			free(tmp->value);
 			tmp->value = value;
+			tmp->type = ENV_VALUE;
 		}
 		tmp = tmp->next;
 	}
@@ -142,9 +150,9 @@ static void	append_quoted(t_tokens **tokens)
 	while (tmp && tmp->next)
 	{
 		if ((tmp->type == QUOTED || tmp->type == SIMPLE_QUOTE ||\
-			tmp->type == DOUBLE_QUOTE || tmp->type == WORD) &&\
+			tmp->type == DOUBLE_QUOTE || tmp->type == WORD || tmp->type == ENV_VALUE) &&\
 			(tmp->next->type == QUOTED || tmp->next->type == SIMPLE_QUOTE ||\
-				tmp->next->type == DOUBLE_QUOTE || tmp->next->type == WORD))
+				tmp->next->type == DOUBLE_QUOTE || tmp->next->type == WORD || tmp->next->type == ENV_VALUE))
 		{
 			append_token(tmp, tmp->next);
 			ft_delete_token(tokens, tmp->next);
