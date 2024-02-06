@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 21:35:26 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/14 14:28:36 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/06 17:32:37 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,23 @@ char *rebuild_string_from_token(t_minishell *shell)
 
 void append_token(t_tokens *appended, t_tokens *to_append)
 {
-	char *joined;
+	char	*joined;
+	char	*def;
 
 	if ((!appended || !appended->value) || (!to_append || !to_append->value))
 		return;
-	joined = ft_strjoin(appended->value, to_append->value);
-	free(appended->value);
+	def = NULL;
+	if (appended->type == ENV_VALUE && to_append->type == ENV_VALUE)
+		def = ft_strjoin(appended->value, " ");
+	if (def != NULL)
+		joined = ft_strjoin(def, to_append->value);
+	else
+		joined = ft_strjoin(appended->value, to_append->value);
+	if (appended->value)
+		free(appended->value);
+	if (def)
+		free(def);
 	appended->value = ft_strdup(joined);
-	free(joined);
+	if (joined != NULL)
+		free(joined);
 }

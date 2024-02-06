@@ -6,14 +6,13 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:36:19 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 15:20:53 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/01/30 15:49:32 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "minishell.h"
 #include <stdio.h>
 
-void	ft_display_env_map(t_env_map *env_map)
+void ft_display_env_map(t_env_map *env_map)
 {
 	while (env_map)
 	{
@@ -22,9 +21,9 @@ void	ft_display_env_map(t_env_map *env_map)
 	}
 }
 
-void	ft_display_env_array(char **env_array)
+void ft_display_env_array(char **env_array)
 {
-	size_t	i;
+	size_t i;
 
 	i = 0;
 	while (env_array[i])
@@ -34,7 +33,7 @@ void	ft_display_env_array(char **env_array)
 	}
 }
 
-void	ft_display_tokens(t_tokens *tokens)
+void ft_display_tokens(t_tokens *tokens)
 {
 	while (tokens)
 	{
@@ -47,7 +46,7 @@ void	ft_display_tokens(t_tokens *tokens)
 	}
 }
 
-void	print_args(t_commands *commands, size_t command_nb, int index)
+void print_args(t_commands *commands, size_t command_nb)
 {
 	printf(" [%zu] -> Already Executed: %d\n",
 		command_nb, commands->has_already_executed);
@@ -63,10 +62,10 @@ void	print_args(t_commands *commands, size_t command_nb, int index)
 		command_nb, commands->output_fd);
 }
 
-void	ft_display_commands_list(t_commands *commands)
+void ft_display_commands_list(t_commands *commands)
 {
-	size_t	command_nb;
-	int		index;
+	size_t command_nb;
+	int index;
 
 	command_nb = 0;
 	while (commands)
@@ -79,7 +78,7 @@ void	ft_display_commands_list(t_commands *commands)
 		index = 0;
 		while (commands->arguments && commands->arguments[index])
 			printf("	[%s]\n", commands->arguments[index++]);
-		print_args(commands, command_nb, index);
+		print_args(commands, command_nb);
 		printf(" \n\n-------------------------------\n\n");
 		command_nb++;
 		commands = commands->next_node;

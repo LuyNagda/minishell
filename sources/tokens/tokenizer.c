@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:16:57 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/15 11:08:31 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/31 19:43:41 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ static void ft_pre_process_token_type(t_tokens *tmp)
 			tmp->type = REDIRECT_IN;
 		else if (ft_is_whitespace(tmp->value[0]))
 			tmp->type = SPACE;
+		else if (ft_str_equals(tmp->value, "?"))
+			tmp->type = INTERO;
 		else
 			tmp->type = WORD;
 		tmp = tmp->next;
@@ -79,12 +81,12 @@ static void ft_post_process_token_type(t_tokens *tmp, t_minishell *shell)
 		post_process_redirections(&shell->parsing_cmd.tokens, tmp);
 		if (ft_token_is_in_quote(shell, rebuilded, get_current_token_pos(tmp)))
 		{
-			tmp->previous->type = QUOTED;
 			tmp->type = QUOTED;
 		}
 		tmp = tmp->next;
 	}
-	if (rebuilded)free(rebuilded);
+	if (rebuilded)
+		free(rebuilded);
 }
 
 static void ft_split_to_tokens(t_minishell *shell, size_t cur_pos, int tmp)
