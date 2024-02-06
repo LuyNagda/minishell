@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:15:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/27 10:13:37 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/02/06 18:29:46 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,7 @@ t_parsing_result	pre_parsing(t_minishell *shell)
 		return (ft_putstr_fd(shell->messages.quote_not_closed, 2),
 			free(shell->sended_line), INVALID_INPUT);
 	ft_replace_whitespace(shell->sended_line, ' ');
+	if (!is_valid_line(shell->sended_line))
+		return (free(shell->sended_line), INVALID_INPUT);
 	return (SUCCESS);
 }
