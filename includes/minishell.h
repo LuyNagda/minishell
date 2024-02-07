@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/31 13:00:04 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/07 12:47:45 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct s_commands
 	int					output_fd;
 	char				*outfile;
 	char				**here_doc;
+	int					expand;
 	struct s_commands	*next_node;
 }						t_commands;
 
@@ -183,6 +184,7 @@ t_commands			*ft_command_new_node(t_env_map *map, char **args);
 t_commands			*ft_create_command_node(char *cmd);
 void				ft_flush_command_list(t_commands *list);
 void				*ft_populate_command_list(t_minishell *shell);
+int					*ft_fill_args_quotes(char **args);
 
 /* *****************************************************/
 /* ******************** PARSING ************************/
