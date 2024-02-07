@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:32:12 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/22 09:49:32 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/07 14:16:21 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void ft_delete_token(t_tokens **head, t_tokens *token)
 		token->next->previous = token->previous;
 	if (token->previous != NULL)
 		token->previous->next = token->next;
+	if (token->value)
+		free(token->value);
 	if (token)
 		free(token);
 }
@@ -68,7 +70,7 @@ void ft_flush_tokens(t_tokens *tokens)
 	while (tokens)
 	{
 		tmp = (tokens)->next;
-	if (tokens->value)
+		if (tokens->value)
 			free(tokens->value);
 		free(tokens);
 		tokens = tmp;

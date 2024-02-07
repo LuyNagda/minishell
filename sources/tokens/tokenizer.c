@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:16:57 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/31 19:43:41 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/07 14:14:10 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "ft_printf.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 static t_boolean is_word(char c)
 {
