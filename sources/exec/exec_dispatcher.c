@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/31 13:34:16 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/09 13:43:24 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,11 @@ int	has_redirection(t_commands *command, char character)
 	{
 		if (command->arguments[index][0] == character
 				&& command->arguments[index][1]
-				&& command->arguments[index][1] == character)
+				&& command->arguments[index][1] == character
+				&& !command->args_quoted[index])
 			return (2);
-		else if (command->arguments[index][0] == character)
+		else if (command->arguments[index][0] == character
+				&& !command->args_quoted[index])
 			return (1);
 		index++;
 	}

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:13:33 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/07 12:50:17 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/09 13:47:50 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int	has_heredoc(t_commands *command, char *here_doc)
 	index = 0;
 	while (command->arguments[index])
 	{
-		if (ft_str_equals(command->arguments[index], here_doc))
+		if (ft_str_equals(command->arguments[index], here_doc)
+			&& !command->args_quoted[index])
 			return (1);
 		index++;
 	}

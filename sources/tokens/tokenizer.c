@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:16:57 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/07 14:14:10 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/09 14:08:25 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ static t_boolean ft_token_is_in_quote(t_minishell *shell, char *rebuilded_string
 
 static void post_process_redirections(t_tokens **head, t_tokens *tmp)
 {
-
 	if (tmp->type == REDIRECT_OUT && tmp->next && tmp->next->type == REDIRECT_OUT)
 	{
 		free(tmp->next->value);
+		tmp->next->value = NULL;
 		ft_delete_token(head, tmp->next);
 		free(tmp->value);
 		tmp->value = ft_strdup(">>");
@@ -65,6 +65,7 @@ static void post_process_redirections(t_tokens **head, t_tokens *tmp)
 	else if (tmp->type == REDIRECT_IN && tmp->next && tmp->next->type == REDIRECT_IN)
 	{
 		free(tmp->next->value);
+		tmp->next->value = NULL;
 		ft_delete_token(head, tmp->next);
 		free(tmp->value);
 		tmp->value = ft_strdup("<<");
