@@ -14,6 +14,7 @@ FILES =	main.c							\
 		builtins/pwd_builtin.c			\
 		command/command_handler.c		\
 		command/command_manager.c		\
+		command/command_utils.c			\
 		environment/env_getter.c		\
 		environment/env_manager.c		\
 		environment/env_setter.c		\

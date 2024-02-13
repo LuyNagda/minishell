@@ -1,36 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*   command_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/09 13:52:07 by lunagda          ###   ########.fr       */
+/*   Created: 2024/02/07 12:15:54 by lunagda           #+#    #+#             */
+/*   Updated: 2024/02/07 12:50:03 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "string_utils.h"
 #include <stdlib.h>
-#include <stdio.h>
 
-void	error_msg(char *string)
+int	*ft_fill_args_quotes(char **args)
 {
-	perror(string);
-	exit(EXIT_FAILURE);
-}
+	int	len;
+	int	*trg;
+	int	index;
 
-void	free_and_exit(t_minishell *shell, t_pipex *pipex, int code)
-{
-	ft_flush_command_list(shell->commands);
-	ft_flush_tokens(shell->parsing_cmd.tokens);
-	if (shell->env_map)
-		env_map_flush(shell->env_map);
-	if (pipex->envp)
-		ft_free_split(pipex->envp);
-	if (pipex->pid)
-		free(pipex->pid);
-	free(shell->sended_line);
-	exit(code);
+	index = 0;
+	len = ft_str_tab_len(args);
+	trg = (int *)malloc(sizeof(int) * (len + 1));
+	while (args[index])
+	{
+		if (ft_str_contains(args[index], "\"", 0)
+			|| ft_str_contains(args[index], "'", 0))
+			trg[index] = 1;
+		else
+			trg[index] = 0;
+		index++;
+	}
+	trg[index] = -1;
+	return (trg);
 }

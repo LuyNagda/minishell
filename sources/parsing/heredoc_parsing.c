@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_heredoc.c                                    :+:      :+:    :+:   */
+/*   heredoc_parsing.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:13:33 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/26 15:31:26 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/09 13:47:50 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int	has_heredoc(t_commands *command, char *here_doc)
 	index = 0;
 	while (command->arguments[index])
 	{
-		if (ft_str_equals(command->arguments[index], here_doc))
+		if (ft_str_equals(command->arguments[index], here_doc)
+			&& !command->args_quoted[index])
 			return (1);
 		index++;
 	}
@@ -98,6 +99,7 @@ static void	heredoc_loop(t_minishell *shell,
 		}
 		tmp->here_doc[j++] = ft_strdup(tmp->arguments[++i]);
 		tmp->here_doc[j] = 0;
+		tmp->expand = tmp->args_quoted[i];
 		remove_heredoc_from_command(tmp, here_doc, i - 1);
 		if (count != 1)
 			close(tmp->input_fd);

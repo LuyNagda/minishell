@@ -6,10 +6,10 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:19:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/06 17:29:20 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/12 13:54:35 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
+
 
 #include "minishell.h"
 #include "put_utils.h"
@@ -133,6 +133,7 @@ static void	treat_variable_keys(t_minishell *shell)
 			}
 			prev = tmp->previous;
 			free(prev->value);
+			prev->value = NULL;
 			ft_delete_token(&shell->parsing_cmd.tokens, prev);
 			free(tmp->value);
 			tmp->value = value;

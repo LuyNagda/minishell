@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 19:26:51 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/30 15:07:20 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/09 13:56:04 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ void	ft_flush_command_list(t_commands *list)
 			ft_free_split(list->arguments);
 		if (list->path)
 			free(list->path);
-		if (list->here_doc)
-			free(list->here_doc);
 		if (list->args_quoted)
 			free(list->args_quoted);
 		free(list);

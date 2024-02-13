@@ -6,9 +6,10 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 17:42:42 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/06 18:26:38 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/07 12:46:19 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minishell.h"
 
 static void remove_char_string(char *str, char d)

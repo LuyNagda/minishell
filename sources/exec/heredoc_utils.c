@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 18:05:56 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/06 18:52:34 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/09 13:47:33 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,8 @@ void	here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		{
 			ft_putstr_fd("heredoc> ", 1);
 			line = get_next_line(0);
-			line = expand_line(line, shell->env_map, 1);
+			if (!command->expand)
+				line = expand_line(line, shell->env_map, 1);
 			while (ft_strncmp(command->here_doc[i],
 					line, ft_strlen(command->here_doc[i])))
 			{

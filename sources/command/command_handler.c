@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 19:26:42 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 14:09:15 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/07 12:48:18 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ t_commands	*ft_command_new_node(t_env_map *map, char **args)
 		command->path = ft_strdup("builtin");
 	else
 		command->path = find_command(map, args[0]);
+	command->args_quoted = ft_fill_args_quotes(args);
 	return (command);
 }
 
