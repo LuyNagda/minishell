@@ -19,7 +19,7 @@
 typedef enum e_token
 {
 	WORD = 1,
-	SPACE = 2,
+	_SPACE = 2,
 	PIPE = 3,
 	REDIRECT_IN = 4,
 	REDIRECT_IN_DOUBLE = 5,
@@ -250,6 +250,13 @@ t_message			ft_init_messages(void);
 t_env_map			*duplicate_list(t_env_map *head);
 t_env_map			*merge_sort(t_env_map *head);
 void				free_duplicate_env(t_env_map *head);
+
+/* *****************************************************/
+/* ******************** SIGNALS ************************/
+/* *****************************************************/
+t_minishell			*get_minishell(t_minishell *minishell);
+void				handle_ignored_signal(void);
+void				handle_exit_signal(void);
 
 /* *****************************************************/
 /* ********************* DEBUG *************************/

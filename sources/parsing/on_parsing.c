@@ -66,7 +66,7 @@ static int	ft_has_only_whitespace_between_pipes(t_minishell *shell)
 		}
 		else if (is_after_pipe)
 		{
-			if (tmp->type != SPACE)
+			if (tmp->type != _SPACE)
 				only_space = _false;
 		}
 		tmp = tmp->next;

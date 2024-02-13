@@ -12,13 +12,8 @@
 
 #include "minishell.h"
 #include "string_utils.h"
-#include "put_utils.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <readline/readline.h>
-#include <errno.h>
 
 void	error_msg(char *string)
 {

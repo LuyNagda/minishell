@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/31 13:33:43 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/13 16:51:49 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
 	if (pipe(pipex->c_pipe) == -1)
 		error_msg("Pipe");
+	handle_ignored_signal();
 	pipex->pid[command->position] = fork();
 	if (pipex->pid[command->position] < 0)
 		error_msg("Fork");

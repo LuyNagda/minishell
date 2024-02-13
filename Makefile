@@ -39,6 +39,8 @@ FILES =	main.c							\
 		utils/messages_utils.c			\
 		utils/debug.c					\
 		utils/merge_sort.c				\
+		signals/ingore_signals.c		\
+		signals/exit_signals.c			\
 
 BUILD_DIRECTORY = ./build/
 
@@ -65,7 +67,8 @@ $(BUILD_DIRECTORY):
 	$(BUILD_DIRECTORY)utils				\
 	$(BUILD_DIRECTORY)parsing			\
 	$(BUILD_DIRECTORY)builtins			\
-	$(BUILD_DIRECTORY)tokens
+	$(BUILD_DIRECTORY)tokens			\
+	$(BUILD_DIRECTORY)signals
 
 all : $(NAME)
 

@@ -33,7 +33,7 @@ t_commands	*build_command_from_tokens(t_minishell *shell)
 						+ 1), sizeof(char *));
 			continue ;
 		}
-		if (tmp->type == SPACE)
+		if (tmp->type == _SPACE)
 		{
 			tmp = tmp->next;
 			continue ;

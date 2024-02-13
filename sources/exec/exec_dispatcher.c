@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/31 13:34:16 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/13 16:50:16 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,9 @@ void	ft_dispatch_command(t_minishell *shell)
 	if (shell->command_amount == 1 && is_builtins(shell->commands)
 		&& !(has_redirection(tmp, '>') || has_redirection(tmp, '<')))
 		ft_dispatch_builtin(shell, tmp);
-	else
+	else {
 		exec_cmd(shell, tmp);
+	}
 }
 
 void	ft_dispatch_builtin(t_minishell *shell, t_commands *command)

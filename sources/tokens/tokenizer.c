@@ -35,7 +35,7 @@ static void ft_pre_process_token_type(t_tokens *tmp)
 		else if (ft_str_equals(tmp->value, "<"))
 			tmp->type = REDIRECT_IN;
 		else if (ft_is_whitespace(tmp->value[0]))
-			tmp->type = SPACE;
+			tmp->type = _SPACE;
 		else if (ft_str_equals(tmp->value, "?"))
 			tmp->type = INTERO;
 		else
