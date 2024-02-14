@@ -6,11 +6,12 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 12:15:54 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/07 12:50:03 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/14 15:55:44 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "string_utils.h"
 #include <stdlib.h>
 
 int	*ft_fill_args_quotes(char **args)
