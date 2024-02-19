@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/19 09:13:37 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:58:25 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void	exec_command(t_minishell *shell,
 	if (command->is_builtin)
 	{
 		ft_dispatch_builtin(shell, command);
-		exit(127);
+		free_and_exit(shell, pipex, 127);
 	}
 	if (command->arguments_amount == 0)
 		free_and_exit(shell, pipex, 0);
