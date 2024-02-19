@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:57 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 13:41:57 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/14 15:54:38 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,16 @@
 #include <errno.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "string_utils.h"
-#include "ft_printf.h"
 
 void	err_msg(t_minishell *shell, t_commands *command, char *msg)
 {
 	if (!msg)
-		ft_printf("cd: %s: %s\n", strerror(errno), command->arguments[0]);
+		printf("cd: %s: %s\n", strerror(errno), command->arguments[0]);
 	else
-		ft_printf(msg);
+		printf("%s", msg);
 	env_map_replace(shell->env_map, "?", "1");
 }
 
@@ -41,6 +42,7 @@ void	exec_cd(t_minishell *shell, t_commands *command)
 	t_env_map	*node;
 	t_env_map	*oldpwd;
 	t_env_map	*pwd;
+	char		*tmp;
 
 	env_map_replace_or_add(shell->env_map, "?", "0");
 	node = env_map_find_node(shell->env_map, "HOME");
@@ -57,5 +59,8 @@ void	exec_cd(t_minishell *shell, t_commands *command)
 	oldpwd = env_map_find_node(shell->env_map, "PWD");
 	if (oldpwd)
 		env_map_replace_or_add(shell->env_map, "OLDPWD", oldpwd->value);
-	env_map_replace_or_add(shell->env_map, "PWD", get_cwd_for_cd());
+	tmp = get_cwd_for_cd();
+	env_map_replace_or_add(shell->env_map, "PWD", tmp);
+	if (tmp)
+		free(tmp);
 }
