@@ -11,8 +11,10 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <stdio.h>
+#include "libft.h"
+#include "char_utils.h"
 #include "minishell.h"
-#include "ft_printf.h"
 
 static t_boolean has_only_digits(char *str)
 {
@@ -50,13 +52,13 @@ void exec_exit(t_minishell *shell, t_commands *command)
 	char *result;
 
 	first_arg = NULL;
-	ft_printf("exit\n");
+	printf("exit\n");
 	if (ft_get_arguments_amount(command) == 2)
 	{
 		first_arg = command->arguments[1];
 		if (!has_only_digits(first_arg))
 		{
-			ft_printf("minishell: exit: %s: only numeric argument required\n", first_arg);
+			printf("minishell: exit: %s: only numeric argument required\n", first_arg);
 			env_map_replace_or_add(shell->env_map, "?", "2");
 			shell->is_running = _false;
 			return;
@@ -65,7 +67,7 @@ void exec_exit(t_minishell *shell, t_commands *command)
 	}
 	else if (ft_get_arguments_amount(command) > 2)
 	{
-		ft_printf("minishell: exit: too many arguments\n");
+		printf("minishell: exit: too many arguments\n");
 		env_map_replace_or_add(shell->env_map, "?", "1");
 		return;
 	}

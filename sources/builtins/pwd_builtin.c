@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 #include <unistd.h>
-#include "ft_printf.h"
+#include <stdio.h>
 
 void	exec_pwd(t_minishell *shell)
 {
@@ -20,12 +20,12 @@ void	exec_pwd(t_minishell *shell)
 
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
-		ft_printf("%s\n", cwd);
+		printf("%s\n", cwd);
 		env_map_replace_or_add(shell->env_map, "?", "0");
 	}
 	else
 	{
-		ft_printf("Error occurred during executing pwd.");
+		printf("Error occurred during executing pwd.");
 		env_map_replace_or_add(shell->env_map, "?", "1");
 	}
 }

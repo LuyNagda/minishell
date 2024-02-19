@@ -11,9 +11,9 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "ft_printf.h"
+#include "char_utils.h"
+#include "string_utils.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 static t_boolean is_word(char c)
 {

@@ -12,11 +12,9 @@
 
 #include <fcntl.h>
 #include <unistd.h>
-#include <stdlib.h>
 #include <stdio.h>
 #include "minishell.h"
 #include "string_utils.h"
-#include <string.h>
 
 static void	out_redirection(t_commands *tmp, int redirection, int i)
 {

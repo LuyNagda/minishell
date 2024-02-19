@@ -13,8 +13,6 @@
 #include "minishell.h"
 #include "string_utils.h"
 #include "memory_utils.h"
-#include "ft_printf.h"
-#include "stdlib.h"
 
 size_t	ft_get_numbers_of_commands(t_commands *commands_list)
 {

@@ -40,8 +40,10 @@ FILES =	main.c							\
 		utils/messages_utils.c			\
 		utils/debug.c					\
 		utils/merge_sort.c				\
-		signals/ingore_signals.c		\
-		signals/exit_signals.c			\
+		signals/ingore_signal.c			\
+		signals/exit_signal.c			\
+		signals/pipe_signal.c			\
+		signals/signals_manager.c		\
 
 BUILD_DIRECTORY = ./build/
 

@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 #include "string_utils.h"
-#include "ft_printf.h"
 #include <unistd.h>
 #include <stdlib.h>
 

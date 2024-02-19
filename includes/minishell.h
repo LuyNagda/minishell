@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/07 12:47:45 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/19 09:12:14 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,8 +257,10 @@ void				free_duplicate_env(t_env_map *head);
 /* ******************** SIGNALS ************************/
 /* *****************************************************/
 t_minishell			*get_minishell(t_minishell *minishell);
-void				handle_ignored_signal(void);
-void				handle_exit_signal(void);
+void				hook_ignored_signal(void);
+void				hook_exit_signal(void);
+void				hook_pipe_signal(void);
+void				hook_signal_on_start(void);
 
 /* *****************************************************/
 /* ********************* DEBUG *************************/
