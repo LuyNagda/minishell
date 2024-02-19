@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/19 09:12:14 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/19 11:39:26 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,9 @@ typedef struct s_message
 	char		*quote_not_closed;
 	char		*pipe_syntax_error;
 	char		*double_pipe_error;
+	char		*semicolon_detected;
 	char		*whitepipe_error;
+	char		*other_input_error;
 
 }				t_message;
 
@@ -227,6 +229,7 @@ size_t				ft_get_tokens_type_amount(t_tokens *tokens,
 long long			ft_next_token_pos(t_tokens *tok,
 						t_token_type type, long long start);
 size_t				get_index_from_token(t_minishell *shell, size_t token_pos);
+void	ft_free_token(t_tokens *token);
 
 /* *****************************************************/
 /* ********************* UTILS *************************/
@@ -260,6 +263,7 @@ t_minishell			*get_minishell(t_minishell *minishell);
 void				hook_ignored_signal(void);
 void				hook_exit_signal(void);
 void				hook_pipe_signal(void);
+void 				hook_heredoc_signal(t_minishell *shell);
 void				hook_signal_on_start(void);
 
 /* *****************************************************/

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:19:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/12 13:54:35 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/19 11:50:13 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ static int	ft_has_only_whitespace_between_pipes(t_minishell *shell)
 
 static int	contains_valid_key(t_minishell *shell, t_tokens *token)
 {
-	t_env_map	*map;
 	t_tokens	*previous;
 	size_t		nb_dollars;
 	size_t		token_pos;
@@ -166,15 +165,10 @@ static void	append_quoted(t_tokens **tokens)
 
 t_parsing_result	on_parse(t_minishell *shell)
 {
-	t_tokens	*end_token;
 
 	if (ft_has_only_whitespace_between_pipes(shell) != 0)
 		return (ft_putstr_fd(shell->messages.whitepipe_error, 2), free(shell->sended_line), INVALID_INPUT);
 	treat_variable_keys(shell);
 	append_quoted(&shell->parsing_cmd.tokens);
-	end_token = ft_create_token(ft_strdup("|"), PIPE);
-	if (!end_token)
-		return (ERROR);
-	ft_add_back_token(&shell->parsing_cmd.tokens, end_token);
 	return (SUCCESS);
 }

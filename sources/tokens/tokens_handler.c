@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:32:12 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/09 14:07:25 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/19 12:30:39 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,13 @@ void ft_delete_token(t_tokens **head, t_tokens *token)
 		free(token->value);
 	if (token)
 		free(token);
+}
+
+void	ft_free_token(t_tokens *token)
+{
+	if (token->value)
+		free(token->value);
+	free(token);
 }
 
 void ft_flush_tokens(t_tokens *tokens)

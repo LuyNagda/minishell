@@ -44,6 +44,7 @@ FILES =	main.c							\
 		signals/exit_signal.c			\
 		signals/pipe_signal.c			\
 		signals/signals_manager.c		\
+		signals/heredoc_signal.c		\
 
 BUILD_DIRECTORY = ./build/
 
