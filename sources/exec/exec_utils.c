@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/09 13:52:07 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/19 10:42:17 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	free_and_exit(t_minishell *shell, t_pipex *pipex, int code)
 		ft_free_split(pipex->envp);
 	if (pipex->pid)
 		free(pipex->pid);
-	free(shell->sended_line);
+	if (shell->sended_line)
+		free(shell->sended_line);
 	exit(code);
 }

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 17:38:28 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 14:53:22 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/19 11:46:23 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ t_message	ft_init_messages(void)
 	messages.double_pipe_error = "⛔ Syntax error near unexpected token "
 		"'||' (Unsupported)\n";
 	messages.quote_not_closed = "⛔ Quote is not closed.\n";
+	messages.semicolon_detected = "⛔ Syntax error near unexpected token ';'\n";
 	messages.whitepipe_error = "⛔ Syntax error near unexpected token "
 		"'|'. (WhitePipe) \n";
+	messages.other_input_error = "⛔ Syntax error near unexpected token\n";
 	return (messages);
 }

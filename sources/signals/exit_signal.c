@@ -34,5 +34,8 @@ void hook_exit_signal(void)
 	sig.sa_flags = SA_RESTART;
 	sig.sa_handler = handle_exit_signal;
 	if (sigaction(SIGINT, &sig, NULL) == -1)
-		return (perror("sigaction"), exit(1));
+	{
+		perror("sigaction");
+		exit(1);
+	}
 }
