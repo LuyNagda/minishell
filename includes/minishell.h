@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/19 14:30:36 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/19 17:31:42 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct s_commands
 	char				*infile;
 	int					output_fd;
 	char				*outfile;
-	char				**here_doc;
+	char				*here_doc;
 	int					expand;
 	struct s_commands	*next_node;
 }						t_commands;
@@ -148,6 +148,7 @@ char				*find_command(t_env_map *map, char *command);
 void				free_and_exit(t_minishell *shell, t_pipex *pipex, int code);
 void				here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex);
 void				normal_redirections(t_minishell *shell, t_commands *command, t_pipex *pipex);
+void				here_doc_execution(t_minishell *shell, t_commands *tmp, int i);
 
 /* *****************************************************/
 /* ********************** ENV **************************/
@@ -208,6 +209,7 @@ int					has_multiple_redirection(t_commands *command, char *character);
 char				**get_export_values(t_commands *command, int *i, int *has_equal);
 void				add_back_command_path(t_minishell *shell, t_commands *command);
 int					ft_string_in_quotes(char *str);
+char				*expand_line(char *line, t_env_map *map, int must_expanded);
 
 /* *****************************************************/
 /* ******************** TOKENS *************************/

@@ -30,6 +30,7 @@ FILES =	main.c							\
 		parsing/redirection_parsing.c	\
 		parsing/redirection_parsing_2.c	\
 		parsing/heredoc_parsing.c		\
+		parsing/heredoc_parsing_2.c		\
 		tokens/tokenizer.c				\
 		tokens/tokens_handler.c			\
 		tokens/tokens_concat.c			\

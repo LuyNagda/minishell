@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:13:33 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/09 13:47:50 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/19 17:31:28 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,13 @@ static void	remove_heredoc_from_command(t_commands *command,
 static void	heredoc_loop(t_minishell *shell,
 		t_commands *tmp, char *here_doc, t_pipex *pipex)
 {
-	int	i;
-	int	j;
-	int	count;
+	int		i;
+	int		j;
+	int		count;
+	char	*line;
 
 	j = 0;
 	count = count_here_doc(tmp, "<<");
-	tmp->here_doc = (char **)malloc(sizeof(char *) * (count + 1));
 	while (count)
 	{
 		i = 0;
@@ -97,10 +97,8 @@ static void	heredoc_loop(t_minishell *shell,
 			perror("here_doc");
 			free_and_exit(shell, pipex, 126);
 		}
-		tmp->here_doc[j++] = ft_strdup(tmp->arguments[++i]);
-		tmp->here_doc[j] = 0;
-		tmp->expand = tmp->args_quoted[i];
-		remove_heredoc_from_command(tmp, here_doc, i - 1);
+		here_doc_execution(shell, tmp, i);
+		remove_heredoc_from_command(tmp, here_doc, i);
 		if (count != 1)
 			close(tmp->input_fd);
 		count--;
