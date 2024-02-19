@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/19 11:39:26 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/19 13:41:30 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,7 +263,7 @@ t_minishell			*get_minishell(t_minishell *minishell);
 void				hook_ignored_signal(void);
 void				hook_exit_signal(void);
 void				hook_pipe_signal(void);
-void 				hook_heredoc_signal(t_minishell *shell);
+void 				hook_heredoc_signal(t_minishell *shell, int fd);
 void				hook_signal_on_start(void);
 
 /* *****************************************************/

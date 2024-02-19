@@ -25,13 +25,13 @@ void	free_and_exit(t_minishell *shell, t_pipex *pipex, int code)
 {
 	ft_flush_command_list(shell->commands);
 	ft_flush_tokens(shell->parsing_cmd.tokens);
-	if (shell->env_map)
+	if (shell && shell->env_map)
 		env_map_flush(shell->env_map);
-	if (pipex->envp)
+	if (pipex && pipex->envp)
 		ft_free_split(pipex->envp);
-	if (pipex->pid)
+	if (pipex && pipex->pid)
 		free(pipex->pid);
-	if (shell->sended_line)
+	if (shell && shell->sended_line)
 		free(shell->sended_line);
 	exit(code);
 }
