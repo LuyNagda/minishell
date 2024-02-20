@@ -7,6 +7,7 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 17:42:42 by lunagda           #+#    #+#             */
 /*   Updated: 2024/02/20 13:02:51 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/19 16:34:54 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,5 +131,7 @@ t_parsing_result post_parsing(t_minishell *shell)
 	remove_quotes(shell);
 	shell->command_amount = ft_get_numbers_of_commands(shell->commands);
 	ft_delete_token(&shell->parsing_cmd.tokens, end_token);
+	ft_display_tokens(shell->parsing_cmd.tokens);
+	ft_display_commands_list(shell->commands);
 	return (SUCCESS);
 }

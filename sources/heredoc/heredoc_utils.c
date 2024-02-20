@@ -93,7 +93,6 @@ char	*expand_line(char *line, t_env_map *map, int must_expanded)
 	return line;
 }
 
-
 void	here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
 	int		i;

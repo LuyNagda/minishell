@@ -23,14 +23,14 @@ FILES =	main.c							\
 		exec/exec_pipex.c				\
 		exec/path_handler.c				\
 		exec/exec_utils.c				\
-		exec/heredoc_utils.c			\
+		heredoc/heredoc_utils.c			\
 		parsing/on_parsing.c			\
 		parsing/post_parsing.c			\
 		parsing/pre_parsing.c			\
 		parsing/redirection_parsing.c	\
 		parsing/redirection_parsing_2.c	\
-		parsing/heredoc_parsing.c		\
-		parsing/heredoc_parsing_2.c		\
+		heredoc/heredoc_parsing.c		\
+		heredoc/heredoc_parsing_2.c		\
 		tokens/tokenizer.c				\
 		tokens/tokens_handler.c			\
 		tokens/tokens_concat.c			\
@@ -73,7 +73,8 @@ $(BUILD_DIRECTORY):
 	$(BUILD_DIRECTORY)parsing			\
 	$(BUILD_DIRECTORY)builtins			\
 	$(BUILD_DIRECTORY)tokens			\
-	$(BUILD_DIRECTORY)signals
+	$(BUILD_DIRECTORY)signals			\
+	$(BUILD_DIRECTORY)heredoc
 
 all : $(NAME)
 
