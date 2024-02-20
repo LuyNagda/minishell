@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 17:23:35 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/19 18:08:38 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/20 15:46:32 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "put_utils.h"
 #include "string_utils.h"
 #include "get_next_line.h"
+#include <signal.h>
 
 static int	check_for_eof(char *here_doc, char *line)
 {
@@ -34,6 +35,7 @@ void	here_doc_execution(t_minishell *shell, t_commands *tmp, int i)
 {
 	char	*line;
 
+	hook_heredoc_signal(shell, tmp->input_fd);
 	ft_putstr_fd("heredoc> ", 1);
 	line = get_next_line(0);
 	if (check_for_eof(tmp->arguments[i], line))
@@ -43,6 +45,8 @@ void	here_doc_execution(t_minishell *shell, t_commands *tmp, int i)
 	while (ft_strncmp(tmp->arguments[i],
 			line, ft_strlen(tmp->arguments[i])))
 	{
+		if (g_signal_state == SIGINT || g_signal_state == SIGQUIT)
+			return ;
 		ft_putstr_fd(line, tmp->input_fd);
 		free(line);
 		ft_putstr_fd("heredoc> ", 1);

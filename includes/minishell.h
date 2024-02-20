@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/20 10:56:25 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:45:46 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,4 +276,7 @@ void				ft_display_commands_list(t_commands *commands);
 void				ft_display_env_map(t_env_map *env_map);
 void				ft_display_env_array(char **env_array);
 void				ft_display_tokens(t_tokens *tokens);
+
+extern int	g_signal_state;
+
 #endif

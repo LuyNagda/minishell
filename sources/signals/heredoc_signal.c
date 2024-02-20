@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc_signals.c                                  :+:      :+:    :+:   */
+/*   heredoc_signal.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 10:13:08 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/20 15:22:25 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:43:55 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "minishell.h"
 #include "string_utils.h"
 
-int	signal_state;
+int	g_signal_state;
 
 static int get_heredoc_fd(int fd)
 {
@@ -31,7 +31,7 @@ static int get_heredoc_fd(int fd)
 static void handle_heredoc_signal(int signum)
 {
 	ft_putstr_fd("\b\b  \b\b", 0);
-	signal_state = signum;
+	g_signal_state = signum;
 }
 
 void hook_heredoc_signal(t_minishell *shell, int fd)
