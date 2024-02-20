@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 21:35:26 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/06 17:32:37 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:33:19 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void append_token(t_tokens *appended, t_tokens *to_append)
 		return;
 	def = NULL;
 	if (appended->type == ENV_VALUE && to_append->type == ENV_VALUE)
-		def = ft_strjoin(appended->value, " ");
+		def = ft_strjoin(appended->value, "");
 	if (def != NULL)
 		joined = ft_strjoin(def, to_append->value);
 	else
