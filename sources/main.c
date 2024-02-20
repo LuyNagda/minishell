@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/19 09:13:16 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/19 16:37:39 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ static void	ft_shell_loop(t_minishell *shell)
 		tokenize_input(shell);
 		if (on_parse(shell) == SUCCESS)
 		{
-			if (post_parsing(shell) == SUCCESS)
+			if (post_parsing(shell) == SUCCESS
+				&& ft_strlen(shell->commands->arguments[0]))
 				ft_dispatch_command(shell);
 			ft_flush_command_list(shell->commands);
 		}

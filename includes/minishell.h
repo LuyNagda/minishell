@@ -119,6 +119,7 @@ typedef struct s_minishell
 	int				is_builtin;
 	char			**envp;
 	t_pipex			*pipex;
+	char			*line;
 }					t_minishell;
 
 /* *****************************************************/

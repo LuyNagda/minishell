@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 18:05:56 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/19 15:43:21 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/19 16:09:17 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,33 +93,32 @@ char	*expand_line(char *line, t_env_map *map, int must_expanded)
 	return line;
 }
 
-
 void	here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
 	int		i;
-	char	*line;
 
 	i = 0;
-	line = NULL;
+	shell->line = NULL;
 	if (has_heredoc(command, "<<") && command->arguments_amount != 1)
 	{
 		heredoc_parsing(shell, command, "<<", pipex);
 		while (command->here_doc[i]) {
+			hook_heredoc_signal(shell, command->input_fd);
 			ft_putstr_fd("heredoc> ", 1);
-			line = get_next_line(0);
-				if (!command->expand)
-					line = expand_line(line, shell->env_map, 1);
-				while (ft_strncmp(command->here_doc[i], line, ft_strlen(command->here_doc[i]))) {
-					ft_putstr_fd(line, command->input_fd);
-					free(line);
-					line = NULL;
-					ft_putstr_fd("heredoc> ", 1);
-					line = expand_line(get_next_line(0), shell->env_map, 1);
-				}
-				free(line);
-				line = NULL;
-				i++;
-				hook_heredoc_signal(shell, command->input_fd);
+			shell->line = get_next_line(0);
+			if (!command->expand)
+				shell->line = expand_line(shell->line, shell->env_map, 1);
+			while (shell->line && ft_strncmp(command->here_doc[i], shell->line, ft_strlen(command->here_doc[i]))) {
+				ft_putstr_fd(shell->line, command->input_fd);
+				free(shell->line);
+				shell->line = NULL;
+				ft_putstr_fd("heredoc> ", 1);
+				char *str = get_next_line(0);
+				shell->line = expand_line(str, shell->env_map, 1);
+			}
+			free(shell->line);
+			shell->line = NULL;
+			i++;
 		}
 		ft_free_split(command->here_doc);
 		here_doc_error_handling(shell, command, pipex);

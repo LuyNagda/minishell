@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 10:13:08 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/19 15:28:37 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/19 16:09:21 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ static void handle_heredoc_signal(int signum)
 	if (signum != SIGINT)
 		return;
 	close(get_heredoc_fd(-1));
-	free_and_exit(get_minishell(NULL), get_minishell(NULL), 1);
+	if (get_minishell(NULL)->line)
+		free(get_minishell(NULL)->line);
+	free_and_exit(get_minishell(NULL), get_minishell(NULL)->pipex, 1);
 }
 
 void hook_heredoc_signal(t_minishell *shell, int fd)
