@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/24 18:41:26 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:27:11 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void exec_exit(t_minishell *shell, t_commands *command)
 
 	first_arg = NULL;
 	printf("exit\n");
-	if (ft_get_arguments_amount(command) == 2)
+	if (ft_get_arguments_amount(command) >= 2)
 	{
 		first_arg = command->arguments[1];
 		if (!has_only_digits(first_arg))

@@ -23,7 +23,6 @@ FILES =	main.c							\
 		exec/exec_pipex.c				\
 		exec/path_handler.c				\
 		exec/exec_utils.c				\
-		heredoc/heredoc_utils.c			\
 		parsing/on_parsing.c			\
 		parsing/post_parsing.c			\
 		parsing/pre_parsing.c			\
@@ -31,6 +30,7 @@ FILES =	main.c							\
 		parsing/redirection_parsing_2.c	\
 		heredoc/heredoc_parsing.c		\
 		heredoc/heredoc_parsing_2.c		\
+		heredoc/heredoc_utils.c			\
 		tokens/tokenizer.c				\
 		tokens/tokens_handler.c			\
 		tokens/tokens_concat.c			\
