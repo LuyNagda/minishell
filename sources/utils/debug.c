@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:36:19 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/07 12:27:39 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/20 08:03:14 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,10 @@ void print_args(t_commands *commands, size_t command_nb)
 	printf("[%zu] -> Output FD : %d\n",
 		command_nb, commands->output_fd);
 	while (commands->args_quoted[index] != -1)
-		printf("Args quoted[%d]: %d\n", index, commands->args_quoted[index++]);
+	{
+		printf("Args quoted[%d]: %d\n", index, commands->args_quoted[index]);
+		index++;
+	}
 }
 
 void ft_display_commands_list(t_commands *commands)
