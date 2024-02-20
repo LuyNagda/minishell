@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_dispatcher.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/19 09:13:42 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/20 08:01:22 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ int	is_builtins(t_commands *command)
 		|| ft_str_starts_with(command->arguments[0], "echo")
 		|| ft_str_starts_with(command->arguments[0], "export")
 		|| ft_str_starts_with(command->arguments[0], "unset")
-		|| ft_str_starts_with(command->arguments[0], "env"));
+		|| (ft_str_starts_with(command->arguments[0], "env")
+			&& command->arguments_amount == 1));
 }
 
 static t_boolean	has_error(t_minishell *shell)

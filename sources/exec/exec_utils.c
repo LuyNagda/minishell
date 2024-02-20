@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/19 10:42:17 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/20 08:20:13 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	error_msg(char *string)
 
 void	free_and_exit(t_minishell *shell, t_pipex *pipex, int code)
 {
+	t_env_map	*node;
+	
 	ft_flush_command_list(shell->commands);
 	ft_flush_tokens(shell->parsing_cmd.tokens);
 	if (shell && shell->env_map)
@@ -33,5 +35,8 @@ void	free_and_exit(t_minishell *shell, t_pipex *pipex, int code)
 		free(pipex->pid);
 	if (shell && shell->sended_line)
 		free(shell->sended_line);
-	exit(code);
+	if (code != -1)
+		exit(code);
+	node = env_map_find_node(shell->env_map, "?");
+	exit(node->value);
 }

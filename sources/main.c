@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/19 16:37:39 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/19 16:57:45 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ static void	ft_shell_loop(t_minishell *shell)
 		shell->commands = NULL;
 		line = readline(shell->messages.minishell_prefix);
 		if (!line)
+		{
+			printf("exit\n");
 			break ;
+		}
 		if (check_for_out_of_bounds(line))
 			return ;
 		shell->sended_line = ft_strtrim(line, " ");

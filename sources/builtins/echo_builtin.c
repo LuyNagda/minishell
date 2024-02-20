@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:23:40 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 15:54:12 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/19 15:53:03 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ static int	check_arg(t_commands *command)
 	i = 1;
 	while (command->arguments[i])
 	{
-		j = 0;
-		if (command->arguments[i][0] == '-')
-			j++;
+		j = 1;
+		if (command->arguments[i][0] != '-')
+			return (i);
 		while (command->arguments[i][j])
 		{
 			if (!ft_strchr("n", command->arguments[i][j]))
