@@ -41,11 +41,9 @@ FILES =	main.c							\
 		utils/messages_utils.c			\
 		utils/debug.c					\
 		utils/merge_sort.c				\
-		signals/ingore_signal.c			\
 		signals/exit_signal.c			\
 		signals/pipe_signal.c			\
 		signals/signals_manager.c		\
-		signals/heredoc_signal.c		\
 
 BUILD_DIRECTORY = ./build/
 

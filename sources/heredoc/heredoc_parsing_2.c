@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 17:23:35 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/20 15:46:32 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/20 16:48:16 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,16 @@ void	here_doc_execution(t_minishell *shell, t_commands *tmp, int i)
 {
 	char	*line;
 
-	hook_heredoc_signal(shell, tmp->input_fd);
 	ft_putstr_fd("heredoc> ", 1);
 	line = get_next_line(0);
-	if (check_for_eof(tmp->arguments[i], line))
+	if (check_for_eof(tmp->arguments[i], line) || g_signal_state == SIGINT)
 		return ;
 	if (!tmp->args_quoted[i])
 		line = expand_line(line, shell->env_map, 1);
 	while (ft_strncmp(tmp->arguments[i],
 			line, ft_strlen(tmp->arguments[i])))
 	{
-		if (g_signal_state == SIGINT || g_signal_state == SIGQUIT)
+		if (g_signal_state == SIGINT)
 			return ;
 		ft_putstr_fd(line, tmp->input_fd);
 		free(line);

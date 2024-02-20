@@ -32,7 +32,7 @@ int	has_heredoc(t_commands *command, char *here_doc)
 	return (0);
 }
 
-static int	count_here_doc(t_commands *command, char *here_doc)
+static size_t	count_here_doc(t_commands *command, char *here_doc)
 {
 	size_t	index;
 	size_t	count;
@@ -51,9 +51,9 @@ static int	count_here_doc(t_commands *command, char *here_doc)
 static void	remove_heredoc_from_command(t_commands *command,
 			char *here_doc, int i)
 {
-	int		j;
-	char	**tmp;
-	char	**result;
+	size_t		j;
+	char		**tmp;
+	char		**result;
 
 	tmp = command->arguments;
 	j = ft_str_tab_len(tmp);
@@ -79,10 +79,10 @@ static void	remove_heredoc_from_command(t_commands *command,
 static void	heredoc_loop(t_minishell *shell,
 		t_commands *tmp, char *here_doc, t_pipex *pipex)
 {
-	int		i;
-	int		j;
-	int		count;
-	char	*line;
+	int			i;
+	int			j;
+	size_t		count;
+	char		*line;
 
 	j = 0;
 	count = count_here_doc(tmp, "<<");
