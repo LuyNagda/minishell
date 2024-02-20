@@ -6,13 +6,14 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:38:42 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/12/03 03:54:24 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:31:48 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../.includes/get_next_line.h"
 #include "../.includes/boolean.h"
 #include <unistd.h>
+#include <stdio.h>
 
 t_boolean	ft_has_new_line(char *buffer, char **returned_line);
 char		*ft_growth_line(char *r_line, char *buf, int chars_readed);
@@ -30,7 +31,9 @@ char		*ft_growth_line(char *r_line, char *buf, int chars_readed);
  * @return The function `get_next_line` is returning a pointer to,
  * a string that contains the next line from the file
  * associated with the given file descriptor.
+ *
  */
+
 char	*get_next_line(int file_descriptor)
 {
 	static char	buffer[BUFFER_SIZE + 1];

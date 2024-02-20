@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/19 16:57:45 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/20 18:33:57 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <unistd.h>
 #include "string_utils.h"
 #include "libft.h"
 
@@ -103,6 +104,7 @@ int	main(int argc, char **argv, char **env)
 	rl_clear_message();
 	rl_clear_visible_line();
 	rl_clear_pending_input();
+
 	return (status_code);
 }
 

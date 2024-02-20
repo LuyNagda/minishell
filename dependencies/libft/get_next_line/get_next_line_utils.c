@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:37:57 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/12/03 04:46:01 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:02:44 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,7 @@ char	*ft_growth_line(char *returned_line, char *buffer, int chars_readed)
  * by increasing its size and copying the contents of `buffer` up to the
  * new line character (if it exists).
  */
+#include "stdio.h"
 t_boolean	ft_has_new_line(char *buffer, char **returned_line)
 {
 	int			index;
@@ -161,7 +162,5 @@ t_boolean	ft_has_new_line(char *buffer, char **returned_line)
 	if (buffer[index] == '\n')
 		is_new_line = _true;
 	*returned_line = ft_growth_line(*returned_line, buffer, ++index);
-	if (returned_line == NULL)
-		return (_false);
 	return (ft_mem_switch(buffer, index), is_new_line);
 }

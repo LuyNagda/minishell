@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 17:23:35 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/20 16:48:16 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:00:59 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "string_utils.h"
 #include "get_next_line.h"
 #include <signal.h>
+#include <stdio.h>
 
 static int	check_for_eof(char *here_doc, char *line)
 {
@@ -31,27 +32,30 @@ static int	check_for_eof(char *here_doc, char *line)
 	return (0);
 }
 
-void	here_doc_execution(t_minishell *shell, t_commands *tmp, int i)
+int	here_doc_execution(t_minishell *shell, t_commands *tmp, int i)
 {
 	char	*line;
 
-	ft_putstr_fd("heredoc> ", 1);
+	ft_putstr_fd("heredoc> ", 0);
 	line = get_next_line(0);
-	if (check_for_eof(tmp->arguments[i], line) || g_signal_state == SIGINT)
-		return ;
+	printf("done with gnl\n");
+	if (check_for_eof(tmp->arguments[i], line))
+		return (0);
 	if (!tmp->args_quoted[i])
 		line = expand_line(line, shell->env_map, 1);
+	if (g_signal_state == SIGINT)
+		return (printf("ONE"), 1);
 	while (ft_strncmp(tmp->arguments[i],
 			line, ft_strlen(tmp->arguments[i])))
 	{
 		if (g_signal_state == SIGINT)
-			return ;
+			return (printf("TWO"), 1);
 		ft_putstr_fd(line, tmp->input_fd);
 		free(line);
-		ft_putstr_fd("heredoc> ", 1);
+		ft_putstr_fd("heredoc> 														", 0);
 		line = get_next_line(0);
 		if (check_for_eof(tmp->arguments[i], line))
-			return ;
+			return (0);
 		if (!tmp->args_quoted[i])
 			line = expand_line(line, shell->env_map, 1);
 	}

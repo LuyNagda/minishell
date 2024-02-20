@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:13:33 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/19 18:06:41 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/20 18:00:43 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ static void	remove_heredoc_from_command(t_commands *command,
 	command->arguments = result;
 }
 
+#include "signal.h"
+
 static void	heredoc_loop(t_minishell *shell,
 		t_commands *tmp, char *here_doc, t_pipex *pipex)
 {
@@ -97,7 +99,8 @@ static void	heredoc_loop(t_minishell *shell,
 			perror("here_doc");
 			free_and_exit(shell, pipex, 126);
 		}
-		here_doc_execution(shell, tmp, i + 1);
+		if (here_doc_execution(shell, tmp, i + 1))
+			free_and_exit(shell, pipex, 0);
 		remove_heredoc_from_command(tmp, here_doc, i);
 		if (count != 1)
 			close(tmp->input_fd);

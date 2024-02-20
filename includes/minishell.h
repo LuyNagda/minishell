@@ -147,7 +147,7 @@ char				*find_command(t_env_map *map, char *command);
 void				free_and_exit(t_minishell *shell, t_pipex *pipex, int code);
 void				here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex);
 void				normal_redirections(t_minishell *shell, t_commands *command, t_pipex *pipex);
-void				here_doc_execution(t_minishell *shell, t_commands *tmp, int i);
+int					here_doc_execution(t_minishell *shell, t_commands *tmp, int i);
 
 /* *****************************************************/
 /* ********************** ENV **************************/
