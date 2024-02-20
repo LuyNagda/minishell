@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 10:13:08 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/19 16:09:21 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:22:25 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include "put_utils.h"
 # include "minishell.h"
 #include "string_utils.h"
+
+int	signal_state;
 
 static int get_heredoc_fd(int fd)
 {
@@ -29,12 +31,7 @@ static int get_heredoc_fd(int fd)
 static void handle_heredoc_signal(int signum)
 {
 	ft_putstr_fd("\b\b  \b\b", 0);
-	if (signum != SIGINT)
-		return;
-	close(get_heredoc_fd(-1));
-	if (get_minishell(NULL)->line)
-		free(get_minishell(NULL)->line);
-	free_and_exit(get_minishell(NULL), get_minishell(NULL)->pipex, 1);
+	signal_state = signum;
 }
 
 void hook_heredoc_signal(t_minishell *shell, int fd)
