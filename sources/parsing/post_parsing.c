@@ -6,6 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 17:42:42 by lunagda           #+#    #+#             */
+/*   Updated: 2024/02/20 13:02:51 by lunagda          ###   ########.fr       */
 /*   Updated: 2024/02/19 16:34:54 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -123,7 +124,7 @@ t_parsing_result post_parsing(t_minishell *shell)
 	if (!end_token)
 		return (free(str), ERROR);
 	if (!specials_is_valid(shell))
-		return (printf(shell->messages.other_input_error), ft_free_token(end_token), INVALID_INPUT);
+		return (printf("%s\n", shell->messages.other_input_error), ft_free_token(end_token), INVALID_INPUT);
 	ft_add_back_token(&shell->parsing_cmd.tokens, end_token);
 	if (!build_command_from_tokens(shell))
 		return (ft_delete_token(&shell->parsing_cmd.tokens, end_token), ERROR);
