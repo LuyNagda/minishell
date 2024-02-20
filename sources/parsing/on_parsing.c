@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:19:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/19 11:50:13 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/20 14:45:04 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 #include "put_utils.h"
 #include "string_utils.h"
 #include <stdlib.h>
+#include <stdio.h>
+
+static void process_expand(t_minishell *shell, t_tokens *tmp, char *value);
 
 static int	variable_in_string(const char *str, size_t index)
 {
@@ -99,10 +102,61 @@ static int	contains_valid_key(t_minishell *shell, t_tokens *token)
 	return (free(rebuilded_string), _true);
 }
 
+static void add_space_token(t_minishell *shell, t_tokens *current)
+{
+	t_tokens *space_token;
+
+	space_token = ft_create_token(ft_strdup(" "), _SPACE);
+	if (space_token == NULL)
+		return ;
+	add_token_after(&shell->parsing_cmd.tokens, space_token, current);
+}
+
+static void delete_previous(t_minishell *shell, t_tokens *current)
+{
+	t_tokens *prev;
+
+	if (current->previous)
+	{
+		prev = current->previous;
+		free(prev->value);
+		prev->value = NULL;
+		ft_delete_token(&shell->parsing_cmd.tokens, prev);
+	}
+}
+
+static void treat_spaced_values(t_minishell *shell, t_tokens *current, char *value)
+{
+	char **split;
+	t_tokens *new;
+	char *str;
+	size_t split_size;
+
+	printf("this is the value: %s\n", value);
+	if (!ft_str_contains(value, " ", 0))
+		return ;
+	split = ft_split(value, ' ');
+	if (split == NULL)
+		return ;
+	split_size = ft_str_tab_len(split) -1;
+	while (split[split_size] != NULL && split_size > 0)
+	{
+		str = ft_strdup(split[split_size]);
+		if (str == NULL)
+			continue;
+		new = ft_create_token(str, ENV_VALUE);
+		if (new == NULL)
+			continue;
+		add_token_after(&shell->parsing_cmd.tokens, new, current);
+		add_space_token(shell, new);
+		split_size--;
+	}
+	ft_free_split(split);
+}
+
 static void	treat_variable_keys(t_minishell *shell)
 {
 	t_tokens	*tmp;
-	t_tokens	*prev;
 	t_env_map	*env_finded;
 	char		*value;
 	char		*trim;
@@ -110,36 +164,69 @@ static void	treat_variable_keys(t_minishell *shell)
 	tmp = shell->parsing_cmd.tokens;
 	while (tmp)
 	{
-		if (contains_valid_key(shell, tmp))
+		if (!contains_valid_key(shell, tmp))
 		{
-			if (ft_str_starts_with(tmp->value, "?"))
-				value = ft_strjoin(env_map_find_node(shell->env_map, "?")->value, tmp->value + 1);
+			tmp = tmp->next;
+			continue;
+		}
+		value = NULL;
+		if (ft_str_starts_with(tmp->value, "?"))
+			value = ft_strjoin(env_map_find_node(shell->env_map, "?")->value, tmp->value + 1);
+		else
+		{
+			env_finded = env_map_find_node(shell->env_map, tmp->value);
+			if (env_finded == NULL)
+				value = ft_strdup("");
 			else
 			{
-				env_finded = env_map_find_node(shell->env_map, tmp->value);
-				if (env_finded == NULL)
-					value = ft_strdup("");
-				else
+				value = ft_strdup(env_finded->value);
+				if (tmp->type != QUOTED)
 				{
-					value = ft_strdup(env_finded->value);
-					if (tmp->type != QUOTED)
-					{
-						trim = ft_strtrim(value, " ");
-						free(value);
-						value = trim;
-					}
+					trim = ft_strtrim(value, " ");
+					free(value);
+					value = trim;
 				}
 			}
-			prev = tmp->previous;
-			free(prev->value);
-			prev->value = NULL;
-			ft_delete_token(&shell->parsing_cmd.tokens, prev);
-			free(tmp->value);
-			tmp->value = value;
-			tmp->type = ENV_VALUE;
 		}
+		process_expand(shell, tmp, value);
 		tmp = tmp->next;
 	}
+}
+
+static void process_expand(t_minishell *shell, t_tokens *tmp, char *value)
+{
+
+	char *str;
+
+
+	if (value == NULL)
+		return ;
+	str = ft_strdup(value);
+	if (str == NULL)
+		return ;
+	if (ft_str_contains(value, " ", 0))
+	{
+		if (tmp->previous)
+		{
+			free(tmp->previous->value);
+			tmp->previous->value = NULL;
+			char **test = ft_split(str, ' ');
+			char *dup = ft_strdup(test[0]);
+			tmp->previous->value = dup;
+			tmp->previous->type = ENV_VALUE;
+		}
+		free(tmp->value);
+		tmp->value = ft_strdup(" ");
+		tmp->type = _SPACE;
+		treat_spaced_values(shell, tmp, str);
+	}
+	else {
+		delete_previous(shell, tmp);
+		free(tmp->value);
+		tmp->value = str;
+		tmp->type = ENV_VALUE;
+	}
+	free(value);
 }
 
 static void	append_quoted(t_tokens **tokens)
@@ -170,5 +257,6 @@ t_parsing_result	on_parse(t_minishell *shell)
 		return (ft_putstr_fd(shell->messages.whitepipe_error, 2), free(shell->sended_line), INVALID_INPUT);
 	treat_variable_keys(shell);
 	append_quoted(&shell->parsing_cmd.tokens);
+	ft_display_tokens(shell->parsing_cmd.tokens);
 	return (SUCCESS);
 }

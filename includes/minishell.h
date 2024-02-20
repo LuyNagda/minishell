@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/19 18:07:17 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/20 10:56:25 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,7 @@ char				*expand_line(char *line, t_env_map *map, int must_expanded);
 void				tokenize_input(t_minishell *shell);
 t_tokens			*ft_create_token(char *token, t_token_type token_type);
 void				ft_add_back_token(t_tokens **tokens_list, t_tokens *token);
+void				add_token_after(t_tokens **tokens, t_tokens *new_token, t_tokens *after);
 void				ft_delete_token(t_tokens **head, t_tokens *token);
 void				ft_flush_tokens(t_tokens *tokens);
 size_t				get_current_token_pos(t_tokens *tokens);

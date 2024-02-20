@@ -47,6 +47,26 @@ void ft_add_back_token(t_tokens **tokens_list, t_tokens *token)
 	tmp->next = token;
 }
 
+void add_token_after(t_tokens **tokens, t_tokens *new_token, t_tokens *after)
+{
+	t_tokens	*tmp;
+
+	if (after == NULL)
+	{
+		ft_add_back_token(tokens, new_token);
+		return ;
+	}
+	else
+	{
+		tmp = after->next;
+		after->next = new_token;
+		new_token->previous = after;
+		new_token->next = tmp;
+		if (tmp)
+			tmp->previous = new_token;
+	}
+}
+
 void ft_delete_token(t_tokens **head, t_tokens *token)
 {
 	if (*head == NULL || token == NULL)

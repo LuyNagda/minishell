@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/20 08:01:22 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/02/20 14:49:36 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 int	is_builtins(t_commands *command)
 {
-	return (ft_str_starts_with(command->arguments[0], "cd")
-		|| ft_str_starts_with(command->arguments[0], "pwd")
-		|| ft_str_starts_with(command->arguments[0], "exit")
-		|| ft_str_starts_with(command->arguments[0], "echo")
-		|| ft_str_starts_with(command->arguments[0], "export")
-		|| ft_str_starts_with(command->arguments[0], "unset")
-		|| (ft_str_starts_with(command->arguments[0], "env")
+	return (ft_str_equals(command->arguments[0], "cd")
+		|| ft_str_equals(command->arguments[0], "pwd")
+		|| ft_str_equals(command->arguments[0], "exit")
+		|| ft_str_equals(command->arguments[0], "echo")
+		|| ft_str_equals(command->arguments[0], "export")
+		|| ft_str_equals(command->arguments[0], "unset")
+		|| (ft_str_equals(command->arguments[0], "env")
 			&& command->arguments_amount == 1));
 }
 
