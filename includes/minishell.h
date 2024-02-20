@@ -117,6 +117,7 @@ typedef struct s_minishell
 	int				is_builtin;
 	char			**envp;
 	t_pipex			*pipex;
+	char			*line;
 }					t_minishell;
 
 /* *****************************************************/
@@ -263,7 +264,7 @@ t_minishell			*get_minishell(t_minishell *minishell);
 void				hook_ignored_signal(void);
 void				hook_exit_signal(void);
 void				hook_pipe_signal(void);
-void 				hook_heredoc_signal(t_minishell *shell);
+void 				hook_heredoc_signal(t_minishell *shell, int fd);
 void				hook_signal_on_start(void);
 
 /* *****************************************************/

@@ -69,7 +69,8 @@ static void	ft_shell_loop(t_minishell *shell)
 		tokenize_input(shell);
 		if (on_parse(shell) == SUCCESS)
 		{
-			if (post_parsing(shell) == SUCCESS)
+			if (post_parsing(shell) == SUCCESS
+				&& ft_strlen(shell->commands->arguments[0]))
 				ft_dispatch_command(shell);
 			ft_flush_command_list(shell->commands);
 		}

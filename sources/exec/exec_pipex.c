@@ -97,6 +97,7 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 {
 	t_pipex	pipex;
 
+	shell->pipex = &pipex;
 	pipex.pid = (int *)malloc(sizeof(int) * shell->command_amount);
 	pipex.envp = env_map_to_array(shell->env_map);
 	if (pipex.envp == NULL)
