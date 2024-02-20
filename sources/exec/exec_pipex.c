@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/19 09:13:37 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/20 08:20:36 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void	exec_command(t_minishell *shell,
 	if (command->is_builtin)
 	{
 		ft_dispatch_builtin(shell, command);
-		exit(127);
+		free_and_exit(shell, pipex, -1);
 	}
 	if (command->arguments_amount == 0)
 		free_and_exit(shell, pipex, 0);

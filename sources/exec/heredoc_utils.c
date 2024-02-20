@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 18:05:56 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/19 10:50:50 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/19 17:23:06 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,25 +103,6 @@ void	here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	if (has_heredoc(command, "<<") && command->arguments_amount != 1)
 	{
 		heredoc_parsing(shell, command, "<<", pipex);
-		while (command->here_doc[i])
-		{
-			ft_putstr_fd("heredoc> ", 1);
-			line = get_next_line(0);
-			if (!command->expand)
-				line = expand_line(line, shell->env_map, 1);
-			while (ft_strncmp(command->here_doc[i],
-					line, ft_strlen(command->here_doc[i])))
-			{
-				ft_putstr_fd(line, command->input_fd);
-				free(line);
-				ft_putstr_fd("heredoc> ", 1);
-				line = get_next_line(0);
-				line = expand_line(line, shell->env_map, 1);
-			}
-			free(line);
-			i++;
-		}
-		ft_free_split(command->here_doc);
 		here_doc_error_handling(shell, command, pipex);
 	}
 }

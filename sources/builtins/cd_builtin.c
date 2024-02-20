@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:57 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/14 15:54:38 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/19 14:31:02 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	err_msg(t_minishell *shell, t_commands *command, char *msg)
 	if (!msg)
 		printf("cd: %s: %s\n", strerror(errno), command->arguments[0]);
 	else
-		printf("%s", msg);
+		printf("%s\n", msg);
 	env_map_replace(shell->env_map, "?", "1");
 }
 
@@ -53,7 +53,7 @@ void	exec_cd(t_minishell *shell, t_commands *command)
 		err_msg(shell, command, NULL);
 	else if (command->arguments[1])
 	{
-		if (chdir(command->arguments[1]) != 0)
+		if (chdir(command->arguments[1]) != 0 || !get_pwd(shell))
 			err_msg(shell, command, NULL);
 	}
 	oldpwd = env_map_find_node(shell->env_map, "PWD");
