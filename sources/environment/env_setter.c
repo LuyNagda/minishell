@@ -92,6 +92,8 @@ t_env_map	*env_map_replace_or_add(t_env_map *env_map, char *key, char *value)
 	if (tmp == NULL)
 	{
 		node = ft_create_env_node(key, value, 1, 0);
+		if (!node)
+			return (NULL);
 		env_map_add_back(&env_map, node, 1);
 		return (env_map);
 	}
