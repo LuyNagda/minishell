@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/21 15:22:00 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/21 16:22:06 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,16 +93,12 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		pipex->o_pipe[0] = pipex->c_pipe[0];
 }
 
-static void	wait_and_free(t_minishell *shell, t_pipex *pipex)
+static void	wait_for_children(t_minishell *shell, t_pipex *pipex)
 {
 	while (pipex->index < shell->command_amount)
 		waitpid(pipex->pid[pipex->index++], &pipex->status, 0);
 	pipex->status_string = ft_itoa(WEXITSTATUS(pipex->status));
 	env_map_replace(shell->env_map, "?", pipex->status_string);
-	free(pipex->status_string);
-	free(pipex->pid);
-	ft_free_split(pipex->envp);
-	unlink(".here_doc");
 }
 
 void	exec_cmd(t_minishell *shell, t_commands *commands)
@@ -125,5 +121,9 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 	close(pipex.c_pipe[0]);
 	close(pipex.c_pipe[1]);
 	pipex.index = 0;
-	wait_and_free(shell, &pipex);
+	wait_for_children(shell, &pipex);
+	free(pipex.status_string);
+	free(pipex.pid);
+	ft_free_split(pipex.envp);
+	unlink(".here_doc");
 }
