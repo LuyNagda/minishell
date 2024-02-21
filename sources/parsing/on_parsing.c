@@ -10,14 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "minishell.h"
 #include "put_utils.h"
 #include "string_utils.h"
 #include <stdlib.h>
 #include <stdio.h>
-
-static void process_expand(t_minishell *shell, t_tokens *tmp, char *value);
 
 static int	variable_in_string(const char *str, size_t index)
 {
@@ -97,14 +94,15 @@ static int	contains_valid_key(t_minishell *shell, t_tokens *token)
 	if (rebuilded_string == NULL)
 		return (_false);
 	token_pos = get_current_token_pos(token);
-	if (!variable_in_string(rebuilded_string, get_index_from_token(shell, token_pos)))
+	if (!variable_in_string(rebuilded_string, \
+		get_index_from_token(shell, token_pos)))
 		return (free(rebuilded_string), _false);
 	return (free(rebuilded_string), _true);
 }
 
-static void add_space_token(t_minishell *shell, t_tokens *current)
+static void	add_space_token(t_minishell *shell, t_tokens *current)
 {
-	t_tokens *space_token;
+	t_tokens	*space_token;
 
 	space_token = ft_create_token(ft_strdup(" "), _SPACE);
 	if (space_token == NULL)
@@ -112,9 +110,9 @@ static void add_space_token(t_minishell *shell, t_tokens *current)
 	add_token_after(&shell->parsing_cmd.tokens, space_token, current);
 }
 
-static void delete_previous(t_minishell *shell, t_tokens *current)
+static void	delete_previous(t_minishell *shell, t_tokens *current)
 {
-	t_tokens *prev;
+	t_tokens	*prev;
 
 	if (current->previous)
 	{
@@ -125,12 +123,13 @@ static void delete_previous(t_minishell *shell, t_tokens *current)
 	}
 }
 
-static void treat_spaced_values(t_minishell *shell, t_tokens *current, char *value)
+static void	treat_spaced_values(t_minishell *shell,
+	t_tokens *current, char *value)
 {
-	char **split;
-	char *str;
-	t_tokens *new;
-	size_t split_size;
+	char		**split;
+	char		*str;
+	t_tokens	*new;
+	size_t		split_size;
 
 	if (!ft_str_contains(value, " ", 0))
 		return ;
@@ -142,10 +141,10 @@ static void treat_spaced_values(t_minishell *shell, t_tokens *current, char *val
 	{
 		str = ft_strdup(split[split_size]);
 		if (str == NULL)
-			continue;
+			continue ;
 		new = ft_create_token(str, ENV_VALUE);
 		if (new == NULL)
-			continue;
+			continue ;
 		add_token_after(&shell->parsing_cmd.tokens, new, current);
 		add_space_token(shell, new);
 		split_size--;
@@ -153,49 +152,10 @@ static void treat_spaced_values(t_minishell *shell, t_tokens *current, char *val
 	ft_free_split(split);
 }
 
-static void	treat_variable_keys(t_minishell *shell)
+static void	process_expand(t_minishell *shell, t_tokens *tmp, char *value)
 {
-	t_tokens	*tmp;
-	t_env_map	*env_finded;
-	char		*value;
-	char		*trim;
-
-	tmp = shell->parsing_cmd.tokens;
-	while (tmp)
-	{
-		if (!contains_valid_key(shell, tmp))
-		{
-			tmp = tmp->next;
-			continue;
-		}
-		value = NULL;
-		if (ft_str_starts_with(tmp->value, "?"))
-			value = ft_strjoin(env_map_find_node(shell->env_map, "?")->value, tmp->value + 1);
-		else
-		{
-			env_finded = env_map_find_node(shell->env_map, tmp->value);
-			if (env_finded == NULL)
-				value = ft_strdup("");
-			else
-			{
-				value = ft_strdup(env_finded->value);
-				if (tmp->type != QUOTED)
-				{
-					trim = ft_strtrim(value, " ");
-					free(value);
-					value = trim;
-				}
-			}
-		}
-		process_expand(shell, tmp, value);
-		tmp = tmp->next;
-	}
-}
-
-static void process_expand(t_minishell *shell, t_tokens *tmp, char *value)
-{
-	char **split;
-	char *dup;
+	char	**split;
+	char	*dup;
 
 	if (value == NULL)
 		return ;
@@ -220,13 +180,63 @@ static void process_expand(t_minishell *shell, t_tokens *tmp, char *value)
 		tmp->type = _SPACE;
 		treat_spaced_values(shell, tmp, value);
 	}
-	else {
+	else
+	{
 		delete_previous(shell, tmp);
 		free(tmp->value);
 		tmp->value = value;
 		tmp->type = ENV_VALUE;
 	}
 	free(value);
+}
+
+static void	treat_variable_keys(t_minishell *shell)
+{
+	t_tokens	*tmp;
+	t_env_map	*env_finded;
+	char		*value;
+	char		*trim;
+
+	tmp = shell->parsing_cmd.tokens;
+	while (tmp)
+	{
+		if (!contains_valid_key(shell, tmp))
+		{
+			tmp = tmp->next;
+			continue ;
+		}
+		value = NULL;
+		if (ft_str_starts_with(tmp->value, "?"))
+		{
+			env_finded = env_map_find_node(shell->env_map, "?");
+			if (env_finded == NULL)
+				value = ft_strdup("0");
+			else
+			{
+				value = ft_strjoin(env_finded->value, tmp->value + 1);
+				if (value == NULL)
+					return ;
+			}
+		}
+		else
+		{
+			env_finded = env_map_find_node(shell->env_map, tmp->value);
+			if (env_finded == NULL)
+				value = ft_strdup("");
+			else
+			{
+				value = ft_strdup(env_finded->value);
+				if (tmp->type != QUOTED)
+				{
+					trim = ft_strtrim(value, " ");
+					free(value);
+					value = trim;
+				}
+			}
+		}
+		process_expand(shell, tmp, value);
+		tmp = tmp->next;
+	}
 }
 
 static void	append_quoted(t_tokens **tokens)
@@ -236,10 +246,12 @@ static void	append_quoted(t_tokens **tokens)
 	tmp = *tokens;
 	while (tmp && tmp->next)
 	{
-		if ((tmp->type == QUOTED || tmp->type == SIMPLE_QUOTE ||\
-			tmp->type == DOUBLE_QUOTE || tmp->type == WORD || tmp->type == ENV_VALUE) &&\
-			(tmp->next->type == QUOTED || tmp->next->type == SIMPLE_QUOTE ||\
-				tmp->next->type == DOUBLE_QUOTE || tmp->next->type == WORD || tmp->next->type == ENV_VALUE))
+		if ((tmp->type == QUOTED || tmp->type == SIMPLE_QUOTE || \
+			tmp->type == DOUBLE_QUOTE || tmp->type == WORD || \
+			tmp->type == ENV_VALUE) && \
+			(tmp->next->type == QUOTED || tmp->next->type == SIMPLE_QUOTE || \
+				tmp->next->type == DOUBLE_QUOTE || tmp->next->type == WORD || \
+				tmp->next->type == ENV_VALUE))
 		{
 			append_token(tmp, tmp->next);
 			ft_delete_token(tokens, tmp->next);
@@ -252,9 +264,9 @@ static void	append_quoted(t_tokens **tokens)
 
 t_parsing_result	on_parse(t_minishell *shell)
 {
-
 	if (ft_has_only_whitespace_between_pipes(shell) != 0)
-		return (ft_putstr_fd(shell->messages.whitepipe_error, 2), free(shell->sended_line), INVALID_INPUT);
+		return (ft_putstr_fd(shell->messages.whitepipe_error, 2), \
+			free(shell->sended_line), INVALID_INPUT);
 	treat_variable_keys(shell);
 	append_quoted(&shell->parsing_cmd.tokens);
 	return (SUCCESS);
