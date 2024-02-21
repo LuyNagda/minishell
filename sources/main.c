@@ -99,10 +99,10 @@ int	main(int argc, char **argv, char **env)
 	env_map_init(&shell);
 	if (&shell.env_map)
 		env_array_to_map(&shell, &shell.env_map, env);
+	node = env_map_find_node(shell.env_map, "?");
 	get_minishell(&shell);
 	hook_signal_on_start();
 	ft_shell_loop(&shell);
-	node = env_map_find_node(shell.env_map, "?");
 	status_code = ft_atoi(node->value);
 	env_map_flush(shell.env_map);
 	rl_clear_history();

@@ -23,6 +23,7 @@ static void	handle_heredoc_signal(int signum)
 	if (signum == SIGINT)
 	{
 		ft_putstr_fd("\n", 0);
+		env_map_find_node(get_minishell("NULL")->env_map, "?")->value = "130";
 		close(0);
 	}
 	if (signum == SIGQUIT)
