@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/21 16:22:06 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/21 21:48:51 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,19 +93,10 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		pipex->o_pipe[0] = pipex->c_pipe[0];
 }
 
-static void	wait_for_children(t_minishell *shell, t_pipex *pipex)
-{
-	while (pipex->index < shell->command_amount)
-		waitpid(pipex->pid[pipex->index++], &pipex->status, 0);
-	pipex->status_string = ft_itoa(WEXITSTATUS(pipex->status));
-	env_map_replace(shell->env_map, "?", pipex->status_string);
-}
-
 void	exec_cmd(t_minishell *shell, t_commands *commands)
 {
 	t_pipex	pipex;
 
-	shell->pipex = &pipex;
 	pipex.pid = (int *)malloc(sizeof(int) * shell->command_amount);
 	pipex.envp = env_map_to_array(shell->env_map);
 	if (pipex.envp == NULL)
@@ -121,7 +112,10 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 	close(pipex.c_pipe[0]);
 	close(pipex.c_pipe[1]);
 	pipex.index = 0;
-	wait_for_children(shell, &pipex);
+	while (pipex.index < shell->command_amount)
+		waitpid(pipex.pid[pipex.index++], &pipex.status, 0);
+	pipex.status_string = ft_itoa(WEXITSTATUS(pipex.status));
+	env_map_replace(shell->env_map, "?", pipex.status_string);
 	free(pipex.status_string);
 	free(pipex.pid);
 	ft_free_split(pipex.envp);

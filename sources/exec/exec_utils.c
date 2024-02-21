@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/21 14:39:18 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/21 21:52:28 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ void	free_and_exit(t_minishell *shell, t_pipex *pipex, int code)
 	ft_flush_tokens(shell->parsing_cmd.tokens);
 	if (shell && shell->env_map)
 		env_map_flush(shell->env_map);
-	if (pipex && pipex->envp)
+	if (pipex->envp)
 		ft_free_split(pipex->envp);
-	if (pipex && pipex->pid)
+	if (pipex->pid)
 		free(pipex->pid);
 	if (shell && shell->sended_line)
 		free(shell->sended_line);
