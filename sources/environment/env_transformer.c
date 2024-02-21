@@ -31,10 +31,7 @@ t_env_map	*env_array_to_map(t_minishell *shell,
 		value = NULL;
 		split = ft_split(envp[index++], '=');
 		if (!split)
-		{
-			shell->is_running = 0;
-			break ;
-		}
+			return (shell->is_running = 0, shell->env_map);
 		if (split[0])
 			key = split[0];
 		if (split[1])
