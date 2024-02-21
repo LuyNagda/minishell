@@ -6,17 +6,21 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 17:38:28 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/19 11:46:23 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/21 17:21:33 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+#define GREEN   "\001\033[0;32m\002"
+#define CYAN    "\001 \033[1;36m\002"
+#define RESET   "\001 \033[0m\002"
+
 t_message	ft_init_messages(void)
 {
 	t_message	messages;
 
-	messages.minishell_prefix = "\033[0;32m➜ \033[1;36m minishell :\033[0m ";
+	messages.minishell_prefix = GREEN"➜"CYAN"minishell :"RESET;
 	messages.pipe_syntax_error = "⛔ Syntax error near unexpected token '|'\n";
 	messages.double_pipe_error = "⛔ Syntax error near unexpected token "
 		"'||' (Unsupported)\n";
