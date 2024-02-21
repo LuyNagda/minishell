@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/03 03:28:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/20 18:28:54 by jbadaire         ###   ########.fr       */
+/*   Created: 2024/02/21 14:54:25 by lunagda           #+#    #+#             */
+/*   Updated: 2024/02/21 14:54:46 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "minishell.h"
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 256
-# endif
+t_minishell	*get_minishell(t_minishell *minishell)
+{
+	static t_minishell	*shell = NULL;
 
-char	*get_next_line(int file_descriptor);
+	if (shell == NULL && minishell != NULL)
+		shell = minishell;
 
-#endif
+	return (shell);
+}

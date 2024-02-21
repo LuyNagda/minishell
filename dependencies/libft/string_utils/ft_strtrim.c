@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:00:38 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/15 18:24:14 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/21 14:17:05 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,15 @@
 
 /**
  * @brief	Allocates and returns a new string that is a copy of the string 's1',
- *			excluding characters specified in 'set' at the beginning and end of the string.
+ *			excluding characters specified in 'set' at the beginning 
+ *			and end of the string.
  *
  * @param	s1	Original string.
- * @param	set	String representing the set of characters to be removed from the beginning and end of 's1'.
+ * @param	set	String representing the set of characters to 
+ * 				be removed from the beginning and end of 's1'.
  *
- * @return	A pointer to the new string, or NULL in case of memory allocation failure.
+ * @return	A pointer to the new string, or NULL in case of 
+ * 			memory allocation failure.
  */
 char	*ft_strtrim(char const *s1, char const *set)
 {

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:19:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/20 14:45:04 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/21 12:47:50 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,6 +257,6 @@ t_parsing_result	on_parse(t_minishell *shell)
 		return (ft_putstr_fd(shell->messages.whitepipe_error, 2), free(shell->sended_line), INVALID_INPUT);
 	treat_variable_keys(shell);
 	append_quoted(&shell->parsing_cmd.tokens);
-	ft_display_tokens(shell->parsing_cmd.tokens);
+	//ft_display_tokens(shell->parsing_cmd.tokens);
 	return (SUCCESS);
 }

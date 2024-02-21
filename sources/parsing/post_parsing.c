@@ -6,10 +6,10 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 17:42:42 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/20 13:02:51 by lunagda          ###   ########.fr       */
-/*   Updated: 2024/02/20 14:46:07 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/21 12:47:53 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -131,6 +131,6 @@ t_parsing_result post_parsing(t_minishell *shell)
 	remove_quotes(shell);
 	shell->command_amount = ft_get_numbers_of_commands(shell->commands);
 	ft_delete_token(&shell->parsing_cmd.tokens, end_token);
-	ft_display_commands_list(shell->commands);
+	//ft_display_commands_list(shell->commands);
 	return (SUCCESS);
 }

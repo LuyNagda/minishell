@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:36:19 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/20 08:03:14 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/02/21 14:52:43 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdio.h>
 
-void ft_display_env_map(t_env_map *env_map)
+void	ft_display_env_map(t_env_map *env_map)
 {
 	while (env_map)
 	{
@@ -22,9 +22,9 @@ void ft_display_env_map(t_env_map *env_map)
 	}
 }
 
-void ft_display_env_array(char **env_array)
+void	ft_display_env_array(char **env_array)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (env_array[i])
@@ -34,7 +34,7 @@ void ft_display_env_array(char **env_array)
 	}
 }
 
-void ft_display_tokens(t_tokens *tokens)
+void	ft_display_tokens(t_tokens *tokens)
 {
 	while (tokens)
 	{
@@ -47,7 +47,7 @@ void ft_display_tokens(t_tokens *tokens)
 	}
 }
 
-void print_args(t_commands *commands, size_t command_nb)
+void	print_args(t_commands *commands, size_t command_nb)
 {
 	int	index;
 	int	args_amount;
@@ -73,10 +73,10 @@ void print_args(t_commands *commands, size_t command_nb)
 	}
 }
 
-void ft_display_commands_list(t_commands *commands)
+void	ft_display_commands_list(t_commands *commands)
 {
-	size_t command_nb;
-	int index;
+	size_t	command_nb;
+	int		index;
 
 	command_nb = 0;
 	while (commands)
