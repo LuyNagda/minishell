@@ -18,6 +18,5 @@ t_minishell	*get_minishell(t_minishell *minishell)
 
 	if (shell == NULL && minishell != NULL)
 		shell = minishell;
-
 	return (shell);
 }

@@ -10,22 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "minishell.h"
 #include "string_utils.h"
 
-static void remove_char_string(char *str, char d)
+static void	remove_char_string(char *str, char d)
 {
-	size_t index;
-	size_t final_index;
+	size_t	index;
+	size_t	final_index;
 
 	index = 0;
 	final_index = 0;
 	if (str == NULL)
-		return;
-	while (str[index]) {
+		return ;
+	while (str[index])
+	{
 		if (str[index] != d)
 			str[final_index++] = str[index];
 		index++;
@@ -33,31 +33,38 @@ static void remove_char_string(char *str, char d)
 	str[final_index] = '\0';
 }
 
-static void remove_quotes_loop(t_commands *commands)
+static void	remove_quotes_loop(t_commands *commands)
 {
-	size_t args_index;
-	size_t str_index;
-	int quote_type;
+	size_t	args_index;
+	size_t	str_index;
+	int		quote_type;
+	char	c;
 
 	args_index = 0;
-	while (commands->arguments[args_index]) {
+	while (commands->arguments[args_index])
+	{
 		if (!ft_str_contains(commands->arguments[args_index], "'", 0) && \
-            !ft_str_contains(commands->arguments[args_index], "\"", 0)) {
+			!ft_str_contains(commands->arguments[args_index], "\"", 0))
+		{
 			args_index++;
-			continue;
+			continue ;
 		}
 		str_index = 0;
 		quote_type = 0;
-		while (commands->arguments[args_index][str_index]) {
-			char c = commands->arguments[args_index][str_index];
-			if (c == '\'') {
+		while (commands->arguments[args_index][str_index])
+		{
+			c = commands->arguments[args_index][str_index];
+			if (c == '\'')
+			{
 				if (quote_type == 0)
 					quote_type = 1;
 				else if (quote_type == 1)
 					quote_type = 0;
 				if (quote_type == 1 || quote_type == 0)
 					commands->arguments[args_index][str_index] = '\a';
-			} else if (c == '\"') {
+			}
+			else if (c == '\"')
+			{
 				if (quote_type == 0)
 					quote_type = 2;
 				else if (quote_type == 2)
@@ -72,28 +79,32 @@ static void remove_quotes_loop(t_commands *commands)
 	}
 }
 
-static t_parsing_result remove_quotes(t_minishell *shell)
+static t_parsing_result	remove_quotes(t_minishell *shell)
 {
-	t_commands *commands;
+	t_commands	*commands;
 
 	commands = shell->commands;
-	while (commands) {
+	while (commands)
+	{
 		remove_quotes_loop(commands);
 		commands = commands->next_node;
 	}
 	return (SUCCESS);
 }
 
-static t_boolean is_special_token(t_tokens *token)
+static t_boolean	is_special_token(t_tokens *token)
 {
-	return (token->type == PIPE || token->type == REDIRECT_IN || token->type == REDIRECT_OUT || \
-        token->type == REDIRECT_IN_DOUBLE || token->type == REDIRECT_OUT_DOUBLE);
+	return (token->type == PIPE || \
+		token->type == REDIRECT_IN || \
+		token->type == REDIRECT_OUT || \
+		token->type == REDIRECT_IN_DOUBLE || \
+		token->type == REDIRECT_OUT_DOUBLE);
 }
 
-static t_boolean specials_is_valid(t_minishell *shell)
+static t_boolean	specials_is_valid(t_minishell *shell)
 {
-	t_tokens *tmp;
-	t_tokens *tmp2;
+	t_tokens	*tmp;
+	t_tokens	*tmp2;
 
 	tmp = shell->parsing_cmd.tokens;
 	while (tmp)
@@ -113,10 +124,11 @@ static t_boolean specials_is_valid(t_minishell *shell)
 	return (_true);
 }
 
-t_parsing_result post_parsing(t_minishell *shell)
+t_parsing_result	post_parsing(t_minishell *shell)
 {
 	t_tokens	*end_token;
 	char		*str;
+
 	str = ft_strdup("|");
 	if (!str)
 		return (ERROR);
@@ -124,13 +136,13 @@ t_parsing_result post_parsing(t_minishell *shell)
 	if (!end_token)
 		return (free(str), ERROR);
 	if (!specials_is_valid(shell))
-		return (printf("%s\n", shell->messages.other_input_error), ft_free_token(end_token), INVALID_INPUT);
+		return (printf("%s\n", shell->messages.other_input_error), \
+			ft_free_token(end_token), INVALID_INPUT);
 	ft_add_back_token(&shell->parsing_cmd.tokens, end_token);
 	if (!build_command_from_tokens(shell))
 		return (ft_delete_token(&shell->parsing_cmd.tokens, end_token), ERROR);
 	remove_quotes(shell);
 	shell->command_amount = ft_get_numbers_of_commands(shell->commands);
 	ft_delete_token(&shell->parsing_cmd.tokens, end_token);
-	//ft_display_commands_list(shell->commands);
 	return (SUCCESS);
 }
