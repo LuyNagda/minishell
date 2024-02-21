@@ -45,37 +45,42 @@ static char	*increment_for_zero(char *str)
 	return (copy);
 }
 
+void	exit_with_args(t_minishell *shell, t_commands *command,
+	int *code, t_boolean *exit)
+{
+	char	*args;
+
+	args = NULL;
+	if (ft_get_arguments_amount(command) > 1)
+	{
+		args = command->arguments[1];
+		if (!has_only_digits(args))
+		{
+			printf("minishell: exit: %s: numeric argument required\n", args);
+			env_map_replace_or_add(shell->env_map, "?", "2");
+			*code = 2;
+		}
+		else if (has_only_digits(args) && ft_get_arguments_amount(command) > 2)
+		{
+			printf("minishell: exit: too many arguments\n");
+			env_map_replace_or_add(shell->env_map, "?", "1");
+			*exit = _false;
+		}
+		else
+			*code = ft_atoi(increment_for_zero(args));
+	}
+}
+
 void	exec_exit(t_minishell *shell, t_commands *command)
 {
-	char		*first_arg;
 	t_env_map	*env_map;
 	int			exit_code;
 	char		*result;
 	t_boolean	must_exit;
 
-	first_arg = NULL;
 	must_exit = _true;
 	printf("exit\n");
-	if (ft_get_arguments_amount(command) > 1)
-	{
-		first_arg = command->arguments[1];
-		if (!has_only_digits(first_arg))
-		{
-			printf("minishell: exit: %s: numeric argument required\n",
-				first_arg);
-			env_map_replace_or_add(shell->env_map, "?", "2");
-			exit_code = 2;
-		}
-		else if (has_only_digits(first_arg)
-			&& ft_get_arguments_amount(command) > 2)
-		{
-			printf("minishell: exit: too many arguments\n");
-			env_map_replace_or_add(shell->env_map, "?", "1");
-			must_exit = _false;
-		}
-		else
-			exit_code = ft_atoi(increment_for_zero(first_arg));
-	}
+	exit_with_args(shell, command, &exit_code, &must_exit);
 	if (ft_get_arguments_amount(command) == 1)
 	{
 		env_map = env_map_find_node(shell->env_map, "?");
