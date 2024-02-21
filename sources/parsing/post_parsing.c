@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 17:42:42 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/21 12:47:53 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/21 17:21:55 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include "minishell.h"
 #include "string_utils.h"
+#include "put_utils.h"
 
 static void remove_char_string(char *str, char d)
 {
@@ -124,13 +125,12 @@ t_parsing_result post_parsing(t_minishell *shell)
 	if (!end_token)
 		return (free(str), ERROR);
 	if (!specials_is_valid(shell))
-		return (printf("%s\n", shell->messages.other_input_error), ft_free_token(end_token), INVALID_INPUT);
+		return (ft_putstr_fd(shell->messages.other_input_error, 2), ft_free_token(end_token), INVALID_INPUT);
 	ft_add_back_token(&shell->parsing_cmd.tokens, end_token);
 	if (!build_command_from_tokens(shell))
 		return (ft_delete_token(&shell->parsing_cmd.tokens, end_token), ERROR);
 	remove_quotes(shell);
 	shell->command_amount = ft_get_numbers_of_commands(shell->commands);
 	ft_delete_token(&shell->parsing_cmd.tokens, end_token);
-	//ft_display_commands_list(shell->commands);
 	return (SUCCESS);
 }
