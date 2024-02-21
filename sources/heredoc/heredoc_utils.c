@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 18:05:56 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/19 17:23:06 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/21 12:45:05 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ void	here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	i = 0;
 	if (has_heredoc(command, "<<") && command->arguments_amount != 1)
 	{
+		hook_heredoc_signal();
 		heredoc_parsing(shell, command, "<<", pipex);
 		here_doc_error_handling(shell, command, pipex);
 	}
