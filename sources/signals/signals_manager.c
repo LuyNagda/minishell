@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:08:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/21 14:49:14 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/21 15:21:45 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 void	hook_signal_on_start(void)
 {
 	hook_exit_signal();
-	hook_pipe_signal();
 }
 
 static void	handle_ignore_signal(int signal)
@@ -34,6 +33,7 @@ void	handle_ignored_signal(void)
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = SA_RESTART;
 	sig.sa_handler = handle_ignore_signal;
-	if (sigaction(SIGINT, &sig, NULL) == -1)
+	if (sigaction(SIGINT, &sig, NULL) == -1
+		|| sigaction(SIGQUIT, &sig, NULL) == -1)
 		return (perror("sigpipe"), exit(1));
 }

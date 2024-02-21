@@ -43,7 +43,6 @@ FILES =	main.c							\
 		utils/utils.c					\
 		utils/merge_sort.c				\
 		signals/exit_signal.c			\
-		signals/pipe_signal.c			\
 		signals/heredoc_signal.c		\
 		signals/signals_manager.c		\
 
