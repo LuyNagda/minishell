@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_parsing_2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 17:23:35 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/21 13:25:38 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/21 22:28:01 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,5 @@ int	here_doc_execution(t_minishell *shell, t_commands *tmp, int i)
 			return (0);
 		line = expand_line(line, shell->env_map, !tmp->args_quoted[i]);
 	}
-	free(line);
+	return (free(line), 0);
 }
