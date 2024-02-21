@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 14:58:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/21 13:21:12 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/21 13:40:38 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static void handle_exit_signal(int signum)
 		ft_putstr_fd("\b\b  \b\b", 0);
 	if (signum == SIGINT)
 	{
-		printf("hello");
 		ft_putstr_fd("\n", 0);
 		rl_on_new_line();
 		rl_replace_line("", 0);
