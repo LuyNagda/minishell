@@ -9,6 +9,7 @@
 /*   Updated: 2024/02/21 12:47:50 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include <libft.h>
 
 #include "minishell.h"
 #include "put_utils.h"
@@ -156,16 +157,21 @@ static void	process_expand(t_minishell *shell, t_tokens *tmp, char *value)
 {
 	char	**split;
 	char	*dup;
+	char	*str;
+	char	*space;
 
 	if (value == NULL)
 		return ;
-	if (ft_str_contains(value, " ", 0))
+	str = ft_strdup(value);
+	if (str == NULL)
+		return ;
+	if (ft_str_contains(str, " ", 0))
 	{
 		if (tmp->previous)
 		{
 			free(tmp->previous->value);
 			tmp->previous->value = NULL;
-			split = ft_split(value, ' ');
+			split = ft_split(str, ' ');
 			if (split == NULL)
 				return ;
 			dup = ft_strdup(split[0]);
@@ -176,57 +182,64 @@ static void	process_expand(t_minishell *shell, t_tokens *tmp, char *value)
 			ft_free_split(split);
 		}
 		free(tmp->value);
-		tmp->value = ft_strdup(" ");
+		space = ft_strdup(" ");
+		if (space == NULL)
+			return ;
+		tmp->value = space;
 		tmp->type = _SPACE;
-		treat_spaced_values(shell, tmp, value);
+		treat_spaced_values(shell, tmp, str);
+		free(str);
 	}
 	else
 	{
 		delete_previous(shell, tmp);
 		free(tmp->value);
-		tmp->value = value;
+		tmp->value = str;
 		tmp->type = ENV_VALUE;
 	}
-	free(value);
 }
 
 static void	treat_variable_keys(t_minishell *shell)
 {
-	t_tokens	*tmp;
+	t_tokens	*tokens;
 	t_env_map	*env_finded;
 	char		*value;
 	char		*trim;
 
-	tmp = shell->parsing_cmd.tokens;
-	while (tmp)
+	tokens = shell->parsing_cmd.tokens;
+	value = NULL;
+	while (tokens)
 	{
-		if (!contains_valid_key(shell, tmp))
+		if (!contains_valid_key(shell, tokens))
 		{
-			tmp = tmp->next;
+			tokens = tokens->next;
 			continue ;
 		}
-		value = NULL;
-		if (ft_str_starts_with(tmp->value, "?"))
+		if (ft_str_starts_with(tokens->value, "?"))
 		{
 			env_finded = env_map_find_node(shell->env_map, "?");
-			if (env_finded == NULL)
+			if (!env_finded)
 				value = ft_strdup("0");
 			else
-			{
-				value = ft_strjoin(env_finded->value, tmp->value + 1);
-				if (value == NULL)
-					return ;
-			}
+				value = ft_strdup(env_finded->value);
+			if (!value)
+				return ;
 		}
 		else
 		{
-			env_finded = env_map_find_node(shell->env_map, tmp->value);
+			env_finded = env_map_find_node(shell->env_map, tokens->value);
 			if (env_finded == NULL)
+			{
 				value = ft_strdup("");
+				if (!value)
+					return ;
+			}
 			else
 			{
 				value = ft_strdup(env_finded->value);
-				if (tmp->type != QUOTED)
+				if (!value)
+					return;
+				if (tokens->type != QUOTED)
 				{
 					trim = ft_strtrim(value, " ");
 					free(value);
@@ -234,8 +247,13 @@ static void	treat_variable_keys(t_minishell *shell)
 				}
 			}
 		}
-		process_expand(shell, tmp, value);
-		tmp = tmp->next;
+		process_expand(shell, tokens, value);
+		if (value)
+		{
+			free(value);
+			value = NULL;
+		}
+		tokens = tokens->next;
 	}
 }
 

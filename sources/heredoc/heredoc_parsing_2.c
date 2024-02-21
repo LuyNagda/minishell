@@ -42,8 +42,7 @@ int	here_doc_execution(t_minishell *shell, t_commands *tmp, int i)
 		return (free(line), 1);
 	if (check_for_eof(tmp->arguments[i], line))
 		return (0);
-	if (!tmp->args_quoted[i])
-		line = expand_line(line, shell->env_map, 1);
+	line = expand_line(line, shell->env_map, !tmp->args_quoted[i]);
 	while (ft_strncmp(tmp->arguments[i],
 			line, ft_strlen(tmp->arguments[i])))
 	{
@@ -55,8 +54,7 @@ int	here_doc_execution(t_minishell *shell, t_commands *tmp, int i)
 			return (free(line), 1);
 		if (check_for_eof(tmp->arguments[i], line))
 			return (0);
-		if (!tmp->args_quoted[i])
-			line = expand_line(line, shell->env_map, 1);
+		line = expand_line(line, shell->env_map, !tmp->args_quoted[i]);
 	}
 	free(line);
 }

@@ -64,23 +64,20 @@ char	*expand_line(char *line, t_env_map *map, int must_expanded)
 				before_key = ft_substr(line, 0, index);
 				key = ft_substr(line, index, key_len);
 				after_key = ft_substr(&line[index + key_len], 0, ft_strlen(line));
+
 				t_env_map *node = env_map_find_node(map, &key[1]);
+				free(key);
 				if (node)
-				{
-					free(key);
 					key = ft_strdup(node->value);
-				}
 				else
-				{
-					free(key);
 					key = ft_strdup("");
-				}
 				key_len = ft_strlen(key);
 				free(line);
 				line = ft_strjoin(before_key, key);
 				free(before_key);
 				free(key);
 				key = ft_strjoin(line, after_key);
+				free(after_key);
 				free(line);
 				line = ft_strdup(key);
 				free(key);
