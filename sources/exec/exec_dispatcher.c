@@ -34,10 +34,7 @@ static t_boolean	has_error(t_minishell *shell)
 	while (tmp)
 	{
 		if (tmp->error_during_creation)
-		{
-			//TODO: Error during parsing
 			return (_true);
-		}
 		tmp = tmp->next_node;
 	}
 	return (_false);

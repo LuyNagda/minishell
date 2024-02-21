@@ -14,22 +14,21 @@
 #include "string_utils.h"
 #include <stdlib.h>
 
-
 /**
- * @brief Rebuilds a string from the tokens stored in the minishell structure.
+ * @brief Rebuilds a string from the tokens stored in the minishell struct.
  *
- * This function concatenates the values of tokens in the minishell's parsing command
+ * This function append the V of tokens in the minishell's parsing command
  * to reconstruct the original command string.
  *
  * @param shell A pointer to the minishell structure.
- * @return A dynamically allocated string containing the reconstructed command.
- *         The caller is responsible for freeing the memory allocated for the string.
+ * @return A dynamically allocated str contains the reconstructed command.
+ *         The caller is responsible for freeing memory for the str.
  */
-char *rebuild_string_from_token(t_minishell *shell)
+char	*rebuild_string_from_token(t_minishell *shell)
 {
-	t_tokens *tokens;
-	char *str_1;
-	char *str_2;
+	t_tokens	*tokens;
+	char		*str_1;
+	char		*str_2;
 
 	tokens = shell->parsing_cmd.tokens;
 	str_1 = ft_strdup("");
@@ -44,13 +43,13 @@ char *rebuild_string_from_token(t_minishell *shell)
 	return (str_1);
 }
 
-void append_token(t_tokens *appended, t_tokens *to_append)
+void	append_token(t_tokens *appended, t_tokens *to_append)
 {
 	char	*joined;
 	char	*def;
 
 	if ((!appended || !appended->value) || (!to_append || !to_append->value))
-		return;
+		return ;
 	def = NULL;
 	if (appended->type == ENV_VALUE && to_append->type == ENV_VALUE)
 		def = ft_strjoin(appended->value, "");
