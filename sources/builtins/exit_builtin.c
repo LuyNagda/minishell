@@ -30,14 +30,15 @@ static t_boolean	has_only_digits(char *str)
 	return (_true);
 }
 
-static char	*increment_for_zero(char *str)
+static char	*skip_chars(char *str)
 {
 	size_t	index;
 	char	*copy;
 
 	index = 0;
 	copy = str;
-	while (str[index] == '0' && str[index + 1] && str[index + 1] == '0')
+	while (str[index] == '0' && str[index + 1] && str[index + 1] == '0' || \
+		ft_is_whitespace(str[index]))
 	{
 		index++;
 		copy++;
@@ -54,6 +55,7 @@ void	exit_with_args(t_minishell *shell, t_commands *command,
 	if (ft_get_arguments_amount(command) > 1)
 	{
 		args = command->arguments[1];
+		args = skip_chars(args);
 		if (!has_only_digits(args))
 		{
 			printf("minishell: exit: %s: numeric argument required\n", args);
@@ -67,7 +69,7 @@ void	exit_with_args(t_minishell *shell, t_commands *command,
 			*exit = _false;
 		}
 		else
-			*code = ft_atoi(increment_for_zero(args));
+			*code = ft_atoi(args);
 	}
 }
 
