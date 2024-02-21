@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/21 13:57:17 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/21 14:19:25 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,9 +145,12 @@ int					is_builtins(t_commands *command);
 char				**convert_path_to_array(t_env_map *env_map);
 char				*find_command(t_env_map *map, char *command);
 void				free_and_exit(t_minishell *shell, t_pipex *pipex, int code);
-void				here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex);
-void				normal_redirections(t_minishell *shell, t_commands *command, t_pipex *pipex);
-int					here_doc_execution(t_minishell *shell, t_commands *tmp, int i);
+void				here_doc(t_minishell *shell,
+						t_commands *command, t_pipex *pipex);
+void				normal_redirections(t_minishell *shell,
+						t_commands *command, t_pipex *pipex);
+int					here_doc_execution(t_minishell *shell,
+						t_commands *tmp, int i);
 
 /* *****************************************************/
 /* ********************** ENV **************************/
@@ -204,9 +207,12 @@ int					has_heredoc(t_commands *command, char *here_doc);
 int					count_redirection(t_commands *command, char *character);
 void				remove_file_from_command(t_commands *command,
 						char *character, int i);
-int					has_multiple_redirection(t_commands *command, char *character);
-char				**get_export_values(t_commands *command, int *i, int *has_equal);
-void				add_back_command_path(t_minishell *shell, t_commands *command);
+int					has_multiple_redirection(t_commands *command,
+						char *character);
+char				**get_export_values(t_commands *command,
+						int *i, int *has_equal);
+void				add_back_command_path(t_minishell *shell,
+						t_commands *command);
 int					ft_string_in_quotes(char *str);
 char				*expand_line(char *line, t_env_map *map, int must_expanded);
 
@@ -217,7 +223,8 @@ char				*expand_line(char *line, t_env_map *map, int must_expanded);
 void				tokenize_input(t_minishell *shell);
 t_tokens			*ft_create_token(char *token, t_token_type token_type);
 void				ft_add_back_token(t_tokens **tokens_list, t_tokens *token);
-void				add_token_after(t_tokens **tokens, t_tokens *new_token, t_tokens *after);
+void				add_token_after(t_tokens **tokens,
+						t_tokens *new_token, t_tokens *after);
 void				ft_delete_token(t_tokens **head, t_tokens *token);
 void				ft_flush_tokens(t_tokens *tokens);
 size_t				get_current_token_pos(t_tokens *tokens);
@@ -231,7 +238,7 @@ size_t				ft_get_tokens_type_amount(t_tokens *tokens,
 long long			ft_next_token_pos(t_tokens *tok,
 						t_token_type type, long long start);
 size_t				get_index_from_token(t_minishell *shell, size_t token_pos);
-void	ft_free_token(t_tokens *token);
+void				ft_free_token(t_tokens *token);
 
 /* *****************************************************/
 /* ********************* UTILS *************************/
@@ -277,6 +284,9 @@ void				ft_display_env_map(t_env_map *env_map);
 void				ft_display_env_array(char **env_array);
 void				ft_display_tokens(t_tokens *tokens);
 
-extern int	g_signal_state;
+/* *****************************************************/
+/* ******************* GLOBAL VAR **********************/
+/* *****************************************************/
+extern int			g_signal_state;
 
 #endif

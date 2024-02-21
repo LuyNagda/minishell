@@ -6,12 +6,11 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 12:28:58 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/31 14:49:40 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/21 14:51:58 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 int	ft_quote_is_closed(const char *line)
 {
@@ -59,7 +58,8 @@ int	ft_index_is_in_quotes(const char *line, size_t pos)
 			else if (line[index] == '\'')
 				open = 2;
 		}
-		else if ((open == 1 && line[index] == '\"') || (open == 2 && line[index] == '\''))
+		else if ((open == 1 && line[index] == '\"')
+			|| (open == 2 && line[index] == '\''))
 			open = 0;
 		if (index == pos)
 			break ;

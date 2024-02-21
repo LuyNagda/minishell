@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:20:38 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/21 13:23:33 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/21 14:50:39 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,9 @@
 #include <stdio.h>
 #include <unistd.h>
 
-static void handle_heredoc_signal(int signum)
+static void	handle_heredoc_signal(int signum)
 {
 	g_signal_state = signum;
-
 	if (signum == SIGINT)
 	{
 		ft_putstr_fd("\n", 0);
@@ -32,7 +31,7 @@ static void handle_heredoc_signal(int signum)
 	}
 }
 
-static void handle_heredoc_signals(int signum)
+static void	handle_heredoc_signals(int signum)
 {
 	g_signal_state = signum;
 	if (access(".here_doc", F_OK) == 0)
@@ -46,7 +45,8 @@ void	hook_heredoc_signal(void)
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = SA_RESTART;
 	sig.sa_handler = handle_heredoc_signals;
-	if (sigaction(SIGINT, &sig, NULL) == -1 || sigaction(SIGQUIT, &sig, NULL) == -1)
+	if (sigaction(SIGINT, &sig, NULL) == -1
+		|| sigaction(SIGQUIT, &sig, NULL) == -1)
 	{
 		perror("sigaction");
 		exit(1);

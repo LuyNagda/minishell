@@ -40,6 +40,7 @@ FILES =	main.c							\
 		utils/str_utils_2.c				\
 		utils/messages_utils.c			\
 		utils/debug.c					\
+		utils/utils.c					\
 		utils/merge_sort.c				\
 		signals/exit_signal.c			\
 		signals/pipe_signal.c			\

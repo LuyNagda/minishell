@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:50 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/24 16:37:34 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/21 14:31:27 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int	ft_string_in_quotes(char *str)
 	return (0);
 }
 
-static char	**populate_export_with_value(t_commands *command, int *i, int *has_equal)
+static char	**populate_export_with_value(t_commands *command,
+				int *i, int *has_equal)
 {
 	char	**export;
 
@@ -39,7 +40,8 @@ static char	**populate_export_with_value(t_commands *command, int *i, int *has_e
 	return (export);
 }
 
-static char **populate_export_without_value(t_commands *command, int *i, int *has_equal)
+static char	**populate_export_without_value(t_commands *command,
+				int *i, int *has_equal)
 {
 	char	**export;
 
@@ -52,7 +54,8 @@ static char **populate_export_without_value(t_commands *command, int *i, int *ha
 	return (export);
 }
 
-static char **populate_export(t_commands *command, int *i, int *has_equal)
+static char	**populate_export(t_commands *command,
+				int *i, int *has_equal)
 {
 	char	**export;
 
@@ -79,11 +82,11 @@ char	**get_export_values(t_commands *command, int *i, int *has_equal)
 	if (!(command->arguments[*i]))
 		return (NULL);
 	if (ft_str_contains(command->arguments[*i], "=",
-		ft_strlen(command->arguments[*i]) - 1)
+			ft_strlen(command->arguments[*i]) - 1)
 		&& ft_string_in_quotes(command->arguments[*i + 1]))
 		return (populate_export_with_value(command, i, has_equal));
 	else if (ft_str_contains(command->arguments[*i], "=",
-		ft_strlen(command->arguments[*i]) - 1)
+			ft_strlen(command->arguments[*i]) - 1)
 		&& !ft_string_in_quotes(command->arguments[*i + 1]))
 		return (populate_export_without_value(command, i, has_equal));
 	else

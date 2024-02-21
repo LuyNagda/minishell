@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:50 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/29 15:43:50 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/21 14:33:03 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ static int	ft_str_contains_any(char *key, char *charset)
 
 static int	var_name_check(char **export)
 {
-	if ((ft_is_alpha(export[0][0]) || export[0][0] == '_') && !ft_str_contains_any(export[0], "-!#$%^&*()\"\'?><.~`"))
+	if ((ft_is_alpha(export[0][0]) || export[0][0] == '_')
+		&& !ft_str_contains_any(export[0], "-!#$%^&*()\"\'?><.~`"))
 		return (0);
 	ft_putstr_fd("minishell: export: '", 2);
 	ft_putstr_fd(export[0], 2);
@@ -47,7 +48,8 @@ static int	var_name_check(char **export)
 	return (1);
 }
 
-static void	export_new_var(t_minishell *shell, t_env_map *node, char **export, int has_equal)
+static void	export_new_var(t_minishell *shell,
+			t_env_map *node, char **export, int has_equal)
 {
 	if (node == NULL)
 	{

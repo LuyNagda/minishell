@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/20 13:16:04 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/21 14:39:18 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	free_and_exit(t_minishell *shell, t_pipex *pipex, int code)
 {
 	t_env_map	*node;
 	int			status_code;
-	
+
 	node = env_map_find_node(shell->env_map, "?");
 	if (code != -1)
 		status_code = code;

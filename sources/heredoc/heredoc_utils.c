@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 18:05:56 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/21 12:45:05 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/21 14:46:20 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*expand_line(char *line, t_env_map *map, int must_expanded)
 			if ((index > 0 && line[index - 1] == '$') && line[index] == '$')
 			{
 				index++;
-				continue;
+				continue ;
 			}
 			if (line[index] == '$' && ft_is_alpha(line[index + 1]) || line[index + 1] == '_' || line[index + 1] == '?')
 			{
@@ -85,12 +85,12 @@ char	*expand_line(char *line, t_env_map *map, int must_expanded)
 				line = ft_strdup(key);
 				free(key);
 				index = index + key_len;
-				continue;
+				continue ;
 			}
 		}
 		index++;
 	}
-	return line;
+	return (line);
 }
 
 void	here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex)

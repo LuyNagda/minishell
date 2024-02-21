@@ -6,16 +6,17 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:06 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/29 08:47:28 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/21 14:45:32 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <char_utils.h>
-#include <stdio.h>
-#include "minishell.h"
 
-t_parsing_result parse_argument(char *arg)
+#include "minishell.h"
+#include <stdio.h>
+#include "char_utils.h"
+
+t_parsing_result	parse_argument(char *arg)
 {
-	size_t index;
+	size_t	index;
 
 	if (!arg)
 		return (ERROR);
@@ -31,19 +32,21 @@ t_parsing_result parse_argument(char *arg)
 	return (SUCCESS);
 }
 
-void exec_unset(t_minishell *shell, t_commands *command)
+void	exec_unset(t_minishell *shell, t_commands *command)
 {
-	size_t index;
+	size_t	index;
 
 	index = 1;
 	while (command->arguments[index])
 	{
 		if (parse_argument(command->arguments[index]) != SUCCESS)
 		{
-			printf("unset: `%s': not a valid identifier\n", command->arguments[index++]);
-			continue;
+			printf("unset: `%s': not a valid identifier\n",
+				command->arguments[index++]);
+			continue ;
 		}
-		shell->env_map = env_map_remove_from_key(shell->env_map, command->arguments[index]);
+		shell->env_map = env_map_remove_from_key(shell->env_map,
+				command->arguments[index]);
 		if (shell->env_map == NULL)
 			env_map_replace_or_add(shell->env_map, "?", "1");
 		else

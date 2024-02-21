@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/20 18:33:57 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/21 14:56:08 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,22 @@ static void	throw_env_error(t_minishell *shell)
 		ft_free_split(shell->envp);
 }
 
+static void	tokenize_and_run(t_minishell *shell)
+{
+	add_history(shell->sended_line);
+	tokenize_input(shell);
+	if (on_parse(shell) == SUCCESS)
+	{
+		if (post_parsing(shell) == SUCCESS
+			&& ft_strlen(shell->commands->arguments[0]))
+			ft_dispatch_command(shell);
+		ft_flush_command_list(shell->commands);
+	}
+	ft_flush_tokens(shell->parsing_cmd.tokens);
+	if (shell->sended_line)
+		free(shell->sended_line);
+}
+
 static void	ft_shell_loop(t_minishell *shell)
 {
 	char	*line;
@@ -66,18 +82,7 @@ static void	ft_shell_loop(t_minishell *shell)
 		free(line);
 		if (pre_parsing(shell) != SUCCESS)
 			continue ;
-		add_history(shell->sended_line);
-		tokenize_input(shell);
-		if (on_parse(shell) == SUCCESS)
-		{
-			if (post_parsing(shell) == SUCCESS
-				&& ft_strlen(shell->commands->arguments[0]))
-				ft_dispatch_command(shell);
-			ft_flush_command_list(shell->commands);
-		}
-		ft_flush_tokens(shell->parsing_cmd.tokens);
-		if (shell->sended_line)
-			free(shell->sended_line);
+		tokenize_and_run(shell);
 	}
 }
 
@@ -104,16 +109,5 @@ int	main(int argc, char **argv, char **env)
 	rl_clear_message();
 	rl_clear_visible_line();
 	rl_clear_pending_input();
-
 	return (status_code);
-}
-
-t_minishell *get_minishell(t_minishell *minishell)
-{
-	static t_minishell	*shell = NULL;
-
-	if (shell == NULL && minishell != NULL)
-		shell = minishell;
-
-	return (shell);
 }
