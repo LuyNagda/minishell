@@ -128,11 +128,10 @@ static void delete_previous(t_minishell *shell, t_tokens *current)
 static void treat_spaced_values(t_minishell *shell, t_tokens *current, char *value)
 {
 	char **split;
-	t_tokens *new;
 	char *str;
+	t_tokens *new;
 	size_t split_size;
 
-	printf("this is the value: %s\n", value);
 	if (!ft_str_contains(value, " ", 0))
 		return ;
 	split = ft_split(value, ' ');
@@ -195,14 +194,10 @@ static void	treat_variable_keys(t_minishell *shell)
 
 static void process_expand(t_minishell *shell, t_tokens *tmp, char *value)
 {
-
-	char *str;
-
+	char **split;
+	char *dup;
 
 	if (value == NULL)
-		return ;
-	str = ft_strdup(value);
-	if (str == NULL)
 		return ;
 	if (ft_str_contains(value, " ", 0))
 	{
@@ -210,20 +205,25 @@ static void process_expand(t_minishell *shell, t_tokens *tmp, char *value)
 		{
 			free(tmp->previous->value);
 			tmp->previous->value = NULL;
-			char **test = ft_split(str, ' ');
-			char *dup = ft_strdup(test[0]);
+			split = ft_split(value, ' ');
+			if (split == NULL)
+				return ;
+			dup = ft_strdup(split[0]);
+			if (dup == NULL)
+				return ;
 			tmp->previous->value = dup;
 			tmp->previous->type = ENV_VALUE;
+			ft_free_split(split);
 		}
 		free(tmp->value);
 		tmp->value = ft_strdup(" ");
 		tmp->type = _SPACE;
-		treat_spaced_values(shell, tmp, str);
+		treat_spaced_values(shell, tmp, value);
 	}
 	else {
 		delete_previous(shell, tmp);
 		free(tmp->value);
-		tmp->value = str;
+		tmp->value = value;
 		tmp->type = ENV_VALUE;
 	}
 	free(value);
@@ -257,6 +257,5 @@ t_parsing_result	on_parse(t_minishell *shell)
 		return (ft_putstr_fd(shell->messages.whitepipe_error, 2), free(shell->sended_line), INVALID_INPUT);
 	treat_variable_keys(shell);
 	append_quoted(&shell->parsing_cmd.tokens);
-	//ft_display_tokens(shell->parsing_cmd.tokens);
 	return (SUCCESS);
 }
