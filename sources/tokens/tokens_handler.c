@@ -13,9 +13,9 @@
 #include "minishell.h"
 #include "stdlib.h"
 
-t_tokens *ft_create_token(char *token, t_token_type token_type)
+t_tokens	*ft_create_token(char *token, t_token_type token_type)
 {
-	t_tokens *tokens;
+	t_tokens	*tokens;
 
 	tokens = malloc(sizeof(t_tokens));
 	if (!tokens)
@@ -27,10 +27,10 @@ t_tokens *ft_create_token(char *token, t_token_type token_type)
 	return (tokens);
 }
 
-void ft_add_back_token(t_tokens **tokens_list, t_tokens *token)
+void	ft_add_back_token(t_tokens **tokens_list, t_tokens *token)
 {
-	t_tokens *tmp;
-	size_t pos;
+	t_tokens	*tmp;
+	size_t		pos;
 
 	tmp = *tokens_list;
 	pos = 1;
@@ -39,7 +39,7 @@ void ft_add_back_token(t_tokens **tokens_list, t_tokens *token)
 		(*tokens_list)->type = token->type;
 		(*tokens_list)->value = token->value;
 		free(token);
-		return;
+		return ;
 	}
 	while (tmp->next && pos++)
 		tmp = tmp->next;
@@ -47,7 +47,7 @@ void ft_add_back_token(t_tokens **tokens_list, t_tokens *token)
 	tmp->next = token;
 }
 
-void add_token_after(t_tokens **tokens, t_tokens *new_token, t_tokens *after)
+void	add_token_after(t_tokens **tokens, t_tokens *new_token, t_tokens *after)
 {
 	t_tokens	*tmp;
 
@@ -56,21 +56,18 @@ void add_token_after(t_tokens **tokens, t_tokens *new_token, t_tokens *after)
 		ft_add_back_token(tokens, new_token);
 		return ;
 	}
-	else
-	{
-		tmp = after->next;
-		after->next = new_token;
-		new_token->previous = after;
-		new_token->next = tmp;
-		if (tmp)
-			tmp->previous = new_token;
-	}
+	tmp = after->next;
+	after->next = new_token;
+	new_token->previous = after;
+	new_token->next = tmp;
+	if (tmp)
+		tmp->previous = new_token;
 }
 
-void ft_delete_token(t_tokens **head, t_tokens *token)
+void	ft_delete_token(t_tokens **head, t_tokens *token)
 {
 	if (*head == NULL || token == NULL)
-		return;
+		return ;
 	if (*head == token)
 		*head = token->next;
 	if (token->next != NULL)
@@ -90,9 +87,9 @@ void	ft_free_token(t_tokens *token)
 	free(token);
 }
 
-void ft_flush_tokens(t_tokens *tokens)
+void	ft_flush_tokens(t_tokens *tokens)
 {
-	t_tokens *tmp;
+	t_tokens	*tmp;
 
 	while (tokens)
 	{
