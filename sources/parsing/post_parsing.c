@@ -34,12 +34,41 @@ static void	remove_char_string(char *str, char d)
 	str[final_index] = '\0';
 }
 
+static void	replace_quotes_loop(t_commands *commands, size_t args_index, \
+	size_t *str_index, int *quote_type)
+{
+	char	c;
+
+	while (commands->arguments[args_index][(*str_index)])
+	{
+		c = commands->arguments[args_index][(*str_index)];
+		if (c == '\'')
+		{
+			if (*quote_type == 0)
+				*quote_type = 1;
+			else if (*quote_type == 1)
+				*quote_type = 0;
+			if (*quote_type == 1 || *quote_type == 0)
+				commands->arguments[args_index][(*str_index)] = '\a';
+		}
+		else if (c == '\"')
+		{
+			if (*quote_type == 0)
+				*quote_type = 2;
+			else if (*quote_type == 2)
+				*quote_type = 0;
+			if (*quote_type == 2 || *quote_type == 0)
+				commands->arguments[args_index][(*str_index)] = '\a';
+		}
+		(*str_index)++;
+	}
+}
+
 static void	remove_quotes_loop(t_commands *commands)
 {
 	size_t	args_index;
 	size_t	str_index;
 	int		quote_type;
-	char	c;
 
 	args_index = 0;
 	while (commands->arguments[args_index])
@@ -52,29 +81,7 @@ static void	remove_quotes_loop(t_commands *commands)
 		}
 		str_index = 0;
 		quote_type = 0;
-		while (commands->arguments[args_index][str_index])
-		{
-			c = commands->arguments[args_index][str_index];
-			if (c == '\'')
-			{
-				if (quote_type == 0)
-					quote_type = 1;
-				else if (quote_type == 1)
-					quote_type = 0;
-				if (quote_type == 1 || quote_type == 0)
-					commands->arguments[args_index][str_index] = '\a';
-			}
-			else if (c == '\"')
-			{
-				if (quote_type == 0)
-					quote_type = 2;
-				else if (quote_type == 2)
-					quote_type = 0;
-				if (quote_type == 2 || quote_type == 0)
-					commands->arguments[args_index][str_index] = '\a';
-			}
-			str_index++;
-		}
+		replace_quotes_loop(commands, args_index, &str_index, &quote_type);
 		remove_char_string(commands->arguments[args_index], '\a');
 		args_index++;
 	}

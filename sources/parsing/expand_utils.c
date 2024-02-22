@@ -61,12 +61,46 @@ static int	contains_valid_key(t_minishell *shell, t_tokens *token)
 	return (free(rebuilded_string), _true);
 }
 
-static void	process_expand(t_minishell *shell, t_tokens *tmp, char *value)
+static t_boolean	process_previous_token(t_tokens *tmp, char *str)
 {
 	char	**split;
 	char	*dup;
-	char	*str;
+
+	free(tmp->previous->value);
+	tmp->previous->value = NULL;
+	split = ft_split(str, ' ');
+	if (split == NULL)
+		return (_true);
+	dup = ft_strdup(split[0]);
+	if (dup == NULL)
+		return (_true);
+	tmp->previous->value = dup;
+	tmp->previous->type = ENV_VALUE;
+	ft_free_split(split);
+	return (_false);
+}
+
+static t_boolean	process_space(t_minishell *shell, t_tokens *tmp, char *str)
+{
 	char	*space;
+
+	if (tmp->previous)
+		if (process_previous_token(tmp, str))
+			return (_true);
+	free(tmp->value);
+	space = ft_strdup(" ");
+	if (space == NULL)
+		return (_true);
+	tmp->value = space;
+	tmp->type = _SPACE;
+	treat_spaced_values(shell, tmp, str);
+	free(str);
+	return (_false);
+}
+
+static void	process_expand(t_minishell *shell, t_tokens *tmp, char *value)
+{
+	char	*str;
 
 	if (value == NULL)
 		return ;
@@ -74,48 +108,69 @@ static void	process_expand(t_minishell *shell, t_tokens *tmp, char *value)
 	if (str == NULL)
 		return ;
 	if (ft_str_contains(str, " ", 0))
-	{
-		if (tmp->previous)
-		{
-			free(tmp->previous->value);
-			tmp->previous->value = NULL;
-			split = ft_split(str, ' ');
-			if (split == NULL)
-				return ;
-			dup = ft_strdup(split[0]);
-			if (dup == NULL)
-				return ;
-			tmp->previous->value = dup;
-			tmp->previous->type = ENV_VALUE;
-			ft_free_split(split);
-		}
-		free(tmp->value);
-		space = ft_strdup(" ");
-		if (space == NULL)
+		if (process_space(shell, tmp, str))
 			return ;
-		tmp->value = space;
-		tmp->type = _SPACE;
-		treat_spaced_values(shell, tmp, str);
-		free(str);
+	delete_prev_token(shell, tmp);
+	free(tmp->value);
+	tmp->value = str;
+	tmp->type = ENV_VALUE;
+}
+
+t_boolean	expand_status(t_minishell *shell, char **value)
+{
+	t_env_map	*env_finded;
+
+	env_finded = env_map_find_node(shell->env_map, "?");
+	if (!env_finded)
+		*value = ft_strdup("0");
+	else
+		*value = ft_strdup(env_finded->value);
+	if (!*value)
+		return (_true);
+	return (_false);
+}
+
+t_boolean	expand_normal(t_minishell *shell, t_tokens *tokens, char **value)
+{
+	char		*trim;
+	t_env_map	*env_finded;
+
+	env_finded = env_map_find_node(shell->env_map, tokens->value);
+	if (env_finded == NULL)
+	{
+		*value = ft_strdup("");
+		if (!*value)
+			return (_true);
 	}
 	else
 	{
-		delete_prev_token(shell, tmp);
-		free(tmp->value);
-		tmp->value = str;
-		tmp->type = ENV_VALUE;
+		*value = ft_strdup(env_finded->value);
+		if (!*value)
+			return (_true);
+		if (tokens->type != QUOTED)
+		{
+			trim = ft_strtrim(*value, " ");
+			free(*value);
+			*value = trim;
+		}
+	}
+	return (_false);
+}
+
+void	free_value(char **value)
+{
+	if (*value)
+	{
+		free(*value);
+		*value = NULL;
 	}
 }
 
-void	treat_variable_keys(t_minishell *shell)
+void	treat_variable_keys(t_minishell *shell, char *value)
 {
 	t_tokens	*tokens;
-	t_env_map	*env_finded;
-	char		*value;
-	char		*trim;
 
 	tokens = shell->parsing_cmd.tokens;
-	value = NULL;
 	while (tokens)
 	{
 		if (!contains_valid_key(shell, tokens))
@@ -125,42 +180,16 @@ void	treat_variable_keys(t_minishell *shell)
 		}
 		if (ft_str_starts_with(tokens->value, "?"))
 		{
-			env_finded = env_map_find_node(shell->env_map, "?");
-			if (!env_finded)
-				value = ft_strdup("0");
-			else
-				value = ft_strdup(env_finded->value);
-			if (!value)
+			if (expand_status(shell, &value))
 				return ;
 		}
 		else
 		{
-			env_finded = env_map_find_node(shell->env_map, tokens->value);
-			if (env_finded == NULL)
-			{
-				value = ft_strdup("");
-				if (!value)
-					return ;
-			}
-			else
-			{
-				value = ft_strdup(env_finded->value);
-				if (!value)
-					return ;
-				if (tokens->type != QUOTED)
-				{
-					trim = ft_strtrim(value, " ");
-					free(value);
-					value = trim;
-				}
-			}
+			if (expand_normal(shell, tokens, &value))
+				return ;
 		}
 		process_expand(shell, tokens, value);
-		if (value)
-		{
-			free(value);
-			value = NULL;
-		}
+		free_value(&value);
 		tokens = tokens->next;
 	}
 }

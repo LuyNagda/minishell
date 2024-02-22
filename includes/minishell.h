@@ -242,7 +242,7 @@ size_t				get_index_from_token(t_minishell *shell, size_t token_pos);
 void				append_quoted(t_tokens **tokens);
 void				add_space_token(t_minishell *shell, t_tokens *current);
 void				delete_prev_token(t_minishell *shell, t_tokens *current);
-void				treat_variable_keys(t_minishell *shell);
+void				treat_variable_keys(t_minishell *shell, char *value);
 void				ft_free_token(t_tokens *token);
 
 /* *****************************************************/
