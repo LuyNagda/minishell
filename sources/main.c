@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/21 14:56:08 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/22 16:24:19 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,7 @@ static void	throw_env_error(t_minishell *shell)
 {
 	shell->envp = convert_path_to_array(shell->env_map);
 	if (shell->envp == NULL)
-		printf("PATH has been unset.\n");
-	else
-		ft_free_split(shell->envp);
+		printf("PATH has been unset. Only builtin commands can be executed.\n");
 }
 
 static void	tokenize_and_run(t_minishell *shell)
@@ -69,6 +67,7 @@ static void	ft_shell_loop(t_minishell *shell)
 	throw_env_error(shell);
 	while (shell->is_running)
 	{
+		hook_signal_on_start();
 		shell->commands = NULL;
 		line = readline(shell->messages.minishell_prefix);
 		if (!line)
@@ -101,10 +100,11 @@ int	main(int argc, char **argv, char **env)
 		env_array_to_map(&shell, &shell.env_map, env);
 	node = env_map_find_node(shell.env_map, "?");
 	get_minishell(&shell);
-	hook_signal_on_start();
 	ft_shell_loop(&shell);
 	status_code = ft_atoi(node->value);
 	env_map_flush(shell.env_map);
+	if (shell.envp)
+		ft_free_split(shell.envp);
 	rl_clear_history();
 	rl_clear_message();
 	rl_clear_visible_line();
