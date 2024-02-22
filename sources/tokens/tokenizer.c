@@ -15,13 +15,6 @@
 #include "string_utils.h"
 #include <stdlib.h>
 
-static t_boolean	is_word(char c)
-{
-	return (c != '\'' && c != '\"' && c != '$' && \
-		c != '|' && c != '>' && c != '<' && \
-		!ft_is_whitespace(c));
-}
-
 static void	ft_pre_process_token_type(t_tokens *tmp)
 {
 	while (tmp)
@@ -97,30 +90,6 @@ static void	ft_post_process_token_type(t_tokens *tmp, t_minishell *shell)
 	}
 	if (rebuilded)
 		free(rebuilded);
-}
-
-static void	ft_split_to_tokens(t_minishell *shell, size_t cur_pos, int tmp)
-{
-	char	*sended;
-
-	sended = shell->sended_line;
-	while (sended[0])
-	{
-		if (!(is_word(sended[0])))
-		{
-			ft_add_back_token(&shell->parsing_cmd.tokens, \
-			ft_create_token(ft_substr(sended++, 0, 1), 1));
-			continue ;
-		}
-		cur_pos = 0;
-		while (sended[cur_pos] && is_word((sended[cur_pos])))
-			cur_pos++;
-		ft_add_back_token(&shell->parsing_cmd.tokens, \
-		ft_create_token(ft_substr(sended, 0, cur_pos), 1));
-		tmp = 0;
-		while (cur_pos > tmp++)
-			sended++;
-	}
 }
 
 void	tokenize_input(t_minishell *shell)

@@ -219,6 +219,7 @@ char				*expand_line(char *str, t_env_map *map, int must_expanded);
 /* *****************************************************/
 
 void				tokenize_input(t_minishell *shell);
+void				ft_split_to_tokens(t_minishell *shell, size_t cur_pos, int tmp);
 t_tokens			*ft_create_token(char *token, t_token_type token_type);
 void				ft_add_back_token(t_tokens **tokens_list, t_tokens *token);
 void				add_token_after(t_tokens **tokens,
