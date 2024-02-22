@@ -214,6 +214,17 @@ void				add_back_command_path(t_minishell *shell,
 						t_commands *command);
 int					ft_string_in_quotes(char *str);
 char				*expand_line(char *str, t_env_map *map, int must_expanded);
+t_boolean			process_space(t_minishell *shell, t_tokens *tmp, char *str);
+void				process_expand(t_minishell *shell,
+						t_tokens *tmp, char *value);
+t_boolean			expand_status(t_minishell *shell, char **value);
+t_boolean			expand_normal(t_minishell *shell,
+						t_tokens *tokens, char **value);
+void				treat_spaced_values(t_minishell *shell,
+						t_tokens *current, char *value);
+int					contains_valid_key(t_minishell *shell, t_tokens *token);
+t_boolean			process_previous_token(t_tokens *tmp, char *str);
+t_parsing_result	remove_quotes(t_minishell *shell);
 
 /* *****************************************************/
 /* ******************** TOKENS *************************/
