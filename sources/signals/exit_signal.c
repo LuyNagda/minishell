@@ -13,6 +13,7 @@
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string_utils.h>
 #include <readline/readline.h>
 #include <unistd.h>
 #include "minishell.h"
@@ -22,7 +23,6 @@ int	g_signal_state;
 
 static void	handle_exit_signal(int signum)
 {
-	(void) signal;
 	if (signum == SIGQUIT)
 	{
 		env_map_replace(get_minishell(NULL)->env_map, "?", "131");

@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include "string_utils.h"
 
 static void	handle_heredoc_signal(int signum)
 {
