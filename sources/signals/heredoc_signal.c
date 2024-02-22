@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:20:38 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/21 14:50:39 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/22 15:46:57 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,12 @@ static void	handle_heredoc_signal(int signum)
 	if (signum == SIGINT)
 	{
 		ft_putstr_fd("\n", 0);
-		env_map_find_node(get_minishell("NULL")->env_map, "?")->value = "130";
+		env_map_replace(get_minishell(NULL)->env_map, "?", "130");
 		close(0);
 	}
 	if (signum == SIGQUIT)
 	{
+		env_map_replace(get_minishell(NULL)->env_map, "?", "131");
 		ft_putstr_fd("\b\b  \b\b", 0);
 	}
 }
