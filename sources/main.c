@@ -41,7 +41,7 @@ static void	throw_env_error(t_minishell *shell)
 {
 	shell->envp = convert_path_to_array(shell->env_map);
 	if (shell->envp == NULL)
-		printf("PATH has been unset. Only builtin commands can be executed.\n");
+		printf("PATH has been unset.\n");
 	else
 		ft_free_split(shell->envp);
 }

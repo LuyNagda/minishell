@@ -26,7 +26,7 @@ static int	is_only_space(char *line)
 	space_amount = 0;
 	while (line[index])
 	{
-		if (ft_is_space(line[index]))
+		if (ft_is_space(line[index]) || ft_is_whitespace(line[index]))
 			space_amount++;
 		index++;
 	}
@@ -55,7 +55,7 @@ t_parsing_result	pre_parsing(t_minishell *shell)
 	if (!ft_quote_is_closed(shell->sended_line))
 		return (ft_putstr_fd(shell->messages.quote_not_closed, 2),
 			free(shell->sended_line), INVALID_INPUT);
-	ft_replace_whitespace(shell->sended_line, ' ');
+	//ft_replace_whitespace(shell->sended_line, ' ');
 	if (!is_valid_line(shell->sended_line))
 		return (free(shell->sended_line), INVALID_INPUT);
 	return (SUCCESS);
