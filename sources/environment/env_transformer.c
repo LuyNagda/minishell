@@ -6,14 +6,26 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:46:17 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 14:12:29 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/22 15:17:00 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../dependencies/libft/.includes/string_utils.h"
-#include "../dependencies/libft/.includes/memory_utils.h"
+#include "minishell.h"
+#include "string_utils.h"
+#include "memory_utils.h"
 #include <stdlib.h>
+#include <unistd.h>
+
+static void	add_pwd_to_env(t_minishell *shell)
+{
+	char	*pwd;
+
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		return ;
+	env_map_replace_or_add(shell->env_map, "PWD", pwd);
+	free(pwd);
+}
 
 t_env_map	*env_array_to_map(t_minishell *shell,
 				t_env_map **env_map, char **envp)
@@ -40,6 +52,7 @@ t_env_map	*env_array_to_map(t_minishell *shell,
 		env_map_add_back(env_map, node, 0);
 		ft_free_split(split);
 	}
+	add_pwd_to_env(shell);
 	return (*env_map);
 }
 

@@ -6,14 +6,13 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:43:45 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/24 12:45:20 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/22 16:26:02 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "string_utils.h"
 #include "stdlib.h"
-#include "ft_printf.h"
 
 void	env_map_init(t_minishell *shell)
 {
