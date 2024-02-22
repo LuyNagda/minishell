@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/22 16:39:43 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/22 18:02:17 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,22 +97,20 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 static void	wait_for_children(t_minishell *shell, t_pipex *pipex)
 {
 	while (pipex->index < shell->command_amount)
-	{
 		waitpid(pipex->pid[pipex->index++], &pipex->status, 0);
-		if (WIFSIGNALED(pipex->status))
+	if (WIFSIGNALED(pipex->status))
+	{
+		if (WTERMSIG(pipex->status) == 3)
 		{
-			if (WTERMSIG(pipex->status) == 3)
-			{
-				ft_putstr_fd("Quit (core dumped)", 2);
-				pipex->status_string = ft_strdup("131");
-			}
-			if (WTERMSIG(pipex->status) == 2)
-				pipex->status_string = ft_strdup("130");
-			ft_putstr_fd("\n", 2);
+			ft_putstr_fd("Quit (core dumped)", 2);
+			pipex->status_string = ft_strdup("131");
 		}
-		else
-			pipex->status_string = ft_itoa(WEXITSTATUS(pipex->status));
+		if (WTERMSIG(pipex->status) == 2)
+			pipex->status_string = ft_strdup("130");
+		ft_putstr_fd("\n", 2);
 	}
+	else
+		pipex->status_string = ft_itoa(WEXITSTATUS(pipex->status));
 }
 
 void	exec_cmd(t_minishell *shell, t_commands *commands)
