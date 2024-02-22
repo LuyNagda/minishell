@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/22 18:02:17 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/22 18:46:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 
 	pipex.pid = (int *)malloc(sizeof(int) * shell->command_amount);
 	pipex.envp = shell->envp;
+	pipex.status_string = NULL;
 	if (pipex.envp == NULL)
 		return ;
 	pipex.o_pipe[0] = -1;
