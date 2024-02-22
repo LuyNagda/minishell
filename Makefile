@@ -28,6 +28,7 @@ FILES =	main.c							\
 		parsing/pre_parsing.c			\
 		parsing/redirection_parsing.c	\
 		parsing/redirection_parsing_2.c	\
+		parsing/expand_utils.c			\
 		heredoc/heredoc_parsing.c		\
 		heredoc/heredoc_parsing_2.c		\
 		heredoc/heredoc_utils.c			\

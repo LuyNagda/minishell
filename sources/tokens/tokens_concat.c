@@ -65,3 +65,26 @@ void	append_token(t_tokens *appended, t_tokens *to_append)
 	if (joined != NULL)
 		free(joined);
 }
+
+void	append_quoted(t_tokens **tokens)
+{
+	t_tokens	*tmp;
+
+	tmp = *tokens;
+	while (tmp && tmp->next)
+	{
+		if ((tmp->type == QUOTED || tmp->type == SIMPLE_QUOTE || \
+			tmp->type == DOUBLE_QUOTE || tmp->type == WORD || \
+			tmp->type == ENV_VALUE) && \
+			(tmp->next->type == QUOTED || tmp->next->type == SIMPLE_QUOTE || \
+				tmp->next->type == DOUBLE_QUOTE || tmp->next->type == WORD || \
+				tmp->next->type == ENV_VALUE))
+		{
+			append_token(tmp, tmp->next);
+			ft_delete_token(tokens, tmp->next);
+			tmp = *tokens;
+			continue ;
+		}
+		tmp = tmp->next;
+	}
+}

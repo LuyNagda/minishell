@@ -177,7 +177,8 @@ size_t				env_map_get_size(t_env_map *env_map);
 /* ******************** COMMANDS ***********************/
 /* *****************************************************/
 
-t_commands			*build_command_loop(t_minishell *shell, char **args, size_t arg_index);
+t_commands			*build_command_loop(t_minishell *shell, char **args, \
+	size_t arg_index);
 size_t				ft_get_numbers_of_commands(t_commands *commands_list);
 t_commands			*ft_get_command_from_pos(t_commands *command_list,
 						size_t command_node_pos);
@@ -219,7 +220,8 @@ char				*expand_line(char *str, t_env_map *map, int must_expanded);
 /* *****************************************************/
 
 void				tokenize_input(t_minishell *shell);
-void				ft_split_to_tokens(t_minishell *shell, size_t cur_pos, int tmp);
+void				ft_split_to_tokens(t_minishell *shell, \
+	size_t cur_pos, int tmp);
 t_tokens			*ft_create_token(char *token, t_token_type token_type);
 void				ft_add_back_token(t_tokens **tokens_list, t_tokens *token);
 void				add_token_after(t_tokens **tokens,
@@ -237,6 +239,10 @@ size_t				ft_get_tokens_type_amount(t_tokens *tokens,
 long long			ft_next_token_pos(t_tokens *tok,
 						t_token_type type, long long start);
 size_t				get_index_from_token(t_minishell *shell, size_t token_pos);
+void				append_quoted(t_tokens **tokens);
+void				add_space_token(t_minishell *shell, t_tokens *current);
+void				delete_prev_token(t_minishell *shell, t_tokens *current);
+void				treat_variable_keys(t_minishell *shell);
 void				ft_free_token(t_tokens *token);
 
 /* *****************************************************/
@@ -262,6 +268,8 @@ char				*build_str_from_array(char **array);
 t_message			ft_init_messages(void);
 t_env_map			*duplicate_list(t_env_map *head);
 t_env_map			*merge_sort(t_env_map *head);
+int					is_quote(char c);
+int					variable_in_quotes(const char *str, size_t index);
 void				free_duplicate_env(t_env_map *head);
 
 /* *****************************************************/

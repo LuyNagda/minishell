@@ -49,3 +49,26 @@ void	ft_delete_token(t_tokens **head, t_tokens *token)
 	if (token)
 		free(token);
 }
+
+void	delete_prev_token(t_minishell *shell, t_tokens *current)
+{
+	t_tokens	*prev;
+
+	if (current->previous)
+	{
+		prev = current->previous;
+		free(prev->value);
+		prev->value = NULL;
+		ft_delete_token(&shell->parsing_cmd.tokens, prev);
+	}
+}
+
+void	add_space_token(t_minishell *shell, t_tokens *current)
+{
+	t_tokens	*space_token;
+
+	space_token = ft_create_token(ft_strdup(" "), _SPACE);
+	if (space_token == NULL)
+		return ;
+	add_token_after(&shell->parsing_cmd.tokens, space_token, current);
+}
