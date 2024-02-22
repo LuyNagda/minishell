@@ -64,22 +64,6 @@ void	add_token_after(t_tokens **tokens, t_tokens *new_token, t_tokens *after)
 		tmp->previous = new_token;
 }
 
-void	ft_delete_token(t_tokens **head, t_tokens *token)
-{
-	if (*head == NULL || token == NULL)
-		return ;
-	if (*head == token)
-		*head = token->next;
-	if (token->next != NULL)
-		token->next->previous = token->previous;
-	if (token->previous != NULL)
-		token->previous->next = token->next;
-	if (token->value)
-		free(token->value);
-	if (token)
-		free(token);
-}
-
 void	ft_free_token(t_tokens *token)
 {
 	if (token->value)

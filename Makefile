@@ -28,13 +28,16 @@ FILES =	main.c							\
 		parsing/pre_parsing.c			\
 		parsing/redirection_parsing.c	\
 		parsing/redirection_parsing_2.c	\
+		parsing/expand_utils.c			\
 		heredoc/heredoc_parsing.c		\
 		heredoc/heredoc_parsing_2.c		\
 		heredoc/heredoc_utils.c			\
 		tokens/tokenizer.c				\
+		tokens/tokenizer_utils.c		\
 		tokens/tokens_handler.c			\
 		tokens/tokens_concat.c			\
 		tokens/tokens_utils.c			\
+		tokens/tokens_utils_2.c			\
 		utils/quote_utils.c				\
 		utils/str_utils.c				\
 		utils/str_utils_2.c				\
