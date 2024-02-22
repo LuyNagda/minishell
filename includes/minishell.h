@@ -212,7 +212,7 @@ char				**get_export_values(t_commands *command,
 void				add_back_command_path(t_minishell *shell,
 						t_commands *command);
 int					ft_string_in_quotes(char *str);
-char				*expand_line(char *line, t_env_map *map, int must_expanded);
+char				*expand_line(char *str, t_env_map *map, int must_expanded);
 
 /* *****************************************************/
 /* ******************** TOKENS *************************/

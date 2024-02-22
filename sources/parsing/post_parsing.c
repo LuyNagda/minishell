@@ -138,7 +138,7 @@ t_parsing_result	post_parsing(t_minishell *shell)
 		return (free(str), ERROR);
 	if (!specials_is_valid(shell))
 		return (ft_putstr_fd(shell->messages.other_input_error, 2),
-            ft_free_token(end_token), INVALID_INPUT);
+			ft_free_token(end_token), INVALID_INPUT);
 	ft_add_back_token(&shell->parsing_cmd.tokens, end_token);
 	if (!build_command_from_tokens(shell))
 		return (ft_delete_token(&shell->parsing_cmd.tokens, end_token), ERROR);

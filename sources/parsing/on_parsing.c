@@ -238,7 +238,7 @@ static void	treat_variable_keys(t_minishell *shell)
 			{
 				value = ft_strdup(env_finded->value);
 				if (!value)
-					return;
+					return ;
 				if (tokens->type != QUOTED)
 				{
 					trim = ft_strtrim(value, " ");

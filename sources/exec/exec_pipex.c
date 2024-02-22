@@ -98,10 +98,10 @@ static void	wait_for_children(t_minishell *shell, t_pipex *pipex)
 {
 	while (pipex->index < shell->command_amount)
 	{
-		waitpid(pipex->pid[pipex->index++], &pipex->status, 0);	
+		waitpid(pipex->pid[pipex->index++], &pipex->status, 0);
 		if (WIFSIGNALED(pipex->status))
 		{
-            if (WTERMSIG(pipex->status) == 3)
+			if (WTERMSIG(pipex->status) == 3)
 			{
 				ft_putstr_fd("Quit (core dumped)", 2);
 				pipex->status_string = ft_strdup("131");
@@ -109,7 +109,7 @@ static void	wait_for_children(t_minishell *shell, t_pipex *pipex)
 			if (WTERMSIG(pipex->status) == 2)
 				pipex->status_string = ft_strdup("130");
 			ft_putstr_fd("\n", 2);
-        }
+		}
 		else
 			pipex->status_string = ft_itoa(WEXITSTATUS(pipex->status));
 	}
