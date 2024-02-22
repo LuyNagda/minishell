@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/22 16:25:44 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/22 16:39:43 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/wait.h>
+#include "put_utils.h"
+#include "libft.h"
 
 static void	redirections(t_minishell *shell,
 			t_commands *command, t_pipex *pipex)
