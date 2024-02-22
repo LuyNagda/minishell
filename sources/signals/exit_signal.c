@@ -13,6 +13,7 @@
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string_utils.h>
 #include <readline/readline.h>
 #include <unistd.h>
 #include "minishell.h"
@@ -22,16 +23,25 @@ int	g_signal_state;
 
 static void	handle_exit_signal(int signum)
 {
-	(void) signal;
+	char		*str;
+	t_env_map	*node;
+
 	if (signum == SIGQUIT)
 		ft_putstr_fd("\b\b  \b\b", 0);
 	if (signum == SIGINT)
 	{
-		env_map_find_node(get_minishell(NULL)->env_map, "?")->value = "130";
 		ft_putstr_fd("\n", 0);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		str = ft_strdup("130");
+		if (!str)
+			return;
+		node = env_map_find_node(get_minishell(NULL)->env_map, "?");
+		if (!node)
+			return;
+		free(node->value);
+		node->value = str;
 	}
 }
 

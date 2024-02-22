@@ -16,15 +16,26 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include "string_utils.h"
 
 static void	handle_heredoc_signal(int signum)
 {
+	char		*str;
+	t_env_map	*node;
+
 	g_signal_state = signum;
 	if (signum == SIGINT)
 	{
 		ft_putstr_fd("\n", 0);
-		env_map_find_node(get_minishell("NULL")->env_map, "?")->value = "130";
 		close(0);
+		str = ft_strdup("130");
+		if (!str)
+			return;
+		node = env_map_find_node(get_minishell(NULL)->env_map, "?");
+		if (!node)
+			return;
+		free(node->value);
+		node->value = str;
 	}
 	if (signum == SIGQUIT)
 	{
