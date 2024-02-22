@@ -6,13 +6,12 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/22 15:55:04 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/22 16:25:44 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "string_utils.h"
-#include "ft_printf.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -93,12 +92,33 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		pipex->o_pipe[0] = pipex->c_pipe[0];
 }
 
+static void	wait_for_children(t_minishell *shell, t_pipex *pipex)
+{
+	while (pipex->index < shell->command_amount)
+	{
+		waitpid(pipex->pid[pipex->index++], &pipex->status, 0);	
+		if (WIFSIGNALED(pipex->status))
+		{
+            if (WTERMSIG(pipex->status) == 3)
+			{
+				ft_putstr_fd("Quit (core dumped)", 2);
+				pipex->status_string = ft_strdup("131");
+			}
+			if (WTERMSIG(pipex->status) == 2)
+				pipex->status_string = ft_strdup("130");
+			ft_putstr_fd("\n", 2);
+        }
+		else
+			pipex->status_string = ft_itoa(WEXITSTATUS(pipex->status));
+	}
+}
+
 void	exec_cmd(t_minishell *shell, t_commands *commands)
 {
 	t_pipex	pipex;
 
 	pipex.pid = (int *)malloc(sizeof(int) * shell->command_amount);
-	pipex.envp = env_map_to_array(shell->env_map);
+	pipex.envp = shell->envp;
 	if (pipex.envp == NULL)
 		return ;
 	pipex.o_pipe[0] = -1;
@@ -112,12 +132,9 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 	close(pipex.c_pipe[0]);
 	close(pipex.c_pipe[1]);
 	pipex.index = 0;
-	while (pipex.index < shell->command_amount)
-		waitpid(pipex.pid[pipex.index++], &pipex.status, 0);
-	pipex.status_string = ft_itoa(WEXITSTATUS(pipex.status));
+	wait_for_children(shell, &pipex);
 	env_map_replace(shell->env_map, "?", pipex.status_string);
 	free(pipex.status_string);
 	free(pipex.pid);
-	ft_free_split(pipex.envp);
 	unlink(".here_doc");
 }
