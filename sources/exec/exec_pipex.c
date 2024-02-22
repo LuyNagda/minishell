@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/22 16:39:43 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/22 17:44:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 	if (pipex.envp == NULL)
 		return ;
 	pipex.o_pipe[0] = -1;
+	pipex.status_string = NULL;
 	while (commands)
 	{
 		exec_cmd_loop(shell, commands, &pipex);
