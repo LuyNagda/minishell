@@ -15,37 +15,70 @@
 #include "memory_utils.h"
 #include "stdlib.h"
 
-t_commands	*build_command_from_tokens(t_minishell *shell)
+static char	**init_args(t_minishell *shell, char **args, size_t *arg_index)
+{
+	if (!args)
+	{
+		*arg_index = 0;
+		args = ft_calloc(\
+			(ft_get_tokens_amount(shell->parsing_cmd.tokens) + 1), \
+			sizeof(char *));
+		if (args == NULL)
+			return (NULL);
+	}
+	return (args);
+}
+
+static char	**handle_non_pipe(t_tokens *tmp, char **args, size_t *arg_index)
+{
+	char	*dup;
+
+	if (tmp->value && tmp->type != PIPE)
+	{
+		dup = ft_strdup(tmp->value);
+		if (!dup)
+		{
+			ft_free_split(args);
+			return (NULL);
+		}
+		args[(*arg_index)++] = dup;
+	}
+	return (args);
+}
+
+static char	**build_and_add_command(t_minishell *shell, char **args)
+{
+	t_commands	*builded;
+
+	builded = ft_command_new_node(shell->env_map, args);
+	if (!builded)
+		return (ft_free_split(args), NULL);
+	ft_add_command(shell, builded);
+	return (args);
+}
+
+t_commands	*build_command_loop(t_minishell *shell, char **args, size_t i)
 {
 	t_tokens	*tmp;
-	t_commands	*builded;
-	size_t		arg_index;
-	char		**args;
 
 	tmp = shell->parsing_cmd.tokens;
-	args = NULL;
 	while (tmp)
 	{
-		if (!args)
-		{
-			arg_index = 0;
-			args = ft_calloc((ft_get_tokens_amount(shell->parsing_cmd.tokens)
-						+ 1), sizeof(char *));
-			continue ;
-		}
+		args = init_args(shell, args, &i);
+		if (args == NULL)
+			return (NULL);
 		if (tmp->type == _SPACE)
 		{
 			tmp = tmp->next;
 			continue ;
 		}
-		if (tmp->value && tmp->type != PIPE)
-			args[arg_index++] = ft_strdup(tmp->value);
+		args = handle_non_pipe(tmp, args, &i);
+		if (args == NULL)
+			return (NULL);
 		if (tmp->type == PIPE)
 		{
-			builded = ft_command_new_node(shell->env_map, args);
-			if (!builded)
-				return (ft_free_split(args), NULL);
-			ft_add_command(shell, builded);
+			if (build_and_add_command(shell, args) == NULL)
+				return (NULL);
 			args = NULL;
 		}
 		tmp = tmp->next;

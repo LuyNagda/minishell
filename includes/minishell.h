@@ -177,7 +177,7 @@ size_t				env_map_get_size(t_env_map *env_map);
 /* ******************** COMMANDS ***********************/
 /* *****************************************************/
 
-t_commands			*build_command_from_tokens(t_minishell *shell);
+t_commands			*build_command_loop(t_minishell *shell, char **args, size_t arg_index);
 size_t				ft_get_numbers_of_commands(t_commands *commands_list);
 t_commands			*ft_get_command_from_pos(t_commands *command_list,
 						size_t command_node_pos);
