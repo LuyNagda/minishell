@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 18:05:56 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/21 14:46:20 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 17:32:29 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	here_doc_error_handling(t_minishell *shell,
 	command->input_fd = open(".here_doc", O_RDONLY);
 	if (command->input_fd < 0)
 	{
-		perror("here_doc");
+		ft_putendl_fd("Please don't delete the .here_doc file.", 2);
 		free_and_exit(shell, pipex, 126);
 	}
 	if (dup2(command->input_fd, STDIN_FILENO) == -1)

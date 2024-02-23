@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/22 16:25:19 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 17:12:01 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void				exec_unset(t_minishell *shell, t_commands *command);
 void				exec_echo(t_minishell *shell, t_commands *command);
 void				exec_pwd(t_minishell *shell);
 void				exec_cd(t_minishell *shell, t_commands *command);
-void				exec_env(t_minishell *shell);
+void				exec_env(t_minishell *shell, t_commands *command);
 void				exec_exit(t_minishell *shell, t_commands *command);
 int					get_pwd(t_minishell *shell);
 

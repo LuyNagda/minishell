@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:57 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/19 14:31:02 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 17:10:02 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	exec_cd(t_minishell *shell, t_commands *command)
 	env_map_replace_or_add(shell->env_map, "?", "0");
 	node = env_map_find_node(shell->env_map, "HOME");
 	if (command->arguments_amount > 2)
-		err_msg(shell, command, "cd: too many arguments\n");
+		err_msg(shell, command, "cd: too many arguments");
 	else if (node != NULL && command->arguments_amount == 1
 		&& chdir(node->value) != 0)
 		err_msg(shell, command, NULL);

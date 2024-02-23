@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/22 17:32:11 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/23 17:44:35 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ int	main(int argc, char **argv, char **env)
 	if (&shell.env_map)
 		env_array_to_map(&shell, &shell.env_map, env);
 	node = env_map_find_node(shell.env_map, "?");
-	shell.envp = convert_path_to_array(shell.env_map);
 	get_minishell(&shell);
 	ft_shell_loop(&shell);
 	status_code = ft_atoi(node->value);

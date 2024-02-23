@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/22 18:46:07 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/23 17:46:16 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 	t_pipex	pipex;
 
 	pipex.pid = (int *)malloc(sizeof(int) * shell->command_amount);
-	pipex.envp = shell->envp;
+	pipex.envp = convert_path_to_array(shell->env_map);
 	pipex.status_string = NULL;
 	if (pipex.envp == NULL)
 		return ;
@@ -135,6 +135,7 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 	pipex.index = 0;
 	wait_for_children(shell, &pipex);
 	env_map_replace(shell->env_map, "?", pipex.status_string);
+	ft_free_split(pipex.envp);
 	free(pipex.status_string);
 	free(pipex.pid);
 	unlink(".here_doc");

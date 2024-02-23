@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_dispatcher.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/20 14:49:36 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/23 17:22:48 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ int	is_builtins(t_commands *command)
 		|| ft_str_equals(command->arguments[0], "echo")
 		|| ft_str_equals(command->arguments[0], "export")
 		|| ft_str_equals(command->arguments[0], "unset")
-		|| (ft_str_equals(command->arguments[0], "env")
-			&& command->arguments_amount == 1));
+		|| ft_str_equals(command->arguments[0], "env"));
 }
 
 static t_boolean	has_error(t_minishell *shell)
@@ -90,7 +89,7 @@ void	ft_dispatch_builtin(t_minishell *shell, t_commands *command)
 	else if (ft_str_equals(command->arguments[0], "unset"))
 		exec_unset(shell, command);
 	else if (ft_str_equals(command->arguments[0], "env"))
-		exec_env(shell);
+		exec_env(shell, command);
 	else if (ft_str_equals(command->arguments[0], "exit"))
 		exec_exit(shell, command);
 }
