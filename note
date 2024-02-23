@@ -1,7 +1,5 @@
 minishell inside of minishell -> nothing works besides builtins
 << eof cat -> expand has issues when with quotes
-export test="     la" -> echo "$test" many issues on valgrind
-export test="echo     $PATH" (or any text after the echo) -> command not found
 free_exit after dup
 errors handling on cd
 if heredoc file is deleted during heredoc, have better error display
