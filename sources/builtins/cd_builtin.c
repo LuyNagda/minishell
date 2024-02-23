@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:57 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/23 17:10:02 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 18:05:35 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "string_utils.h"
+#include "put_utils.h"
 
 void	err_msg(t_minishell *shell, t_commands *command, char *msg)
 {
 	if (!msg)
-		printf("cd: %s: %s\n", strerror(errno), command->arguments[0]);
+	{
+		ft_putstr_fd("cd: error retrieving current directory: getcwd: ", 2);
+		ft_putstr_fd("cannot access parent directories: No such file or directory\n", 2);
+	}
 	else
-		printf("%s\n", msg);
+		ft_putendl_fd(msg, 2);
 	env_map_replace(shell->env_map, "?", "1");
 }
 

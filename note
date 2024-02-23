@@ -1,11 +1,11 @@
-minishell inside of minishell -> nothing works besides builtins
+FIXED: minishell inside of minishell -> nothing works besides builtins
 << eof cat -> expand has issues when with quotes
 export test="     la" -> echo "$test" many issues on valgrind
 export test="echo     $PATH" (or any text after the echo) -> command not found
-free_exit after dup
-errors handling on cd
+FIXED: free_exit after dup
+FIXED: errors handling on cd
 FIXED: if heredoc file is deleted during heredoc, have better error display
-env -i (removed env) does not display command not found
+FIXED: env -i (removed env) does not display command not found
 "$WDAWDW" or "" or '' doesnt display command not foudn 
 unset removes every variable above target and target
 << "$PATH" cat doesnt stop the heredoc when $PATH is given, the limiter is expanded when it shouldnt
