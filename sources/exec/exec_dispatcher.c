@@ -6,10 +6,11 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/23 17:22:48 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 19:48:14 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include "minishell.h"
 
 int	is_builtins(t_commands *command)
@@ -59,10 +60,18 @@ int	has_redirection(t_commands *command, char character)
 	return (0);
 }
 
+#include "string_utils.h"
+
 void	ft_dispatch_command(t_minishell *shell)
 {
 	t_commands	*tmp;
 
+	if (!ft_strlen(shell->commands->arguments[0]) || ft_str_is_only_whitespace(shell->commands->arguments[0]))
+	{
+		printf("minishell: '' : command not found\n");
+		env_map_replace(shell->env_map, "?", "127");
+		return ;
+	}
 	if (has_error(shell))
 	{
 		env_map_replace(shell->env_map, "?", "1");

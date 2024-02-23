@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 12:28:58 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/21 14:51:58 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 19:46:50 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,7 @@ int	variable_in_quotes(const char *str, size_t index)
 	i = 0;
 	while (i <= index)
 	{
-		if (i == 0)
-			update_quote_status(&ins_s_quotes, &ins_d_quotes, str[i]);
-		else if (is_quote(str[i]))
+		if (i == 0 || is_quote(str[i]))
 			update_quote_status(&ins_s_quotes, &ins_d_quotes, str[i]);
 		i++;
 	}

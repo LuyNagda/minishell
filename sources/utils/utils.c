@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "char_utils.h"
 
 t_minishell	*get_minishell(t_minishell *minishell)
 {
@@ -19,4 +20,18 @@ t_minishell	*get_minishell(t_minishell *minishell)
 	if (shell == NULL && minishell != NULL)
 		shell = minishell;
 	return (shell);
+}
+
+t_boolean ft_str_is_only_whitespace(const char *str)
+{
+	size_t	index;
+
+	index = 0;
+	while (str[index])
+	{
+		if (!ft_is_whitespace(str[index]))
+			return (_false);
+		index++;
+	}
+	return (_true);
 }
