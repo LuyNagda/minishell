@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/23 19:28:10 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 20:41:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,8 @@
 static void	redirections(t_minishell *shell,
 			t_commands *command, t_pipex *pipex)
 {
-	if (shell->here_doc_fd)
-	{
-		if (dup2(shell->here_doc_fd, STDIN_FILENO) == -1)
-			error_msg(shell, pipex, "DUP2 failed");
-		close(shell->here_doc_fd);
-	}
+	here_doc(shell, command, pipex);
+	normal_redirections(shell, command, pipex);
 	if (command->arguments_amount == 0)
 		free_and_exit(shell, pipex, 0);
 	if (command->position > 0 && !command->input_fd && !shell->here_doc_fd)
@@ -129,12 +125,6 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 		return ;
 	pipex.status_string = NULL;
 	pipex.o_pipe[0] = -1;
-	while (tmp)
-	{
-		here_doc(shell, tmp, &pipex);
-		normal_redirections(shell, tmp, &pipex);
-		tmp = tmp->next_node;
-	}
 	while (commands)
 	{
 		exec_cmd_loop(shell, commands, &pipex);
@@ -144,7 +134,6 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 		close(pipex.o_pipe[0]);
 	close(pipex.c_pipe[0]);
 	close(pipex.c_pipe[1]);
-	close(shell->here_doc_fd);
 	pipex.index = 0;
 	wait_for_children(shell, &pipex);
 	env_map_replace(shell->env_map, "?", pipex.status_string);
