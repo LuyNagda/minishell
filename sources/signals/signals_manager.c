@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:08:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/21 15:21:45 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 18:53:12 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	hook_signal_on_start(void)
 static void	handle_ignore_signal(int signal)
 {
 	(void)signal;
+	printf("\n");
 }
 
 void	handle_ignored_signal(void)
