@@ -118,6 +118,15 @@ typedef struct s_minishell
 	char			**envp;
 }					t_minishell;
 
+typedef struct s_heredoc_line
+{
+	size_t	index;
+	size_t	key_len;
+	char	*before_key;
+	char	*key;
+	char	*after_key;
+}					t_heredoc_line;
+
 /* *****************************************************/
 /* ******************** BUILTIN ************************/
 /* *****************************************************/
@@ -214,6 +223,17 @@ void				add_back_command_path(t_minishell *shell,
 						t_commands *command);
 int					ft_string_in_quotes(char *str);
 char				*expand_line(char *str, t_env_map *map, int must_expanded);
+t_boolean			process_space(t_minishell *shell, t_tokens *tmp, char *str);
+void				process_expand(t_minishell *shell,
+						t_tokens *tmp, char *value);
+t_boolean			expand_status(t_minishell *shell, char **value);
+t_boolean			expand_normal(t_minishell *shell,
+						t_tokens *tokens, char **value);
+void				treat_spaced_values(t_minishell *shell,
+						t_tokens *current, char *value);
+int					contains_valid_key(t_minishell *shell, t_tokens *token);
+t_boolean			process_previous_token(t_tokens *tmp, char *str);
+t_parsing_result	remove_quotes(t_minishell *shell);
 
 /* *****************************************************/
 /* ******************** TOKENS *************************/
@@ -242,7 +262,7 @@ size_t				get_index_from_token(t_minishell *shell, size_t token_pos);
 void				append_quoted(t_tokens **tokens);
 void				add_space_token(t_minishell *shell, t_tokens *current);
 void				delete_prev_token(t_minishell *shell, t_tokens *current);
-void				treat_variable_keys(t_minishell *shell);
+void				treat_variable_keys(t_minishell *shell, char *value);
 void				ft_free_token(t_tokens *token);
 
 /* *****************************************************/

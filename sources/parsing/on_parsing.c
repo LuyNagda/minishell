@@ -50,7 +50,7 @@ t_parsing_result	on_parse(t_minishell *shell)
 	if (ft_has_only_whitespace_between_pipes(shell) != 0)
 		return (ft_putstr_fd(shell->messages.whitepipe_error, 2), \
 			free(shell->sended_line), INVALID_INPUT);
-	treat_variable_keys(shell);
+	treat_variable_keys(shell, NULL);
 	append_quoted(&shell->parsing_cmd.tokens);
 	return (SUCCESS);
 }
