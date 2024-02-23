@@ -6,7 +6,11 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/02/23 19:18:30 by lunagda          ###   ########.fr       */
+=======
+/*   Updated: 2024/02/23 18:05:50 by jbadaire         ###   ########.fr       */
+>>>>>>> 91f59a6860b92c65cdcc6e7c98d13962769e823d
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,14 +228,9 @@ void				add_back_command_path(t_minishell *shell,
 int					ft_string_in_quotes(char *str);
 char				*expand_line(char *str, t_env_map *map, int must_expanded);
 t_boolean			process_space(t_minishell *shell, t_tokens *tmp, char *str);
-void				process_expand(t_minishell *shell,
-						t_tokens *tmp, char *value);
 t_boolean			expand_status(t_minishell *shell, char **value);
 t_boolean			expand_normal(t_minishell *shell,
 						t_tokens *tokens, char **value);
-void				treat_spaced_values(t_minishell *shell,
-						t_tokens *current, char *value);
-int					contains_valid_key(t_minishell *shell, t_tokens *token);
 t_boolean			process_previous_token(t_tokens *tmp, char *str);
 t_parsing_result	remove_quotes(t_minishell *shell);
 
@@ -262,7 +261,7 @@ size_t				get_index_from_token(t_minishell *shell, size_t token_pos);
 void				append_quoted(t_tokens **tokens);
 void				add_space_token(t_minishell *shell, t_tokens *current);
 void				delete_prev_token(t_minishell *shell, t_tokens *current);
-void				treat_variable_keys(t_minishell *shell, char *value);
+void				treat_variable_keys(t_minishell *shell);
 void				ft_free_token(t_tokens *token);
 
 /* *****************************************************/
