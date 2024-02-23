@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:13:33 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/21 14:47:12 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 19:22:04 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,16 @@ static void	heredoc_loop(t_minishell *shell,
 		i = 0;
 		while (tmp->arguments[i] && !ft_str_equals(tmp->arguments[i], here_doc))
 			i++;
-		tmp->input_fd = open(".here_doc", O_RDWR | O_CREAT | O_TRUNC, 0777);
-		if (tmp->input_fd < 0)
+		shell->here_doc_fd = open(".here_doc", O_RDWR | O_CREAT | O_TRUNC, 0777);
+		if (shell->here_doc_fd < 0)
 		{
 			perror("here_doc");
-			free_and_exit(shell, pipex, 126);
+			break ;
+			//free_and_exit(shell, pipex, 126);
 		}
 		if (here_doc_execution(shell, tmp, i + 1))
-			free_and_exit(shell, pipex, 0);
+			break ;
+			//free_and_exit(shell, pipex, 0);
 		remove_heredoc_from_command(tmp, here_doc, i);
 		if (count != 1)
 			close(tmp->input_fd);

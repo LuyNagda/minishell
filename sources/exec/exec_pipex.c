@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/23 18:00:13 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 19:28:10 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,15 @@
 static void	redirections(t_minishell *shell,
 			t_commands *command, t_pipex *pipex)
 {
-	here_doc(shell, command, pipex);
-	normal_redirections(shell, command, pipex);
+	if (shell->here_doc_fd)
+	{
+		if (dup2(shell->here_doc_fd, STDIN_FILENO) == -1)
+			error_msg(shell, pipex, "DUP2 failed");
+		close(shell->here_doc_fd);
+	}
 	if (command->arguments_amount == 0)
 		free_and_exit(shell, pipex, 0);
-	if (command->position > 0 && !command->input_fd)
+	if (command->position > 0 && !command->input_fd && !shell->here_doc_fd)
 	{
 		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
 			error_msg(shell, pipex, "DUP2 failed");
@@ -115,14 +119,22 @@ static void	wait_for_children(t_minishell *shell, t_pipex *pipex)
 
 void	exec_cmd(t_minishell *shell, t_commands *commands)
 {
-	t_pipex	pipex;
+	t_pipex		pipex;
+	t_commands	*tmp;
 
+	tmp = commands;
 	pipex.pid = (int *)malloc(sizeof(int) * shell->command_amount);
 	pipex.envp = env_map_to_array(shell->env_map);
 	if (pipex.envp == NULL)
 		return ;
 	pipex.status_string = NULL;
 	pipex.o_pipe[0] = -1;
+	while (tmp)
+	{
+		here_doc(shell, tmp, &pipex);
+		normal_redirections(shell, tmp, &pipex);
+		tmp = tmp->next_node;
+	}
 	while (commands)
 	{
 		exec_cmd_loop(shell, commands, &pipex);
@@ -132,6 +144,7 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 		close(pipex.o_pipe[0]);
 	close(pipex.c_pipe[0]);
 	close(pipex.c_pipe[1]);
+	close(shell->here_doc_fd);
 	pipex.index = 0;
 	wait_for_children(shell, &pipex);
 	env_map_replace(shell->env_map, "?", pipex.status_string);

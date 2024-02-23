@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/23 17:54:26 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 19:18:30 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ typedef struct s_minishell
 
 	t_env_map		*env_map;
 	int				is_builtin;
-	char			**envp;
+	int				here_doc_fd;
 }					t_minishell;
 
 typedef struct s_heredoc_line
