@@ -138,7 +138,7 @@ void				exec_unset(t_minishell *shell, t_commands *command);
 void				exec_echo(t_minishell *shell, t_commands *command);
 void				exec_pwd(t_minishell *shell);
 void				exec_cd(t_minishell *shell, t_commands *command);
-void				exec_env(t_minishell *shell);
+void				exec_env(t_minishell *shell, t_commands *command);
 void				exec_exit(t_minishell *shell, t_commands *command);
 int					get_pwd(t_minishell *shell);
 
@@ -278,7 +278,7 @@ int					ft_str_starts_with(const char *src, const char *value);
 void				ft_replace_whitespace(char *line, char value);
 char				ft_get_last_char_iw(char *line);
 char				ft_get_first_char_iw(char *line);
-void				error_msg(char *string);
+void				error_msg(t_minishell *shell, t_pipex *pipex, char *string);
 char				*build_str_from_array(char **array);
 t_message			ft_init_messages(void);
 t_env_map			*duplicate_list(t_env_map *head);

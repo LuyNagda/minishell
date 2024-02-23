@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:10:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/22 17:43:14 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/23 17:55:34 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 #include <stdio.h>
 #include "libft.h"
 
-void	error_msg(char *string)
+void	error_msg(t_minishell *shell, t_pipex *pipex, char *string)
 {
 	perror(string);
-	exit(EXIT_FAILURE);
+	free_and_exit(shell, pipex, EXIT_FAILURE);
 }
 
 void	free_and_exit(t_minishell *shell, t_pipex *pipex, int code)
@@ -40,8 +40,8 @@ void	free_and_exit(t_minishell *shell, t_pipex *pipex, int code)
 		free(pipex->pid);
 	if (pipex->status_string)
 		free(pipex->status_string);
-	if (shell && shell->envp)
-		ft_free_split(shell->envp);
+	if (pipex->envp)
+		ft_free_split(pipex->envp);
 	if (shell && shell->sended_line)
 		free(shell->sended_line);
 	exit(status_code);
