@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/23 17:46:16 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 18:00:13 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,20 @@ static void	redirections(t_minishell *shell,
 	if (command->position > 0 && !command->input_fd)
 	{
 		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
-			error_msg("DUP2 failed");
+			error_msg(shell, pipex, "DUP2 failed");
 	}
 	if (has_redirection(command, '>'))
 	{
 		redirection_parsing(shell, command, ">", pipex);
 		if (dup2(command->output_fd, STDOUT_FILENO) == -1)
-			error_msg("DUP2 failed");
+			error_msg(shell, pipex, "DUP2 failed");
 		close(command->output_fd);
 	}
 	else if (shell->command_amount != 1
 		&& command->position < shell->command_amount - 1)
 	{
 		if (dup2(pipex->c_pipe[1], STDOUT_FILENO) == -1)
-			error_msg("DUP2 failed");
+			error_msg(shell, pipex, "DUP2 failed");
 	}
 }
 
@@ -74,11 +74,11 @@ static void	exec_command(t_minishell *shell,
 void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
 	if (pipe(pipex->c_pipe) == -1)
-		error_msg("Pipe");
+		error_msg(shell, pipex, "Pipe");
 	handle_ignored_signal();
 	pipex->pid[command->position] = fork();
 	if (pipex->pid[command->position] < 0)
-		error_msg("Fork");
+		error_msg(shell, pipex, "Fork");
 	if (pipex->pid[command->position] == 0)
 	{
 		redirections(shell, command, pipex);
@@ -118,10 +118,10 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 	t_pipex	pipex;
 
 	pipex.pid = (int *)malloc(sizeof(int) * shell->command_amount);
-	pipex.envp = convert_path_to_array(shell->env_map);
-	pipex.status_string = NULL;
+	pipex.envp = env_map_to_array(shell->env_map);
 	if (pipex.envp == NULL)
 		return ;
+	pipex.status_string = NULL;
 	pipex.o_pipe[0] = -1;
 	while (commands)
 	{

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/23 17:12:01 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 17:54:26 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,7 +283,7 @@ int					ft_str_starts_with(const char *src, const char *value);
 void				ft_replace_whitespace(char *line, char value);
 char				ft_get_last_char_iw(char *line);
 char				ft_get_first_char_iw(char *line);
-void				error_msg(char *string);
+void				error_msg(t_minishell *shell, t_pipex *pipex, char *string);
 char				*build_str_from_array(char **array);
 t_message			ft_init_messages(void);
 t_env_map			*duplicate_list(t_env_map *head);

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/23 17:44:35 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 17:49:31 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,6 @@ int	main(int argc, char **argv, char **env)
 	ft_shell_loop(&shell);
 	status_code = ft_atoi(node->value);
 	env_map_flush(shell.env_map);
-	if (shell.envp)
-		ft_free_split(shell.envp);
 	rl_clear_history();
 	rl_clear_message();
 	rl_clear_visible_line();
