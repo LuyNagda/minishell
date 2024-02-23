@@ -36,58 +36,56 @@ static void	here_doc_error_handling(t_minishell *shell,
 	close(command->input_fd);
 }
 
+static void	expand_key(char **str, t_env_map *map, t_heredoc_line *doc)
+{
+	t_env_map		*node;
+
+	doc->before_key = ft_substr(*str, 0, doc->index);
+	doc->key = ft_substr(*str, doc->index, doc->key_len);
+	doc->after_key = ft_substr(&(*str)[doc->index + doc->key_len], \
+		0, ft_strlen(*str));
+	node = env_map_find_node(map, &doc->key[1]);
+	free(doc->key);
+	if (node)
+		doc->key = ft_strdup(node->value);
+	else
+		doc->key = ft_strdup("");
+	doc->key_len = ft_strlen(doc->key);
+	free(*str);
+	*str = ft_strjoin(doc->before_key, doc->key);
+	free(doc->before_key);
+	free(doc->key);
+	doc->key = ft_strjoin(*str, doc->after_key);
+	free(doc->after_key);
+	free(*str);
+	*str = ft_strdup(doc->key);
+	free(doc->key);
+}
+
 char	*expand_line(char *str, t_env_map *map, int must_expanded)
 {
-	t_env_map	*node;
-	size_t		index;
-	size_t		key_len;
-	char		*before_key;
-	char		*key;
-	char		*after_key;
+	t_heredoc_line	doc;
 
-	index = 0;
+	doc.index = 0;
 	if (!ft_str_contains(str, "$", 0) || !must_expanded)
 		return (str);
-	while (str && str[index])
+	while (str && str[doc.index] && str[doc.index + 1])
 	{
-		if (str[index + 1])
+		if ((doc.index > 0 && str[doc.index - 1] == '$') \
+			&& str[doc.index] == '$' && ++doc.index)
+			continue ;
+		if (str[doc.index] == '$' && ft_is_alpha(str[doc.index + 1]) \
+			|| str[doc.index + 1] == '_' || str[doc.index + 1] == '?')
 		{
-			if ((index > 0 && str[index - 1] == '$') && str[index] == '$')
-			{
-				index++;
-				continue ;
-			}
-			if (str[index] == '$' && ft_is_alpha(str[index + 1]) || \
-				str[index + 1] == '_' || str[index + 1] == '?')
-			{
-				key_len = 0;
-				while (str[index + key_len] && \
-					!ft_is_whitespace(str[index + key_len]))
-					key_len++;
-				before_key = ft_substr(str, 0, index);
-				key = ft_substr(str, index, key_len);
-				after_key = ft_substr(&str[index + key_len], 0, ft_strlen(str));
-				node = env_map_find_node(map, &key[1]);
-				free(key);
-				if (node)
-					key = ft_strdup(node->value);
-				else
-					key = ft_strdup("");
-				key_len = ft_strlen(key);
-				free(str);
-				str = ft_strjoin(before_key, key);
-				free(before_key);
-				free(key);
-				key = ft_strjoin(str, after_key);
-				free(after_key);
-				free(str);
-				str = ft_strdup(key);
-				free(key);
-				index = index + key_len;
-				continue ;
-			}
+			doc.key_len = 0;
+			while (str[doc.index + doc.key_len] && \
+				!ft_is_whitespace(str[doc.index + doc.key_len]))
+				doc.key_len++;
+			expand_key(&str, map, &doc);
+			doc.index = doc.index + doc.key_len;
+			continue ;
 		}
-		index++;
+		doc.index++;
 	}
 	return (str);
 }

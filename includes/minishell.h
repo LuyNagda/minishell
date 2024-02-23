@@ -118,6 +118,15 @@ typedef struct s_minishell
 	char			**envp;
 }					t_minishell;
 
+typedef struct s_heredoc_line
+{
+	size_t	index;
+	size_t	key_len;
+	char	*before_key;
+	char	*key;
+	char	*after_key;
+}					t_heredoc_line;
+
 /* *****************************************************/
 /* ******************** BUILTIN ************************/
 /* *****************************************************/
