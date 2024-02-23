@@ -6,8 +6,7 @@ free_exit after dup
 errors handling on cd
 if heredoc file is deleted during heredoc, have better error display
 env -i (removed env) does not display command not found
-"$WDAWDW" or "" or '' doesnt display command not foudn 
-unset removes every variable above target and target
+"$WDAWDW" or "" or '' doesnt display command not foudn
 << "$PATH" cat doesnt stop the heredoc when $PATH is given, the limiter is expanded when it shouldnt
 unset home -> cd should print an error but it doesnt
 env should always go through your builtin, not execve if more than 1 arg
