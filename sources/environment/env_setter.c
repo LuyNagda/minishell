@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:43:18 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/29 09:53:38 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/23 17:14:59 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,8 @@ t_env_map	*env_map_remove_from_key(t_env_map *env_map, char *key)
 	t_env_map	*previous_node;
 	t_env_map	*current_node;
 
-	if (!env_map)
+	if (!env_map || !key)
 		return (NULL);
-	previous_node = env_map;
 	current_node = env_map;
 	while (current_node)
 	{
@@ -49,13 +48,17 @@ t_env_map	*env_map_remove_from_key(t_env_map *env_map, char *key)
 		{
 			if (current_node->is_immutable)
 				return (NULL);
+			if (previous_node)
+				previous_node->next_node = current_node->next_node;
+			else
+				env_map = current_node->next_node;
 			if (current_node->value)
 				free(current_node->value);
 			if (current_node->key)
 				free(current_node->key);
-			previous_node->next_node = current_node->next_node;
 			return (free(current_node), env_map);
 		}
+		previous_node = current_node;
 		current_node = current_node->next_node;
 	}
 	return (env_map);
