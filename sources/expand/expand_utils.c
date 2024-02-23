@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 20:33:04 by luynagda          #+#    #+#             */
-/*   Updated: 2024/02/22 20:33:05 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/02/23 18:07:23 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void	treat_spaced_values(t_minishell *shell,
+static void	treat_spaced_values(t_minishell *shell, \
 t_tokens *current, char *value)
 {
 	char		**split;
@@ -45,7 +45,7 @@ t_tokens *current, char *value)
 	ft_free_split(split);
 }
 
-int	contains_valid_key(t_minishell *shell, t_tokens *token)
+static int	contains_valid_key(t_minishell *shell, t_tokens *token)
 {
 	t_tokens	*previous;
 	size_t		nb_dollars;
@@ -57,7 +57,7 @@ int	contains_valid_key(t_minishell *shell, t_tokens *token)
 	nb_dollars = 0;
 	previous = token->previous;
 	while (previous && previous->value
-		&& previous->value[0] == '$' && ++nb_dollars)
+		   && previous->value[0] == '$' && ++nb_dollars)
 		previous = previous->previous;
 	if (nb_dollars != 1)
 		return (_false);
@@ -71,39 +71,61 @@ int	contains_valid_key(t_minishell *shell, t_tokens *token)
 	return (free(rebuilded_string), _true);
 }
 
-t_boolean	process_previous_token(t_tokens *tmp, char *str)
+static void	process_expand(t_minishell *shell, t_tokens *tmp, char *value)
 {
 	char	**split;
 	char	*dup;
+	char	*str;
+	char	*space;
 
-	free(tmp->previous->value);
-	tmp->previous->value = NULL;
-	split = ft_split(str, ' ');
-	if (split == NULL)
-		return (_true);
-	dup = ft_strdup(split[0]);
-	if (dup == NULL)
-		return (_true);
-	tmp->previous->value = dup;
-	tmp->previous->type = ENV_VALUE;
-	ft_free_split(split);
-	return (_false);
-}
-
-static void	free_value(char **value)
-{
-	if (*value)
+	if (value == NULL)
+		return ;
+	str = ft_strdup(value);
+	if (str == NULL)
+		return ;
+	if (ft_str_contains(str, " ", 0))
 	{
-		free(*value);
-		*value = NULL;
+		if (tmp->previous)
+		{
+			free(tmp->previous->value);
+			tmp->previous->value = NULL;
+			split = ft_split(str, ' ');
+			if (split == NULL)
+				return ;
+			dup = ft_strdup(split[0]);
+			if (dup == NULL)
+				return ;
+			tmp->previous->value = dup;
+			tmp->previous->type = ENV_VALUE;
+			ft_free_split(split);
+		}
+		free(tmp->value);
+		space = ft_strdup(" ");
+		if (space == NULL)
+			return ;
+		tmp->value = space;
+		tmp->type = _SPACE;
+		treat_spaced_values(shell, tmp, str);
+		free(str);
+	}
+	else
+	{
+		delete_prev_token(shell, tmp);
+		free(tmp->value);
+		tmp->value = str;
+		tmp->type = ENV_VALUE;
 	}
 }
 
-void	treat_variable_keys(t_minishell *shell, char *value)
+void	treat_variable_keys(t_minishell *shell)
 {
 	t_tokens	*tokens;
+	t_env_map	*env_finded;
+	char		*value;
+	char		*trim;
 
 	tokens = shell->parsing_cmd.tokens;
+	value = NULL;
 	while (tokens)
 	{
 		if (!contains_valid_key(shell, tokens))
@@ -113,16 +135,42 @@ void	treat_variable_keys(t_minishell *shell, char *value)
 		}
 		if (ft_str_starts_with(tokens->value, "?"))
 		{
-			if (expand_status(shell, &value))
+			env_finded = env_map_find_node(shell->env_map, "?");
+			if (!env_finded)
+				value = ft_strdup("0");
+			else
+				value = ft_strdup(env_finded->value);
+			if (!value)
 				return ;
 		}
 		else
 		{
-			if (expand_normal(shell, tokens, &value))
-				return ;
+			env_finded = env_map_find_node(shell->env_map, tokens->value);
+			if (env_finded == NULL)
+			{
+				value = ft_strdup("");
+				if (!value)
+					return ;
+			}
+			else
+			{
+				value = ft_strdup(env_finded->value);
+				if (!value)
+					return ;
+				if (tokens->type != QUOTED)
+				{
+					trim = ft_strtrim(value, " ");
+					free(value);
+					value = trim;
+				}
+			}
 		}
 		process_expand(shell, tokens, value);
-		free_value(&value);
+		if (value)
+		{
+			free(value);
+			value = NULL;
+		}
 		tokens = tokens->next;
 	}
 }
