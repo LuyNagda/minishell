@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_transformer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:46:17 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/24 11:06:12 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/24 13:24:59 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ char	**env_map_to_array(t_env_map *env_map)
 		if (tmp->has_equal)
 		{
 			tmp_key = ft_strjoin_env(tmp->key, "=");
-			env_array[index] = ft_strjoin_env(tmp->key, tmp->value);
+			env_array[index] = ft_strjoin_env(tmp_key, tmp->value);
 			free(tmp_key);
 		}
 		else
