@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 18:05:56 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 08:52:25 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/24 08:58:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 void	here_doc_error_handling(t_minishell *shell,
 			t_commands *command, t_pipex *pipex)
 {
-	if (access(".here_doc", F_OK) == 0)
+	if (shell->doc_fd != 0)
 	{
 		close(shell->doc_fd);
 		shell->doc_fd = open(".here_doc", O_RDONLY);
