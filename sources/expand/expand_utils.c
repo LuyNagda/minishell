@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 20:33:04 by luynagda          #+#    #+#             */
-/*   Updated: 2024/02/24 11:41:34 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/24 11:53:58 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,39 @@ static int	contains_valid_key(t_minishell *shell, t_tokens *token)
 	return (free(rebuilded_string), _true);
 }
 
-static void	process_expand(t_minishell *shell, t_tokens *tmp, char *value)
+static void	process_expand_with_space(t_minishell *shell, \
+t_tokens *tmp, char *str)
 {
 	char	**split;
 	char	*dup;
-	char	*str;
 	char	*space;
+
+	if (tmp->previous)
+	{
+		free(tmp->previous->value);
+		tmp->previous->value = NULL;
+		split = ft_split(str, ' ');
+		if (split == NULL)
+			return ;
+		dup = ft_strdup(split[0]);
+		if (dup == NULL)
+			return ;
+		tmp->previous->value = dup;
+		tmp->previous->type = ENV_VALUE;
+		ft_free_split(split);
+	}
+	free(tmp->value);
+	space = ft_strdup(" ");
+	if (space == NULL)
+		return ;
+	tmp->value = space;
+	tmp->type = _SPACE;
+	treat_spaced_values(shell, tmp, str);
+}
+
+static void	process_expand(t_minishell *shell, t_tokens *tmp, char *value)
+{
+	char	*str;
 
 	if (value == NULL)
 		return ;
@@ -85,27 +112,7 @@ static void	process_expand(t_minishell *shell, t_tokens *tmp, char *value)
 		return ;
 	if (ft_str_contains(str, " ", 0))
 	{
-		if (tmp->previous)
-		{
-			free(tmp->previous->value);
-			tmp->previous->value = NULL;
-			split = ft_split(str, ' ');
-			if (split == NULL)
-				return ;
-			dup = ft_strdup(split[0]);
-			if (dup == NULL)
-				return ;
-			tmp->previous->value = dup;
-			tmp->previous->type = ENV_VALUE;
-			ft_free_split(split);
-		}
-		free(tmp->value);
-		space = ft_strdup(" ");
-		if (space == NULL)
-			return ;
-		tmp->value = space;
-		tmp->type = _SPACE;
-		treat_spaced_values(shell, tmp, str);
+		process_expand_with_space(shell, tmp, str);
 		free(str);
 	}
 	else
