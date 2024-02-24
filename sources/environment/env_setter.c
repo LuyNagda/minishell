@@ -34,20 +34,20 @@ t_env_map	*env_map_add_back(t_env_map **env_map,
 	return (*env_map);
 }
 
-t_env_map	*env_map_remove_from_key(t_env_map *env_map, char *key)
+void	env_map_remove_from_key(t_env_map *env_map, char *key)
 {
 	t_env_map	*previous_node;
 	t_env_map	*current_node;
 
 	if (!env_map || !key)
-		return (NULL);
+		return ;
 	current_node = env_map;
 	while (current_node)
 	{
 		if (ft_str_equals(current_node->key, key))
 		{
 			if (current_node->is_immutable)
-				return (NULL);
+				return ;
 			if (previous_node)
 				previous_node->next_node = current_node->next_node;
 			else
@@ -56,12 +56,11 @@ t_env_map	*env_map_remove_from_key(t_env_map *env_map, char *key)
 				free(current_node->value);
 			if (current_node->key)
 				free(current_node->key);
-			return (free(current_node), env_map);
+			return (free(current_node));
 		}
 		previous_node = current_node;
 		current_node = current_node->next_node;
 	}
-	return (env_map);
 }
 
 t_env_map	*env_map_replace(t_env_map *env_map, char *key, char *value)

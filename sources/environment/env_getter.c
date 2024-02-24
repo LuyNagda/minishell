@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:43:18 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/23 19:59:57 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/24 11:40:52 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_env_map	*env_map_find_node(t_env_map *env_map, char *key)
 	return (NULL);
 }
 
-t_env_map *env_map_get_from_value(t_env_map *env_map, char *value)
+t_env_map	*env_map_get_from_value(t_env_map *env_map, char *value)
 {
 	t_env_map	*tmp;
 
@@ -43,7 +43,6 @@ t_env_map *env_map_get_from_value(t_env_map *env_map, char *value)
 	}
 	return (NULL);
 }
-
 
 size_t	env_map_get_size(t_env_map *env_map)
 {

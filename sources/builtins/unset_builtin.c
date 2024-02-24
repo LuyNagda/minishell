@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:06 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/23 20:56:19 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/02/24 11:46:11 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,7 @@ void	exec_unset(t_minishell *shell, t_commands *command)
 			ft_putstr_fd("': not a valid identifier\n", 2);
 			continue ;
 		}
-		shell->env_map = env_map_remove_from_key(shell->env_map,
-				command->arguments[index]);
+		env_map_remove_from_key(shell->env_map, command->arguments[index]);
 		if (shell->env_map == NULL)
 			env_map_replace_or_add(shell->env_map, "?", "1");
 		else

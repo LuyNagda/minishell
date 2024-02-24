@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 20:33:04 by luynagda          #+#    #+#             */
-/*   Updated: 2024/02/23 18:07:23 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/24 11:41:34 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ static int	contains_valid_key(t_minishell *shell, t_tokens *token)
 		return (_false);
 	nb_dollars = 0;
 	previous = token->previous;
-	while (previous && previous->value
-		   && previous->value[0] == '$' && ++nb_dollars)
+	while (previous && previous->value && \
+	previous->value[0] == '$' && ++nb_dollars)
 		previous = previous->previous;
 	if (nb_dollars != 1)
 		return (_false);

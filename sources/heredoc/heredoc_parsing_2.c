@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 17:23:35 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 11:16:30 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/24 11:41:54 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	check_for_eof(char *here_doc, char *line)
 	return (0);
 }
 
-static char *get_delimiter(t_minishell *shell, char *str)
+static char	*get_delimiter(t_minishell *shell, char *str)
 {
 	t_env_map	*env_map;
 

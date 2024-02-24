@@ -173,7 +173,7 @@ t_env_map			*ft_create_env_node(char *k, char *v,
 t_env_map			*env_map_add_back(t_env_map **env_map,
 						t_env_map *new_node, int is_immutable);
 t_env_map			*env_map_remove_back(t_env_map *env_map);
-t_env_map			*env_map_remove_from_key(t_env_map *env_map, char *key);
+void				env_map_remove_from_key(t_env_map *env_map, char *key);
 t_env_map			*env_map_get_from_value(t_env_map *env_map, char *value);
 t_env_map			*env_map_replace(t_env_map *env_map,
 						char *key, char *value);
