@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:54:25 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/21 14:54:46 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 11:07:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_minishell	*get_minishell(t_minishell *minishell)
 	return (shell);
 }
 
-t_boolean ft_str_is_only_whitespace(const char *str)
+t_boolean	ft_str_is_only_whitespace(const char *str)
 {
 	size_t	index;
 
