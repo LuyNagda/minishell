@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_transformer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 10:46:17 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/22 15:17:00 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 11:06:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,38 @@ t_env_map	*env_array_to_map(t_minishell *shell,
 	return (*env_map);
 }
 
+static int	ft_fill_env(void **mlc, char const *text, int mlc_index)
+{
+	int	index;
+
+	index = 0;
+	while (text[index])
+	{
+		((char *)mlc)[mlc_index] = text[index];
+		index++;
+		mlc_index++;
+	}
+	return (mlc_index);
+}
+
+static char	*ft_strjoin_env(char const *s1, char const *s2)
+{
+	void	*mlc;
+	int		size;
+
+	if (!s1)
+		s1 = "";
+	if (!s2)
+		s2 = "";
+	mlc = malloc(sizeof(char ) * (ft_strlen(s1) + ft_strlen(s2)) + 1);
+	if (!mlc)
+		return (NULL);
+	size = ft_fill_env(mlc, s1, 0);
+	size = ft_fill_env(mlc, s2, size);
+	((char *) mlc)[size] = '\0';
+	return ((char *) mlc);
+}
+
 char	**env_map_to_array(t_env_map *env_map)
 {
 	char		**env_array;
@@ -74,12 +106,12 @@ char	**env_map_to_array(t_env_map *env_map)
 		tmp = env_map_find_node(env_map, env_map_get_key(env_map, index));
 		if (tmp->has_equal)
 		{
-			tmp_key = ft_strjoin(tmp->key, "=");
-			env_array[index] = ft_strjoin(tmp_key, tmp->value);
+			tmp_key = ft_strjoin_env(tmp->key, "=");
+			env_array[index] = ft_strjoin_env(tmp->key, tmp->value);
 			free(tmp_key);
 		}
 		else
-			env_array[index] = ft_strjoin(tmp->key, tmp->value);
+			env_array[index] = ft_strjoin_env(tmp->key, tmp->value);
 		index++;
 	}
 	return (env_array);
