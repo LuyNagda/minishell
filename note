@@ -11,6 +11,6 @@ FIXED: echo - "" "" "" hello doesnt print the new line
 FIXED: cd .. hi - > error has 2 \n
 FIXED: cat | ls -> ctrl c prints ^C but without a newline at the end
 FIXED: "$WDAWDW" or "" or '' doesnt display command not found
- # What is this shit ??? << eof cat -> expand has issues when with quotes
+FIXED: << eof cat -> expand has issues when with quotes
 FIXED: << "$PATH" cat doesnt stop the heredoc when $PATH is given, the limiter is expanded when it shouldn't
 heredocs should always go first, cat << eof | ls does ls at the same time as the heredoc
