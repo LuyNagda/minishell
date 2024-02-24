@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 10:54:55 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/24 11:12:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,8 +135,6 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 	pipex.envp = env_map_to_array(shell->env_map);
 	if (pipex.envp == NULL)
 		return ;
-	printf("pipex.envp length: %ld\n", ft_str_tab_len(pipex.envp));
-	printf("shell->env_map length: %ld\n", env_map_get_size(shell->env_map));
 	pipex.pid = (int *)malloc(sizeof(int) * shell->command_amount);
 	if (pipex.pid == NULL)
 	{
