@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 15:22:59 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 15:48:36 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,11 @@ void	exec_cmd_loop(t_minishell *shell,
 			t_commands *command, t_pipex *pipex)
 {
 	if (here_doc(shell, command, pipex)
-		&& command->position == 0 && shell->command_amount > 1)
+		&& command->position == 0)
 	{
-		close(shell->doc_fd);
+		if (shell->command_amount == 1)
+			close(shell->doc_fd);
+		pipex->close_pipe = 0;
 		return ;
 	}
 	if (pipe(pipex->c_pipe) == -1)
@@ -92,31 +94,35 @@ void	exec_cmd_loop(t_minishell *shell,
 	}
 	close_fds_pipex(shell, command, pipex);
 	pipex->index++;
+	pipex->close_pipe = 1;
 }
 
 static void	close_wait_free(t_minishell *shell, t_pipex *pipex)
 {
 	if (pipex->o_pipe[0] != -1)
 		close(pipex->o_pipe[0]);
-	close(pipex->c_pipe[0]);
-	close(pipex->c_pipe[1]);
-	pipex->i = 0;
-	while (pipex->i < pipex->index)
-		waitpid(pipex->pid[pipex->i++], &pipex->status, 0);
-	if (WIFSIGNALED(pipex->status))
+	if (pipex->close_pipe)
 	{
-		if (WTERMSIG(pipex->status) == 3)
+		close(pipex->c_pipe[0]);
+		close(pipex->c_pipe[1]);
+		pipex->i = 0;
+		while (pipex->i < pipex->index)
+			waitpid(pipex->pid[pipex->i++], &pipex->status, 0);
+		if (WIFSIGNALED(pipex->status))
 		{
-			ft_putstr_fd("Quit (core dumped)", 2);
-			pipex->status_string = ft_strdup("131");
+			if (WTERMSIG(pipex->status) == 3)
+			{
+				ft_putstr_fd("Quit (core dumped)", 2);
+				pipex->status_string = ft_strdup("131");
+			}
+			if (WTERMSIG(pipex->status) == 2)
+				pipex->status_string = ft_strdup("130");
+			ft_putstr_fd("\n", 2);
 		}
-		if (WTERMSIG(pipex->status) == 2)
-			pipex->status_string = ft_strdup("130");
-		ft_putstr_fd("\n", 2);
+		else
+			pipex->status_string = ft_itoa(WEXITSTATUS(pipex->status));
+		env_map_replace(shell->env_map, "?", pipex->status_string);
 	}
-	else
-		pipex->status_string = ft_itoa(WEXITSTATUS(pipex->status));
-	env_map_replace(shell->env_map, "?", pipex->status_string);
 	ft_free_split(pipex->envp);
 }
 

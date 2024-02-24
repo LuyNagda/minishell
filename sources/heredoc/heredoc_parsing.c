@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:13:33 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 13:46:31 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 15:40:38 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,10 @@ static void	heredoc_loop(t_minishell *shell,
 		if (shell->doc_fd < 0)
 		{
 			perror("here_doc");
-			free_and_exit(shell, pipex, 126);
+			break ;
 		}
 		if (here_doc_execution(shell, tmp, i + 1))
-			free_and_exit(shell, pipex, 0);
+			break ;
 		remove_heredoc_from_command(tmp, here_doc, i);
 		if (count != 1)
 			close(shell->doc_fd);

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/24 15:23:12 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 15:46:33 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ typedef struct s_pipex
 	int		c_pipe[2];
 	int		o_pipe[2];
 	char	**envp;
+	int		close_pipe;
 }			t_pipex;
 
 typedef struct s_minishell

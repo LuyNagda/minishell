@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:20:38 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/22 15:46:57 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 15:48:13 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@ static void	handle_heredoc_signal(int signum)
 	g_signal_state = signum;
 	if (signum == SIGINT)
 	{
-		ft_putstr_fd("\n", 0);
+		ft_putendl_fd("\n", 0);
 		env_map_replace(get_minishell(NULL)->env_map, "?", "130");
-		close(0);
 	}
 	if (signum == SIGQUIT)
 	{
@@ -46,7 +45,7 @@ void	hook_heredoc_signal(void)
 	struct sigaction	sig;
 
 	sigemptyset(&sig.sa_mask);
-	sig.sa_flags = SA_RESTART;
+	sig.sa_flags = 0;
 	sig.sa_handler = handle_heredoc_signals;
 	if (sigaction(SIGINT, &sig, NULL) == -1
 		|| sigaction(SIGQUIT, &sig, NULL) == -1)

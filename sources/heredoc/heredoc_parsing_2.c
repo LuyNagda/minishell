@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 17:23:35 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 14:40:32 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 15:39:55 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	here_doc_execution(t_minishell *shell, t_commands *tmp, int i)
 
 	delimiter = get_delimiter(shell, tmp->arguments[i]);
 	ft_putstr_fd("heredoc> ", 0);
+	hook_heredoc_signal();
 	line = get_next_line(0);
 	if (g_signal_state == SIGINT)
 		return (free(delimiter), free(line), 1);
@@ -63,6 +64,7 @@ int	here_doc_execution(t_minishell *shell, t_commands *tmp, int i)
 		return (free(delimiter), 0);
 	while (!ft_str_equals(line, delimiter))
 	{
+		hook_heredoc_signal();
 		line = expand_line(line, shell->env_map, !tmp->args_quoted[i]);
 		ft_putstr_fd(line, shell->doc_fd);
 		free(line);
