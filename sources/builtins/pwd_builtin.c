@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   pwd_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:45 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/19 14:30:21 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 20:49:45 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <unistd.h>
 #include <stdio.h>
+#include "put_utils.h"
 
 int	get_pwd(t_minishell *shell)
 {
@@ -35,7 +36,7 @@ void	exec_pwd(t_minishell *shell)
 	}
 	else
 	{
-		printf("Error occurred during executing pwd.\n");
+		ft_putstr_fd("Error occurred during executing pwd.\n", 2);
 		env_map_replace_or_add(shell->env_map, "?", "1");
 	}
 }

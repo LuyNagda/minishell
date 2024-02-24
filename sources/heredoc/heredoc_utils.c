@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 18:05:56 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/23 17:56:02 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 08:52:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,22 @@
 #include "string_utils.h"
 #include "get_next_line.h"
 
-static void	here_doc_error_handling(t_minishell *shell,
+void	here_doc_error_handling(t_minishell *shell,
 			t_commands *command, t_pipex *pipex)
 {
-	close(command->input_fd);
-	command->input_fd = open(".here_doc", O_RDONLY);
-	if (command->input_fd < 0)
+	if (access(".here_doc", F_OK) == 0)
 	{
-		ft_putendl_fd("Please don't delete the .here_doc file.", 2);
-		free_and_exit(shell, pipex, 126);
+		close(shell->doc_fd);
+		shell->doc_fd = open(".here_doc", O_RDONLY);
+		if (shell->doc_fd < 0)
+		{
+			ft_putendl_fd("Please don't delete the .here_doc file.", 2);
+			free_and_exit(shell, pipex, 126);
+		}
+		if (dup2(shell->doc_fd, STDIN_FILENO) == -1)
+			error_msg(shell, pipex, "DUP2 failed");
+		close(shell->doc_fd);
 	}
-	if (dup2(command->input_fd, STDIN_FILENO) == -1)
-		error_msg(shell, pipex, "DUP2 failed");
-	close(command->input_fd);
 }
 
 static void	expand_key(char **str, t_env_map *map, t_heredoc_line *doc)
@@ -90,7 +93,7 @@ char	*expand_line(char *str, t_env_map *map, int must_expanded)
 	return (str);
 }
 
-void	here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex)
+int	here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
 	int		i;
 	char	*line;
@@ -100,8 +103,9 @@ void	here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	{
 		hook_heredoc_signal();
 		heredoc_parsing(shell, command, "<<", pipex);
-		here_doc_error_handling(shell, command, pipex);
+		return (1);
 	}
+	return (0);
 }
 
 void	normal_redirections(t_minishell *shell,

@@ -3,11 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/23 19:47:56 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/24 08:50:06 by lunagda          ###   ########.fr       */
 /*                                                                            */
+/* ************************************************************************** */
+
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
@@ -115,7 +117,7 @@ typedef struct s_minishell
 
 	t_env_map		*env_map;
 	int				is_builtin;
-	char			**envp;
+	int				doc_fd;
 }					t_minishell;
 
 typedef struct s_heredoc_line
@@ -152,12 +154,14 @@ int					is_builtins(t_commands *command);
 char				**convert_path_to_array(t_env_map *env_map);
 char				*find_command(t_env_map *map, char *command);
 void				free_and_exit(t_minishell *shell, t_pipex *pipex, int code);
-void				here_doc(t_minishell *shell,
+int					here_doc(t_minishell *shell,
 						t_commands *command, t_pipex *pipex);
 void				normal_redirections(t_minishell *shell,
 						t_commands *command, t_pipex *pipex);
 int					here_doc_execution(t_minishell *shell,
 						t_commands *tmp, int i);
+void				here_doc_error_handling(t_minishell *shell,
+						t_commands *command, t_pipex *pipex);
 
 /* *****************************************************/
 /* ********************** ENV **************************/
