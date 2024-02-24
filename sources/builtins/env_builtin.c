@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:38 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/23 17:29:00 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 08:46:41 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void	exec_env(t_minishell *shell, t_commands *command)
 
 	if (command->arguments[1])
 	{
-		if (ft_str_contains(command->arguments[1], "/", 0) && access(command->arguments[1], F_OK) == 0)
+		if (ft_str_contains(command->arguments[1], "/", 0)
+			&& access(command->arguments[1], F_OK) == 0)
 		{
 			print_error(command->arguments[1], "Permission Denied");
 			env_map_replace_or_add(shell->env_map, "?", "126");

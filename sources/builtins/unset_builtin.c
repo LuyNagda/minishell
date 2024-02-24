@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   unset_builtin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:06 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/21 14:45:32 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 20:56:19 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdio.h>
 #include "char_utils.h"
+#include "put_utils.h"
 
 t_parsing_result	parse_argument(char *arg)
 {
@@ -41,8 +42,9 @@ void	exec_unset(t_minishell *shell, t_commands *command)
 	{
 		if (parse_argument(command->arguments[index]) != SUCCESS)
 		{
-			printf("unset: `%s': not a valid identifier\n",
-				command->arguments[index++]);
+			ft_putstr_fd("unset: `", 2);
+			ft_putstr_fd(command->arguments[index++], 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
 			continue ;
 		}
 		shell->env_map = env_map_remove_from_key(shell->env_map,

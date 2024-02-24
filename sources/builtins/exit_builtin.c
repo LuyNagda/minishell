@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/21 14:37:21 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/23 20:54:23 by luynagda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,15 @@ void	exit_with_args(t_minishell *shell, t_commands *command,
 		args = skip_chars(args);
 		if (!has_only_digits(args))
 		{
-			printf("minishell: exit: %s: numeric argument required\n", args);
+			ft_putstr_fd("minishell: exit: ", 2);
+			ft_putstr_fd(args, 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
 			env_map_replace_or_add(shell->env_map, "?", "2");
 			*code = 2;
 		}
 		else if (has_only_digits(args) && ft_get_arguments_amount(command) > 2)
 		{
-			printf("minishell: exit: too many arguments\n");
+			ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 			env_map_replace_or_add(shell->env_map, "?", "1");
 			*exit = _false;
 		}
