@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 17:23:35 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/23 20:46:08 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/24 08:52:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	here_doc_execution(t_minishell *shell, t_commands *tmp, int i)
 	while (ft_strncmp(tmp->arguments[i],
 			line, ft_strlen(tmp->arguments[i])))
 	{
-		ft_putstr_fd(line, tmp->input_fd);
+		ft_putstr_fd(line, shell->doc_fd);
 		free(line);
 		ft_putstr_fd("heredoc> ", 0);
 		line = get_next_line(0);

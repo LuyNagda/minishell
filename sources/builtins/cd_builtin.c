@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_builtin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:57 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/23 18:05:35 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 08:47:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void	err_msg(t_minishell *shell, t_commands *command, char *msg)
 	if (!msg)
 	{
 		ft_putstr_fd("cd: error retrieving current directory: getcwd: ", 2);
-		ft_putstr_fd("cannot access parent directories: No such file or directory\n", 2);
+		ft_putstr_fd("cannot access parent directories: ", 2);
+		ft_putendl_fd("No such file or directory\n", 2);
 	}
 	else
 		ft_putendl_fd(msg, 2);

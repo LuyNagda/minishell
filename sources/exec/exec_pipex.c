@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/23 20:41:05 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/24 08:51:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@
 static void	redirections(t_minishell *shell,
 			t_commands *command, t_pipex *pipex)
 {
-	here_doc(shell, command, pipex);
+	here_doc_error_handling(shell, command, pipex);
 	normal_redirections(shell, command, pipex);
 	if (command->arguments_amount == 0)
 		free_and_exit(shell, pipex, 0);
-	if (command->position > 0 && !command->input_fd && !shell->here_doc_fd)
+	if (command->position > 0 && !command->input_fd && !shell->doc_fd)
 	{
 		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
 			error_msg(shell, pipex, "DUP2 failed");
@@ -76,6 +76,9 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 	if (pipe(pipex->c_pipe) == -1)
 		error_msg(shell, pipex, "Pipe");
 	handle_ignored_signal();
+	if (here_doc(shell, command, pipex)
+		&& command->position == 0 && shell->command_amount > 1)
+		return ;
 	pipex->pid[command->position] = fork();
 	if (pipex->pid[command->position] < 0)
 		error_msg(shell, pipex, "Fork");
@@ -116,9 +119,7 @@ static void	wait_for_children(t_minishell *shell, t_pipex *pipex)
 void	exec_cmd(t_minishell *shell, t_commands *commands)
 {
 	t_pipex		pipex;
-	t_commands	*tmp;
 
-	tmp = commands;
 	pipex.pid = (int *)malloc(sizeof(int) * shell->command_amount);
 	pipex.envp = env_map_to_array(shell->env_map);
 	if (pipex.envp == NULL)
