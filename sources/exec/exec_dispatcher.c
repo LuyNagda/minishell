@@ -6,13 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/24 11:08:18 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/24 11:12:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "minishell.h"
 #include "put_utils.h"
+#include "string_utils.h"
 
 int	is_builtins(t_commands *command)
 {
