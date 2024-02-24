@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/24 08:50:06 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/24 08:50:06 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,6 +268,7 @@ void				ft_free_token(t_tokens *token);
 /* ********************* UTILS *************************/
 /* *****************************************************/
 
+t_boolean			ft_str_is_only_whitespace(const char *str);
 int					ft_quote_is_closed(const char *line);
 int					ft_index_is_in_quote(const char *line,
 						size_t pos, char quote);

@@ -1,16 +1,17 @@
 FIXED: minishell inside of minishell -> nothing works besides builtins
-<< eof cat -> expand has issues when with quotes
 FIXED: export test="     la" -> echo "$test" many issues on valgrind
 FIXED: export test="echo     $PATH" (or any text after the echo) -> command not found
 FIXED: free_exit after dup
 FIXED: errors handling on cd
 FIXED: if heredoc file is deleted during heredoc, have better error display
 FIXED: env -i (removed env) does not display command not found
-"$WDAWDW" or "" or '' doesnt display command not foudn 
-<< "$PATH" cat doesnt stop the heredoc when $PATH is given, the limiter is expanded when it shouldnt
 FIXED: unset home -> cd should print an error but it doesnt
 FIXED: env should always go through your builtin, not execve if more than 1 arg
 FIXED: echo - "" "" "" hello doesnt print the new line
 FIXED: cd .. hi - > error has 2 \n
+FIXED: cat | ls -> ctrl c prints ^C but without a newline at the end
+FIXED: "$WDAWDW" or "" or '' doesnt display command not found
+
+<< eof cat -> expand has issues when with quotes
+<< "$PATH" cat doesnt stop the heredoc when $PATH is given, the limiter is expanded when it shouldnt
 heredocs should always go first, cat << eof | ls does ls at the same time as the heredoc
-cat | ls -> ctrl c prints ^C but without a newline at the end
