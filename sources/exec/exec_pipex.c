@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 15:48:36 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 16:06:31 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,9 @@ void	exec_cmd_loop(t_minishell *shell,
 			t_commands *command, t_pipex *pipex)
 {
 	if (here_doc(shell, command, pipex)
-		&& command->position == 0)
+		&& command->arguments == 0)
 	{
+		printf("here_doc\n");
 		if (shell->command_amount == 1)
 			close(shell->doc_fd);
 		pipex->close_pipe = 0;
@@ -84,6 +85,7 @@ void	exec_cmd_loop(t_minishell *shell,
 	}
 	if (pipe(pipex->c_pipe) == -1)
 		error_msg(shell, pipex, "Pipe");
+	pipex->close_pipe = 1;
 	pipex->pid[pipex->index] = fork();
 	if (pipex->pid[pipex->index] < 0)
 		error_msg(shell, pipex, "Fork");
@@ -94,7 +96,6 @@ void	exec_cmd_loop(t_minishell *shell,
 	}
 	close_fds_pipex(shell, command, pipex);
 	pipex->index++;
-	pipex->close_pipe = 1;
 }
 
 static void	close_wait_free(t_minishell *shell, t_pipex *pipex)
