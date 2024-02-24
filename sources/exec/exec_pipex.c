@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 08:51:46 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/24 09:12:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,17 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		close(pipex->o_pipe[0]);
 	if (!(command->position == shell->command_amount - 1))
 		pipex->o_pipe[0] = pipex->c_pipe[0];
+	if (shell->doc_fd > 0)
+		close(shell->doc_fd);
 }
 
-static void	wait_for_children(t_minishell *shell, t_pipex *pipex)
+static void	close_wait_free(t_minishell *shell, t_pipex *pipex)
 {
+	if (pipex->o_pipe[0] != -1)
+		close(pipex->o_pipe[0]);
+	close(pipex->c_pipe[0]);
+	close(pipex->c_pipe[1]);
+	pipex->index = 0;
 	while (pipex->index < shell->command_amount)
 		waitpid(pipex->pid[pipex->index++], &pipex->status, 0);
 	if (WIFSIGNALED(pipex->status))
@@ -114,16 +121,27 @@ static void	wait_for_children(t_minishell *shell, t_pipex *pipex)
 	}
 	else
 		pipex->status_string = ft_itoa(WEXITSTATUS(pipex->status));
+	env_map_replace(shell->env_map, "?", pipex->status_string);
+	ft_free_split(pipex->envp);
+	free(pipex->status_string);
+	free(pipex->pid);
+	unlink(".here_doc");
 }
 
 void	exec_cmd(t_minishell *shell, t_commands *commands)
 {
 	t_pipex		pipex;
 
-	pipex.pid = (int *)malloc(sizeof(int) * shell->command_amount);
 	pipex.envp = env_map_to_array(shell->env_map);
 	if (pipex.envp == NULL)
 		return ;
+	pipex.pid = (int *)malloc(sizeof(int) * shell->command_amount);
+	if (pipex.pid == NULL)
+	{
+		ft_free_split(pipex.envp);
+		return ;
+	}
+	shell->doc_fd = 0;
 	pipex.status_string = NULL;
 	pipex.o_pipe[0] = -1;
 	while (commands)
@@ -131,15 +149,5 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 		exec_cmd_loop(shell, commands, &pipex);
 		commands = commands->next_node;
 	}
-	if (pipex.o_pipe[0] != -1)
-		close(pipex.o_pipe[0]);
-	close(pipex.c_pipe[0]);
-	close(pipex.c_pipe[1]);
-	pipex.index = 0;
-	wait_for_children(shell, &pipex);
-	env_map_replace(shell->env_map, "?", pipex.status_string);
-	ft_free_split(pipex.envp);
-	free(pipex.status_string);
-	free(pipex.pid);
-	unlink(".here_doc");
+	close_wait_free(shell, &pipex);
 }
