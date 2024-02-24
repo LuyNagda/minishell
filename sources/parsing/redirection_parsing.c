@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:42:21 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 14:24:50 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 15:19:57 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,13 @@ static int	in_redirection(t_commands *tmp, int redirection, int i)
 	return (0);
 }
 
+static void	close_and_free(t_minishell *shell, t_pipex *pipex)
+{
+	close(pipex->c_pipe[0]);
+	close(pipex->c_pipe[1]);
+	free_and_exit(shell, pipex, 1);
+}
+
 static void	main_parsing(t_minishell *shell, t_commands *tmp,
 			t_pipex *pipex, char *character)
 {
@@ -72,26 +79,14 @@ static void	main_parsing(t_minishell *shell, t_commands *tmp,
 		while (tmp->arguments[i]
 			&& ft_strncmp(tmp->arguments[i], character, 1))
 			i++;
-		if (!ft_strncmp(">", character, 1) && out_redirection(tmp, redirection, i))
-		{
-			close(pipex->c_pipe[0]);
-			close(pipex->c_pipe[1]);
-			free_and_exit(shell, pipex, 1);
-		}
-		else if (!ft_strncmp("<", character, 1) && in_redirection(tmp, redirection, i))
-		{
-			close(pipex->c_pipe[0]);
-			close(pipex->c_pipe[1]);
-			free_and_exit(shell, pipex, 1);
-		}
+		if (!ft_strncmp(">", character, 1)
+			&& out_redirection(tmp, redirection, i))
+			close_and_free(shell, pipex);
+		else if (!ft_strncmp("<", character, 1)
+			&& in_redirection(tmp, redirection, i))
+			close_and_free(shell, pipex);
 		if (tmp->input_fd < 0 || tmp->outfile < 0)
-		{
-			if (tmp->input_fd < 0)
-				perror(tmp->infile);
-			if (tmp->outfile < 0)
-				perror(tmp->outfile);
-			free_and_exit(shell, pipex, 126);
-		}
+			close_fds(shell, pipex, tmp);
 		remove_file_from_command(tmp, character, i);
 	}
 }

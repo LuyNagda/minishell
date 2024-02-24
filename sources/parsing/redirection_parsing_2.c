@@ -6,13 +6,14 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:42:21 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/26 13:47:20 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 15:23:46 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "minishell.h"
 #include "string_utils.h"
+#include <stdio.h>
 
 int	count_redirection(t_commands *command, char *character)
 {
@@ -76,4 +77,13 @@ void	add_back_command_path(t_minishell *shell, t_commands *command)
 			free(command->path);
 		command->path = find_command(shell->env_map, command->arguments[0]);
 	}
+}
+
+void	close_fds(t_minishell *shell, t_pipex *pipex, t_commands *tmp)
+{
+	if (tmp->input_fd < 0)
+		perror(tmp->infile);
+	if (tmp->outfile < 0)
+		perror(tmp->outfile);
+	free_and_exit(shell, pipex, 126);
 }

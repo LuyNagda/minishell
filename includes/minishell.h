@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/24 13:41:46 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 15:23:12 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,6 +242,10 @@ t_boolean			expand_normal(t_minishell *shell,
 						t_tokens *tokens, char **value);
 t_boolean			process_previous_token(t_tokens *tmp, char *str);
 t_parsing_result	remove_quotes(t_minishell *shell);
+void				close_fds(t_minishell *shell,
+						t_pipex *pipex, t_commands *tmp);
+void				close_fds_pipex(t_minishell *shell,
+						t_commands *command, t_pipex *pipex);
 
 /* *****************************************************/
 /* ******************** TOKENS *************************/
@@ -300,6 +304,7 @@ t_env_map			*merge_sort(t_env_map *head);
 int					is_quote(char c);
 int					variable_in_quotes(const char *str, size_t index);
 void				free_duplicate_env(t_env_map *head);
+void				command_dir_error(t_commands *command);
 
 /* *****************************************************/
 /* ******************** SIGNALS ************************/

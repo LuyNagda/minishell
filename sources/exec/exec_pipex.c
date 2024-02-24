@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 14:15:48 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 15:22:59 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ static void	exec_command(t_minishell *shell,
 	}
 	if (command->arguments_amount == 0)
 		free_and_exit(shell, pipex, 0);
-	if (command->arguments_amount > 0 && command->path == NULL)
+	if (command->arguments_amount > 0 && (command->path == NULL
+			|| (ft_get_last_char_iw(command->path) == '/')))
 	{
-		ft_putstr_fd(command->arguments[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
+		command_dir_error(command);
 		free_and_exit(shell, pipex, 127);
 	}
 	execve(command->path, command->arguments, pipex->envp);
@@ -71,7 +71,8 @@ static void	exec_command(t_minishell *shell,
 	free_and_exit(shell, pipex, 1);
 }
 
-void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
+void	exec_cmd_loop(t_minishell *shell,
+			t_commands *command, t_pipex *pipex)
 {
 	if (here_doc(shell, command, pipex)
 		&& command->position == 0 && shell->command_amount > 1)
@@ -89,16 +90,7 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		redirections(shell, command, pipex);
 		exec_command(shell, command, pipex);
 	}
-	close(pipex->c_pipe[1]);
-	if (pipex->o_pipe[0] != -1
-		&& (command->position == shell->command_amount - 1))
-		close(pipex->o_pipe[0]);
-	else if (pipex->o_pipe[0] != -1)
-		close(pipex->o_pipe[0]);
-	if (!(command->position == shell->command_amount - 1))
-		pipex->o_pipe[0] = pipex->c_pipe[0];
-	if (shell->doc_fd > 0)
-		close(shell->doc_fd);
+	close_fds_pipex(shell, command, pipex);
 	pipex->index++;
 }
 
