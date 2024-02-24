@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 11:12:38 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/24 13:53:38 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,16 +73,18 @@ static void	exec_command(t_minishell *shell,
 
 void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 {
-	if (pipe(pipex->c_pipe) == -1)
-		error_msg(shell, pipex, "Pipe");
-	handle_ignored_signal();
 	if (here_doc(shell, command, pipex)
 		&& command->position == 0 && shell->command_amount > 1)
+	{
+		close(shell->doc_fd);
 		return ;
-	pipex->pid[command->position] = fork();
-	if (pipex->pid[command->position] < 0)
+	}
+	if (pipe(pipex->c_pipe) == -1)
+		error_msg(shell, pipex, "Pipe");
+	pipex->pid[pipex->index] = fork();
+	if (pipex->pid[pipex->index] < 0)
 		error_msg(shell, pipex, "Fork");
-	if (pipex->pid[command->position] == 0)
+	if (pipex->pid[pipex->index] == 0)
 	{
 		redirections(shell, command, pipex);
 		exec_command(shell, command, pipex);
@@ -97,6 +99,7 @@ void	exec_cmd_loop(t_minishell *shell, t_commands *command, t_pipex *pipex)
 		pipex->o_pipe[0] = pipex->c_pipe[0];
 	if (shell->doc_fd > 0)
 		close(shell->doc_fd);
+	pipex->index++;
 }
 
 static void	close_wait_free(t_minishell *shell, t_pipex *pipex)
@@ -105,9 +108,9 @@ static void	close_wait_free(t_minishell *shell, t_pipex *pipex)
 		close(pipex->o_pipe[0]);
 	close(pipex->c_pipe[0]);
 	close(pipex->c_pipe[1]);
-	pipex->index = 0;
-	while (pipex->index < shell->command_amount)
-		waitpid(pipex->pid[pipex->index++], &pipex->status, 0);
+	pipex->i = 0;
+	while (pipex->i < pipex->index)
+		waitpid(pipex->pid[pipex->i++], &pipex->status, 0);
 	if (WIFSIGNALED(pipex->status))
 	{
 		if (WTERMSIG(pipex->status) == 3)
@@ -123,9 +126,6 @@ static void	close_wait_free(t_minishell *shell, t_pipex *pipex)
 		pipex->status_string = ft_itoa(WEXITSTATUS(pipex->status));
 	env_map_replace(shell->env_map, "?", pipex->status_string);
 	ft_free_split(pipex->envp);
-	free(pipex->status_string);
-	free(pipex->pid);
-	unlink(".here_doc");
 }
 
 void	exec_cmd(t_minishell *shell, t_commands *commands)
@@ -144,10 +144,15 @@ void	exec_cmd(t_minishell *shell, t_commands *commands)
 	shell->doc_fd = 0;
 	pipex.status_string = NULL;
 	pipex.o_pipe[0] = -1;
+	pipex.index = 0;
 	while (commands)
 	{
+		handle_ignored_signal();
 		exec_cmd_loop(shell, commands, &pipex);
 		commands = commands->next_node;
 	}
 	close_wait_free(shell, &pipex);
+	free(pipex.status_string);
+	free(pipex.pid);
+	unlink(".here_doc");
 }
