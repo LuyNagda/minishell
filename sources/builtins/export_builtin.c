@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:50 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/21 14:33:03 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 17:39:55 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static void	export_vars(t_minishell *shell, t_commands *command)
 {
 	t_env_map	*node;
 	char		**export;
-	int			i;
+	size_t		i;
 	int			has_equal;
 
 	i = 1;

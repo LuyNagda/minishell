@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:45 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/23 20:49:45 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/02/24 17:41:56 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include "put_utils.h"
 
-int	get_pwd(t_minishell *shell)
+int	get_pwd(void)
 {
 	char	cwd[1024];
 

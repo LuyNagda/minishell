@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 17:07:23 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 17:48:35 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 static void	redirections(t_minishell *shell,
 			t_commands *command, t_pipex *pipex)
 {
-	here_doc_error_handling(shell, command, pipex);
+	here_doc_error_handling(shell, pipex);
 	normal_redirections(shell, command, pipex);
 	if (command->arguments_amount == 0)
 		free_and_exit(shell, pipex, 0);
@@ -74,7 +74,7 @@ static void	exec_command(t_minishell *shell,
 void	exec_cmd_loop(t_minishell *shell,
 			t_commands *command, t_pipex *pipex)
 {
-	if (here_doc(shell, command, pipex)
+	if (here_doc(shell, command)
 		&& command->arguments == 0)
 	{
 		printf("here_doc\n");

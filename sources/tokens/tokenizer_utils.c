@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 20:32:21 by luynagda          #+#    #+#             */
-/*   Updated: 2024/02/22 20:32:22 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/02/24 17:49:38 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static t_boolean	is_word(char c)
 		!ft_is_whitespace(c));
 }
 
-void	ft_split_to_tokens(t_minishell *shell, size_t cur_pos, int tmp)
+void	ft_split_to_tokens(t_minishell *shell, size_t cur_pos, size_t tmp)
 {
 	char		*sended;
 	t_tokens	*token;

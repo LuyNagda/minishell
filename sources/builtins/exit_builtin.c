@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/23 20:54:23 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/02/24 17:39:38 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static char	*skip_chars(char *str)
 
 	index = 0;
 	copy = str;
-	while (str[index] == '0' && str[index + 1] && str[index + 1] == '0' || \
+	while ((str[index] == '0' && str[index + 1] && str[index + 1] == '0') || \
 		ft_is_whitespace(str[index]))
 	{
 		index++;

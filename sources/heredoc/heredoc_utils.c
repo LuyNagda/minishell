@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 18:05:56 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 16:08:32 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 17:49:22 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@
 #include "string_utils.h"
 #include "get_next_line.h"
 
-void	here_doc_error_handling(t_minishell *shell,
-			t_commands *command, t_pipex *pipex)
+void	here_doc_error_handling(t_minishell *shell, t_pipex *pipex)
 {
 	if (shell->doc_fd != 0)
 	{
@@ -42,7 +41,6 @@ void	here_doc_error_handling(t_minishell *shell,
 static void	expand_key(char **str, t_env_map *map, t_heredoc_line *doc)
 {
 	t_env_map		*node;
-	char			*trim;
 
 	doc->before_key = ft_substr(*str, 0, doc->index);
 	doc->key = ft_substr(*str, doc->index, doc->key_len);
@@ -78,7 +76,7 @@ char	*expand_line(char *str, t_env_map *map, int must_expanded)
 		if ((doc.index > 0 && str[doc.index - 1] == '$') \
 			&& str[doc.index] == '$' && ++doc.index)
 			continue ;
-		if (str[doc.index] == '$' && ft_is_alpha(str[doc.index + 1]) \
+		if ((str[doc.index] == '$' && ft_is_alpha(str[doc.index + 1]))
 			|| str[doc.index + 1] == '_' || str[doc.index + 1] == '?')
 		{
 			doc.key_len = 0;
@@ -95,15 +93,11 @@ char	*expand_line(char *str, t_env_map *map, int must_expanded)
 	return (str);
 }
 
-int	here_doc(t_minishell *shell, t_commands *command, t_pipex *pipex)
+int	here_doc(t_minishell *shell, t_commands *command)
 {
-	int		i;
-	char	*line;
-
-	i = 0;
 	if (has_heredoc(command, "<<") && command->arguments_amount != 1)
 	{
-		heredoc_parsing(shell, command, "<<", pipex);
+		heredoc_parsing(shell, command, "<<");
 		return (1);
 	}
 	return (0);

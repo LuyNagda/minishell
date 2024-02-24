@@ -55,7 +55,7 @@ BUILD_DIRECTORY = ./build/
 
 CC = gcc
 
-FLAGS = -c -g3
+FLAGS = -c -Wall -Wextra -Werror -g3
 
 SOURCES = $(addprefix "sources/", $(SRCS:.c=.o))
 OBJS = $(addprefix $(BUILD_DIRECTORY), $(FILES:.c=.o))

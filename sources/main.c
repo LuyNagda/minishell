@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/23 19:38:19 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/24 17:37:58 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	check_for_out_of_bounds(char *line)
 	while (line[i])
 	{
 		c = (unsigned char) line[i];
-		if (c < 0 || c > 127)
+		if (c <= 0 || c > 127)
 			return (1);
 		i++;
 	}

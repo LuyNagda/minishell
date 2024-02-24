@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:42:21 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 15:19:57 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 17:43:51 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,9 @@ static void	main_parsing(t_minishell *shell, t_commands *tmp,
 		else if (!ft_strncmp("<", character, 1)
 			&& in_redirection(tmp, redirection, i))
 			close_and_free(shell, pipex);
-		if (tmp->input_fd < 0 || tmp->outfile < 0)
+		if (tmp->input_fd < 0 || tmp->output_fd < 0)
 			close_fds(shell, pipex, tmp);
-		remove_file_from_command(tmp, character, i);
+		remove_file_from_command(tmp, i);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:50 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/21 14:31:27 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 17:41:43 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_string_in_quotes(char *str)
 }
 
 static char	**populate_export_with_value(t_commands *command,
-				int *i, int *has_equal)
+				size_t *i, int *has_equal)
 {
 	char	**export;
 
@@ -41,7 +41,7 @@ static char	**populate_export_with_value(t_commands *command,
 }
 
 static char	**populate_export_without_value(t_commands *command,
-				int *i, int *has_equal)
+				size_t *i, int *has_equal)
 {
 	char	**export;
 
@@ -55,7 +55,7 @@ static char	**populate_export_without_value(t_commands *command,
 }
 
 static char	**populate_export(t_commands *command,
-				int *i, int *has_equal)
+				size_t *i, int *has_equal)
 {
 	char	**export;
 
@@ -75,10 +75,8 @@ static char	**populate_export(t_commands *command,
 	return (export);
 }
 
-char	**get_export_values(t_commands *command, int *i, int *has_equal)
+char	**get_export_values(t_commands *command, size_t *i, int *has_equal)
 {
-	char	**export;
-
 	if (!(command->arguments[*i]))
 		return (NULL);
 	if (ft_str_contains(command->arguments[*i], "=",

@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:36:19 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/21 14:52:43 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 17:50:19 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,8 @@ void	ft_display_tokens(t_tokens *tokens)
 void	print_args(t_commands *commands, size_t command_nb)
 {
 	int	index;
-	int	args_amount;
 
 	index = 0;
-	args_amount = commands->arguments_amount;
 	printf(" [%zu] -> Already Executed: %d\n",
 		command_nb, commands->has_already_executed);
 	printf(" [%zu] -> Ordered Position In List: %zu\n",

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_builtin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:57 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/24 08:47:05 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/24 17:42:50 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include "string_utils.h"
 #include "put_utils.h"
 
-void	err_msg(t_minishell *shell, t_commands *command, char *msg)
+void	err_msg(t_minishell *shell, char *msg)
 {
 	if (!msg)
 	{
@@ -46,20 +46,19 @@ void	exec_cd(t_minishell *shell, t_commands *command)
 {
 	t_env_map	*node;
 	t_env_map	*oldpwd;
-	t_env_map	*pwd;
 	char		*tmp;
 
 	env_map_replace_or_add(shell->env_map, "?", "0");
 	node = env_map_find_node(shell->env_map, "HOME");
 	if (command->arguments_amount > 2)
-		err_msg(shell, command, "cd: too many arguments");
+		err_msg(shell, "cd: too many arguments");
 	else if (node != NULL && command->arguments_amount == 1
 		&& chdir(node->value) != 0)
-		err_msg(shell, command, NULL);
+		err_msg(shell, NULL);
 	else if (command->arguments[1])
 	{
-		if (chdir(command->arguments[1]) != 0 || !get_pwd(shell))
-			err_msg(shell, command, NULL);
+		if (chdir(command->arguments[1]) != 0 || !get_pwd())
+			err_msg(shell, NULL);
 	}
 	oldpwd = env_map_find_node(shell->env_map, "PWD");
 	if (oldpwd)

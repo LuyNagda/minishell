@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/24 15:46:33 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 17:49:58 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ void				exec_pwd(t_minishell *shell);
 void				exec_cd(t_minishell *shell, t_commands *command);
 void				exec_env(t_minishell *shell, t_commands *command);
 void				exec_exit(t_minishell *shell, t_commands *command);
-int					get_pwd(t_minishell *shell);
+int					get_pwd(void);
 
 /* *****************************************************/
 /* ********************* EXEC **************************/
@@ -156,14 +156,12 @@ int					is_builtins(t_commands *command);
 char				**convert_path_to_array(t_env_map *env_map);
 char				*find_command(t_env_map *map, char *command);
 void				free_and_exit(t_minishell *shell, t_pipex *pipex, int code);
-int					here_doc(t_minishell *shell,
-						t_commands *command, t_pipex *pipex);
+int					here_doc(t_minishell *shell, t_commands *command);
 void				normal_redirections(t_minishell *shell,
 						t_commands *command, t_pipex *pipex);
 int					here_doc_execution(t_minishell *shell,
 						t_commands *tmp, int i);
-void				here_doc_error_handling(t_minishell *shell,
-						t_commands *command, t_pipex *pipex);
+void				here_doc_error_handling(t_minishell *shell, t_pipex *pipex);
 
 /* *****************************************************/
 /* ********************** ENV **************************/
@@ -224,15 +222,14 @@ int					has_redirection(t_commands *command, char character);
 void				redirection_parsing(t_minishell *shell,
 						t_commands *commands, char *character, t_pipex *pipex);
 void				heredoc_parsing(t_minishell *shell,
-						t_commands *command, char *here_doc, t_pipex *pipex);
+						t_commands *command, char *here_doc);
 int					has_heredoc(t_commands *command, char *here_doc);
 int					count_redirection(t_commands *command, char *character);
-void				remove_file_from_command(t_commands *command,
-						char *character, int i);
+void				remove_file_from_command(t_commands *command, int i);
 int					has_multiple_redirection(t_commands *command,
 						char *character);
 char				**get_export_values(t_commands *command,
-						int *i, int *has_equal);
+						size_t *i, int *has_equal);
 void				add_back_command_path(t_minishell *shell,
 						t_commands *command);
 int					ft_string_in_quotes(char *str);
@@ -254,7 +251,7 @@ void				close_fds_pipex(t_minishell *shell,
 
 void				tokenize_input(t_minishell *shell);
 void				ft_split_to_tokens(t_minishell *shell, \
-	size_t cur_pos, int tmp);
+						size_t cur_pos, size_t tmp);
 t_tokens			*ft_create_token(char *token, t_token_type token_type);
 void				ft_add_back_token(t_tokens **tokens_list, t_tokens *token);
 void				add_token_after(t_tokens **tokens,

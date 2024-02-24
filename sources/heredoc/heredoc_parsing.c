@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:13:33 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 15:40:38 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 17:45:50 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,9 @@ static size_t	count_here_doc(t_commands *command, char *here_doc)
 	return (count);
 }
 
-static void	remove_heredoc_from_command(t_commands *command,
-			char *here_doc, int i)
+static void	remove_heredoc_from_command(t_commands *command, int i)
 {
-	size_t		j;
+	int		j;
 	char		**tmp;
 	char		**result;
 
@@ -77,14 +76,11 @@ static void	remove_heredoc_from_command(t_commands *command,
 }
 
 static void	heredoc_loop(t_minishell *shell,
-		t_commands *tmp, char *here_doc, t_pipex *pipex)
+		t_commands *tmp, char *here_doc)
 {
 	int			i;
-	int			j;
 	size_t		count;
-	char		*line;
 
-	j = 0;
 	count = count_here_doc(tmp, "<<");
 	while (count)
 	{
@@ -99,7 +95,7 @@ static void	heredoc_loop(t_minishell *shell,
 		}
 		if (here_doc_execution(shell, tmp, i + 1))
 			break ;
-		remove_heredoc_from_command(tmp, here_doc, i);
+		remove_heredoc_from_command(tmp, i);
 		if (count != 1)
 			close(shell->doc_fd);
 		count--;
@@ -107,7 +103,7 @@ static void	heredoc_loop(t_minishell *shell,
 }
 
 void	heredoc_parsing(t_minishell *shell,
-		t_commands *command, char *here_doc, t_pipex *pipex)
+		t_commands *command, char *here_doc)
 {
 	int			redirection;
 	t_commands	*tmp;
@@ -115,6 +111,6 @@ void	heredoc_parsing(t_minishell *shell,
 	tmp = command;
 	redirection = has_heredoc(tmp, "<<");
 	if (redirection)
-		heredoc_loop(shell, tmp, here_doc, pipex);
+		heredoc_loop(shell, tmp, here_doc);
 	add_back_command_path(shell, command);
 }
