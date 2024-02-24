@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:22:40 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 13:53:38 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 14:15:48 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,17 @@ static void	redirections(t_minishell *shell,
 	normal_redirections(shell, command, pipex);
 	if (command->arguments_amount == 0)
 		free_and_exit(shell, pipex, 0);
-	if (command->position > 0 && !command->input_fd && !shell->doc_fd)
-	{
-		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
-			error_msg(shell, pipex, "DUP2 failed");
-	}
 	if (has_redirection(command, '>'))
 	{
 		redirection_parsing(shell, command, ">", pipex);
 		if (dup2(command->output_fd, STDOUT_FILENO) == -1)
 			error_msg(shell, pipex, "DUP2 failed");
 		close(command->output_fd);
+	}
+	if (command->position > 0 && !command->input_fd && !shell->doc_fd)
+	{
+		if (dup2(pipex->o_pipe[0], STDIN_FILENO) == -1)
+			error_msg(shell, pipex, "DUP2 failed");
 	}
 	else if (shell->command_amount != 1
 		&& command->position < shell->command_amount - 1)

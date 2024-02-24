@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_parsing_2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 17:23:35 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 12:17:11 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/24 14:40:32 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,18 @@ static int	check_for_eof(char *here_doc, char *line)
 static char	*get_delimiter(t_minishell *shell, char *str)
 {
 	t_env_map	*env_map;
+	char		*tmp;
+	char		*delimiter;
 
 	if (!str)
 		return (NULL);
 	env_map = env_map_get_from_value(shell->env_map, str);
 	if (!env_map)
-		return (ft_strdup(str));
-	return (ft_strjoin("$", env_map->key));
+		return (ft_strjoin(str, "\n"));
+	tmp = ft_strjoin(env_map->key, "\n");
+	delimiter = ft_strjoin("$", tmp);
+	free(tmp);
+	return (delimiter);
 }
 
 int	here_doc_execution(t_minishell *shell, t_commands *tmp, int i)
@@ -56,7 +61,7 @@ int	here_doc_execution(t_minishell *shell, t_commands *tmp, int i)
 		return (free(delimiter), free(line), 1);
 	if (check_for_eof(tmp->arguments[i], line))
 		return (free(delimiter), 0);
-	while (ft_strncmp(delimiter, line, ft_strlen(delimiter)))
+	while (!ft_str_equals(line, delimiter))
 	{
 		line = expand_line(line, shell->env_map, !tmp->args_quoted[i]);
 		ft_putstr_fd(line, shell->doc_fd);

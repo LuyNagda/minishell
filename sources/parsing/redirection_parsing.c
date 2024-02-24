@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:42:21 by lunagda           #+#    #+#             */
-/*   Updated: 2024/01/26 15:31:17 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 14:24:50 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,20 @@
 #include <stdio.h>
 #include "minishell.h"
 #include "string_utils.h"
+#include "put_utils.h"
 
-static void	out_redirection(t_commands *tmp, int redirection, int i)
+static int	out_redirection(t_commands *tmp, int redirection, int i)
 {
+	if (ft_str_equals(tmp->arguments[i + 1], ">")
+		|| ft_str_equals(tmp->arguments[i + 1], ">>")
+		|| ft_str_equals(tmp->arguments[i + 1], "<")
+		|| ft_str_equals(tmp->arguments[i + 1], "<<"))
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+		ft_putstr_fd(tmp->arguments[i + 1], 2);
+		ft_putstr_fd("'\n", 2);
+		return (1);
+	}
 	if (redirection == 1)
 		tmp->output_fd = open(tmp->arguments[++i],
 				O_CREAT | O_RDWR | O_TRUNC, 0777);
@@ -25,15 +36,27 @@ static void	out_redirection(t_commands *tmp, int redirection, int i)
 		tmp->output_fd = open(tmp->arguments[++i],
 				O_WRONLY | O_APPEND | O_CREAT, 0777);
 	tmp->outfile = tmp->arguments[i];
+	return (0);
 }
 
-static void	in_redirection(t_commands *tmp, int redirection, int i)
+static int	in_redirection(t_commands *tmp, int redirection, int i)
 {
+	if (ft_str_equals(tmp->arguments[i + 1], ">")
+		|| ft_str_equals(tmp->arguments[i + 1], ">>")
+		|| ft_str_equals(tmp->arguments[i + 1], "<")
+		|| ft_str_equals(tmp->arguments[i + 1], "<<"))
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+		ft_putstr_fd(tmp->arguments[i + 1], 2);
+		ft_putstr_fd("'\n", 2);
+		return (1);
+	}
 	if (redirection == 1)
 	{
 		tmp->input_fd = open(tmp->arguments[++i], O_RDONLY);
 		tmp->infile = tmp->arguments[i];
 	}
+	return (0);
 }
 
 static void	main_parsing(t_minishell *shell, t_commands *tmp,
@@ -49,10 +72,18 @@ static void	main_parsing(t_minishell *shell, t_commands *tmp,
 		while (tmp->arguments[i]
 			&& ft_strncmp(tmp->arguments[i], character, 1))
 			i++;
-		if (!ft_strncmp(">", character, 1))
-			out_redirection(tmp, redirection, i);
-		else
-			in_redirection(tmp, redirection, i);
+		if (!ft_strncmp(">", character, 1) && out_redirection(tmp, redirection, i))
+		{
+			close(pipex->c_pipe[0]);
+			close(pipex->c_pipe[1]);
+			free_and_exit(shell, pipex, 1);
+		}
+		else if (!ft_strncmp("<", character, 1) && in_redirection(tmp, redirection, i))
+		{
+			close(pipex->c_pipe[0]);
+			close(pipex->c_pipe[1]);
+			free_and_exit(shell, pipex, 1);
+		}
 		if (tmp->input_fd < 0 || tmp->outfile < 0)
 		{
 			if (tmp->input_fd < 0)
