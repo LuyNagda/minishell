@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 20:32:59 by luynagda          #+#    #+#             */
-/*   Updated: 2024/02/24 12:29:06 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/24 12:36:48 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ t_tokens *tokens, char *value)
 		free(value);
 		value = trim;
 	}
+	return (value);
 }
 
 void	free_value(char *value)
