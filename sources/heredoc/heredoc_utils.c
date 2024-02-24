@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 18:05:56 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 08:58:44 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/24 13:18:11 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	here_doc_error_handling(t_minishell *shell,
 static void	expand_key(char **str, t_env_map *map, t_heredoc_line *doc)
 {
 	t_env_map		*node;
+	char			*trim;
 
 	doc->before_key = ft_substr(*str, 0, doc->index);
 	doc->key = ft_substr(*str, doc->index, doc->key_len);
@@ -82,7 +83,8 @@ char	*expand_line(char *str, t_env_map *map, int must_expanded)
 		{
 			doc.key_len = 0;
 			while (str[doc.index + doc.key_len] && \
-				!ft_is_whitespace(str[doc.index + doc.key_len]))
+				!ft_is_whitespace(str[doc.index + doc.key_len]) \
+				&& !is_quote(str[doc.index + doc.key_len]))
 				doc.key_len++;
 			expand_key(&str, map, &doc);
 			doc.index = doc.index + doc.key_len;
