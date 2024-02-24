@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/24 08:50:06 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/24 12:28:42 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,6 +204,13 @@ void				ft_flush_command_list(t_commands *list);
 void				*ft_populate_command_list(t_minishell *shell);
 int					*ft_fill_args_quotes(char **args);
 
+/* *****************************************************/
+/* ******************** EXPANDS ************************/
+/* *****************************************************/
+char				*get_status_value(t_minishell *shell, char *value);
+char				*get_normal_value(t_minishell *shell, \
+t_tokens *tokens, char *value);
+void				free_value(char *value);
 /* *****************************************************/
 /* ******************** PARSING ************************/
 /* *****************************************************/
