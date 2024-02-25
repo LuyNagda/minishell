@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 20:33:04 by luynagda          #+#    #+#             */
-/*   Updated: 2024/02/24 12:37:23 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/25 16:29:54 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ static int	contains_valid_key(t_minishell *shell, t_tokens *token)
 	if (rebuilded_string == NULL)
 		return (_false);
 	token_pos = get_current_token_pos(token);
-	if (!variable_in_quotes(rebuilded_string, \
-		get_index_from_token(shell, token_pos)))
+	if (!quotes_is_valid(rebuilded_string, \
+	get_index_from_token(shell, token_pos)))
 		return (free(rebuilded_string), _false);
 	return (free(rebuilded_string), _true);
 }

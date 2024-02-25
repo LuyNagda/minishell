@@ -300,7 +300,7 @@ t_message			ft_init_messages(void);
 t_env_map			*duplicate_list(t_env_map *head);
 t_env_map			*merge_sort(t_env_map *head);
 int					is_quote(char c);
-int					variable_in_quotes(const char *str, size_t index);
+int					quotes_is_valid(const char *str, size_t index);
 void				free_duplicate_env(t_env_map *head);
 void				command_dir_error(t_commands *command);
 
