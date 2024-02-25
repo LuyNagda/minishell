@@ -6,7 +6,7 @@
 #    By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/24 20:52:05 by luynagda          #+#    #+#              #
-#    Updated: 2024/02/24 20:52:09 by luynagda         ###   ########.fr        #
+#    Updated: 2024/02/25 16:56:03 by luynagda         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,7 +71,7 @@ FLAGS = -c -Wall -Wextra -Werror -g3
 
 OBJS = $(addprefix $(BUILD_DIRECTORY), $(FILES:.c=.o))
 
-$(NAME): $(OBJS) $(LIBFT)
+$(NAME): $(BUILD_DIRECTORY) $(OBJS) $(LIBFT)
 	@NEED_LINK=0; \
 	for file in $(OBJS) $(LIBFT); do \
 		if [ $$file -nt $(NAME) ]; then \
@@ -106,9 +106,11 @@ $(BUILD_DIRECTORY):
 all : $(NAME)
 
 clean :
-	$(RM) $(OBJS)
+	$(MAKE_LIBFT) clean
+	rm -rf $(BUILD_DIRECTORY)
 
 fclean : clean
+	$(MAKE_LIBFT) fclean
 	$(RM) $(NAME)
 
 re : fclean all
