@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:13:33 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 17:45:50 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/25 16:30:34 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ static size_t	count_here_doc(t_commands *command, char *here_doc)
 static void	remove_heredoc_from_command(t_commands *command, int i)
 {
 	int		j;
-	char		**tmp;
-	char		**result;
+	char	**tmp;
+	char	**result;
 
 	tmp = command->arguments;
 	j = ft_str_tab_len(tmp);
