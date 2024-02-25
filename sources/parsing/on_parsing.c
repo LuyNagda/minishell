@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:19:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/23 18:07:56 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/25 16:20:49 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <libft.h>
@@ -48,8 +48,7 @@ static int	ft_has_only_whitespace_between_pipes(t_minishell *shell)
 t_parsing_result	on_parse(t_minishell *shell)
 {
 	if (ft_has_only_whitespace_between_pipes(shell) != 0)
-		return (ft_putstr_fd(shell->messages.whitepipe_error, 2), \
-			free(shell->sended_line), INVALID_INPUT);
+		return (ft_putstr_fd(shell->messages.whitepipe_error, 2), INVALID_INPUT);
 	treat_variable_keys(shell);
 	append_quoted(&shell->parsing_cmd.tokens);
 	return (SUCCESS);
