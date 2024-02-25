@@ -12,9 +12,7 @@
 
 #include <libft.h>
 #include "minishell.h"
-#include "string_utils.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 static void	treat_spaced_values(t_minishell *shell, \
 t_tokens *current, char *value)

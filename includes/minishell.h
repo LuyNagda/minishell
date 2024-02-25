@@ -118,7 +118,6 @@ typedef struct s_minishell
 	size_t			command_amount;
 
 	t_env_map		*env_map;
-	int				is_builtin;
 	int				doc_fd;
 }					t_minishell;
 
@@ -172,7 +171,6 @@ t_env_map			*ft_create_env_node(char *k, char *v,
 						int has_equals, int is_system);
 t_env_map			*env_map_add_back(t_env_map **env_map,
 						t_env_map *new_node, int is_immutable);
-t_env_map			*env_map_remove_back(t_env_map *env_map);
 void				env_map_remove_from_key(t_env_map *env_map, char *key);
 t_env_map			*env_map_get_from_value(t_env_map *env_map, char *value);
 t_env_map			*env_map_replace(t_env_map *env_map,
@@ -194,14 +192,10 @@ size_t				env_map_get_size(t_env_map *env_map);
 t_commands			*build_command_loop(t_minishell *shell, char **args, \
 	size_t arg_index);
 size_t				ft_get_numbers_of_commands(t_commands *commands_list);
-t_commands			*ft_get_command_from_pos(t_commands *command_list,
-						size_t command_node_pos);
 t_commands			*ft_add_command(t_minishell *shell, t_commands *new_node);
 size_t				ft_get_arguments_amount(t_commands *command);
 t_commands			*ft_command_new_node(t_env_map *map, char **args);
-t_commands			*ft_create_command_node(char *cmd);
 void				ft_flush_command_list(t_commands *list);
-void				*ft_populate_command_list(t_minishell *shell);
 int					*ft_fill_args_quotes(char **args);
 
 /* *****************************************************/
@@ -234,11 +228,6 @@ void				add_back_command_path(t_minishell *shell,
 						t_commands *command);
 int					ft_string_in_quotes(char *str);
 char				*expand_line(char *str, t_env_map *map, int must_expanded);
-t_boolean			process_space(t_minishell *shell, t_tokens *tmp, char *str);
-t_boolean			expand_status(t_minishell *shell, char **value);
-t_boolean			expand_normal(t_minishell *shell,
-						t_tokens *tokens, char **value);
-t_boolean			process_previous_token(t_tokens *tmp, char *str);
 t_parsing_result	remove_quotes(t_minishell *shell);
 void				close_fds(t_minishell *shell,
 						t_pipex *pipex, t_commands *tmp);
@@ -261,13 +250,7 @@ void				ft_flush_tokens(t_tokens *tokens);
 size_t				get_current_token_pos(t_tokens *tokens);
 char				*rebuild_string_from_token(t_minishell *shell);
 void				append_token(t_tokens *appended, t_tokens *to_append);
-void				ft_concat_quoted_pipes(t_minishell *shell, char *final_str);
-size_t				ft_tokens_len(t_tokens *tokens);
 size_t				ft_get_tokens_amount(t_tokens *tokens);
-size_t				ft_get_tokens_type_amount(t_tokens *tokens,
-						t_token_type tokenType);
-long long			ft_next_token_pos(t_tokens *tok,
-						t_token_type type, long long start);
 size_t				get_index_from_token(t_minishell *shell, size_t token_pos);
 void				append_quoted(t_tokens **tokens);
 void				add_space_token(t_minishell *shell, t_tokens *current);
@@ -281,17 +264,11 @@ void				ft_free_token(t_tokens *token);
 
 t_boolean			ft_str_is_only_whitespace(const char *str);
 int					ft_quote_is_closed(const char *line);
-int					ft_index_is_in_quote(const char *line,
-						size_t pos, char quote);
 int					ft_index_is_in_quotes(const char *line, size_t pos);
 int					ft_str_equals(const char *str1, const char *str2);
-int					ft_str_index_of(const char *src, const char *search,
-						size_t *start_at, size_t starting_search);
 int					ft_str_contains(const char *src, const char *search,
 						size_t starting_search);
-char				**ft_memcpy_array(char **src, char **dest, size_t start);
 int					ft_str_starts_with(const char *src, const char *value);
-void				ft_replace_whitespace(char *line, char value);
 char				ft_get_last_char_iw(char *line);
 char				ft_get_first_char_iw(char *line);
 void				error_msg(t_minishell *shell, t_pipex *pipex, char *string);

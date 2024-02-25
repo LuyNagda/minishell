@@ -58,39 +58,3 @@ int	ft_str_starts_with(const char *src, const char *value)
 		return (1);
 	return (0);
 }
-
-char	**ft_memcpy_array(char **src, char **dest, size_t start)
-{
-	char	*current;
-	size_t	index;
-	size_t	tab_len;
-
-	if (!src || !dest)
-		return (NULL);
-	tab_len = ft_str_tab_len(src);
-	if (tab_len <= 0)
-		return (NULL);
-	index = 0;
-	while (src[start] && tab_len >= start)
-	{
-		current = ft_strdup(src[start]);
-		if (!current)
-			break ;
-		dest[index] = current;
-		start++;
-		index++;
-	}
-	return (dest);
-}
-
-char	**ft_increase_string_array(char **src)
-{
-	size_t	array_len;
-	char	**array;
-
-	if (!src)
-		return (ft_calloc(2, sizeof(char *)));
-	array_len = ft_str_tab_len(src);
-	array = ft_calloc(array_len + 2, sizeof (char *));
-	return (array);
-}

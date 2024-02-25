@@ -27,22 +27,6 @@ size_t	ft_get_numbers_of_commands(t_commands *commands_list)
 	return (length);
 }
 
-t_commands	*ft_get_command_from_pos(t_commands *command_list,
-			size_t command_node_pos)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < command_node_pos)
-	{
-		if (!command_list->next_node)
-			return (NULL);
-		command_list = command_list->next_node;
-		i++;
-	}
-	return (command_list);
-}
-
 size_t	ft_get_arguments_amount(t_commands *command)
 {
 	size_t	i;

@@ -69,6 +69,8 @@ static void	ft_shell_loop(t_minishell *shell)
 		if (check_for_out_of_bounds(line))
 			return ;
 		shell->sended_line = ft_strtrim(line, " ");
+		if (!shell->sended_line)
+			break ;
 		free(line);
 		if (pre_parsing(shell) != SUCCESS)
 			continue ;

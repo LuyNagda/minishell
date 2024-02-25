@@ -16,7 +16,6 @@
 #include <stdio.h>
 #include "libft.h"
 #include <unistd.h>
-#include <fcntl.h>
 
 void	error_msg(t_minishell *shell, t_pipex *pipex, char *string)
 {

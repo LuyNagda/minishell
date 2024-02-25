@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 10:54:43 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/23 15:00:23 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/25 16:48:46 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,29 +52,6 @@ int	ft_str_contains(const char *src, const char *search, size_t starting_search)
 	return (0);
 }
 
-int	ft_str_index_of(const char *src, const char *search,
-	size_t *start_at, size_t starting_search)
-{
-	size_t	src_index;
-	size_t	search_index;
-
-	src_index = starting_search;
-	while (ft_strlen(src) > src_index)
-	{
-		search_index = 0;
-		while (search[search_index]
-			&& src[search_index + src_index] == search[search_index])
-			search_index++;
-		if (search[search_index] == '\0')
-		{
-			*start_at = src_index;
-			return (1);
-		}
-		src_index++;
-	}
-	return (0);
-}
-
 char	*build_str_from_array(char **array)
 {
 	size_t	array_index;
@@ -100,17 +77,4 @@ char	*build_str_from_array(char **array)
 		array_index++;
 	}
 	return (string);
-}
-
-void	ft_replace_whitespace(char *line, char value)
-{
-	size_t	index;
-
-	index = 0;
-	while (line[index])
-	{
-		if (ft_is_whitespace(line[index]))
-			line[index] = value;
-		index++;
-	}
 }
