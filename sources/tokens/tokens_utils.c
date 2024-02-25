@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 21:40:05 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/12 02:09:10 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/25 20:00:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "string_utils.h"
-
 
 /**
  * @brief Gets the total number of tokens in a linked list.

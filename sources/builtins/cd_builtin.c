@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_builtin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:57 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/24 17:42:50 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/25 19:58:56 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	err_msg(t_minishell *shell, char *msg)
 	{
 		ft_putstr_fd("cd: error retrieving current directory: getcwd: ", 2);
 		ft_putstr_fd("cannot access parent directories: ", 2);
-		ft_putendl_fd("No such file or directory\n", 2);
+		ft_putendl_fd("No such file or directory", 2);
 	}
 	else
 		ft_putendl_fd(msg, 2);
@@ -42,6 +42,27 @@ static char	*get_cwd_for_cd(void)
 		return (NULL);
 }
 
+static void	handle_cd_args(t_minishell *shell, t_commands *command)
+{
+	t_env_map	*home;
+	t_env_map	*oldpwd;
+
+	home = env_map_find_node(shell->env_map, "HOME");
+	oldpwd = env_map_find_node(shell->env_map, "OLDPWD");
+	if (ft_str_equals(command->arguments[1], "~"))
+	{
+		if (home != NULL && chdir(home->value) != 0)
+			err_msg(shell, "cd: HOME not set");
+	}
+	else if (ft_str_equals(command->arguments[1], "-"))
+	{
+		if (oldpwd != NULL && chdir(oldpwd->value) != 0)
+			err_msg(shell, "cd: OLDPWD not set");
+	}
+	else if (chdir(command->arguments[1]) != 0 || !get_pwd())
+		err_msg(shell, NULL);
+}
+
 void	exec_cd(t_minishell *shell, t_commands *command)
 {
 	t_env_map	*node;
@@ -56,10 +77,7 @@ void	exec_cd(t_minishell *shell, t_commands *command)
 		&& chdir(node->value) != 0)
 		err_msg(shell, NULL);
 	else if (command->arguments[1])
-	{
-		if (chdir(command->arguments[1]) != 0 || !get_pwd())
-			err_msg(shell, NULL);
-	}
+		handle_cd_args(shell, command);
 	oldpwd = env_map_find_node(shell->env_map, "PWD");
 	if (oldpwd)
 		env_map_replace_or_add(shell->env_map, "OLDPWD", oldpwd->value);
