@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/24 17:37:58 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/25 18:21:30 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ static int	check_for_out_of_bounds(char *line)
 
 static void	tokenize_and_run(t_minishell *shell)
 {
-	add_history(shell->sended_line);
 	tokenize_input(shell);
 	if (on_parse(shell) == SUCCESS)
 	{
@@ -71,6 +70,7 @@ static void	ft_shell_loop(t_minishell *shell)
 		shell->sended_line = ft_strtrim(line, " ");
 		if (!shell->sended_line)
 			break ;
+		add_history(shell->sended_line);
 		free(line);
 		if (pre_parsing(shell) != SUCCESS)
 			continue ;
