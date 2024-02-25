@@ -6,7 +6,7 @@
 /*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/24 20:52:23 by luynagda         ###   ########.fr       */
+/*   Updated: 2024/02/25 17:58:00 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ void	ft_dispatch_command(t_minishell *shell)
 	if (!ft_strlen(shell->commands->arguments[0])
 		|| ft_str_is_only_whitespace(shell->commands->arguments[0]))
 	{
-		ft_putstr_fd("minishell: '' : command not found\n", 2);
-		env_map_replace(shell->env_map, "?", "127");
+		//ft_putstr_fd("minishell: '' : command not found\n", 2);
+		env_map_replace(shell->env_map, "?", "0");
 		return ;
 	}
 	if (has_error(shell))
