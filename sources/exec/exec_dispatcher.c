@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:38:24 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/25 21:40:59 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/25 21:48:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,13 @@ void	ft_dispatch_command(t_minishell *shell)
 		|| ft_str_is_only_whitespace(shell->commands->arguments[0]))
 	{
 		if (shell->commands->args_quoted[0])
-		{	
+		{
 			ft_putstr_fd("minishell: '' : command not found\n", 2);
 			env_map_replace(shell->env_map, "?", "127");
-			return ;
 		}
 		else
-		{
 			env_map_replace(shell->env_map, "?", "0");
-			return ;
-		
-		}
+		return ;
 	}
 	if (has_error(shell))
 	{
