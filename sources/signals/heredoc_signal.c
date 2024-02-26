@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:20:38 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/26 15:03:45 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/26 15:59:27 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,18 @@ static void	handle_heredoc_signals(int signum)
 
 void	hook_heredoc_signal(void)
 {
-	struct sigaction sig;
+	struct sigaction	sig;
 
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
 	sig.sa_handler = handle_heredoc_signals;
-	if (sigaction(SIGINT, &sig, NULL) == -1) {
+	if (sigaction(SIGINT, &sig, NULL) == -1)
+	{
 		perror("sigaction");
 		exit(1);
 	}
-	if (signal(SIGQUIT, SIG_IGN) == SIG_ERR) {
+	if (signal(SIGQUIT, SIG_IGN) == SIG_ERR)
+	{
 		perror("signal");
 		exit(1);
 	}

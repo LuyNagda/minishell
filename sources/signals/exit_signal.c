@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 14:58:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/26 15:08:03 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/26 15:58:57 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,4 @@ void	hook_exit_signal(void)
 		perror("signal");
 		exit(1);
 	}
-
 }

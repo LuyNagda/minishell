@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:49:31 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/26 14:18:25 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/26 15:58:52 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	find_next_quote(char *str)
 int	find_unsual_things(char *str)
 {
 	char	*substr;
-	
+
 	substr = ft_substr(str, find_next_quote(str), ft_strlen(str));
 	if (ft_str_contains(substr, "||", 0))
 		return (free(substr), 1);
