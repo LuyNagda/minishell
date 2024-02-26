@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 17:42:42 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/26 14:25:10 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/26 18:00:26 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,21 @@ static t_boolean	specials_is_valid(t_minishell *shell)
 	return (_true);
 }
 
+static void	add_path_to_commands(t_minishell *shell)
+{
+	t_commands	*command;
+	
+	command = shell->commands;
+	while (command)
+	{
+		if (is_builtins(command))
+			command->path = ft_strdup("builtin");
+		else
+			command->path = find_command(shell->env_map, command->arguments[0]);
+		command = command->next_node;
+	}
+}
+
 t_parsing_result	post_parsing(t_minishell *shell)
 {
 	t_tokens	*end_token;
@@ -65,6 +80,7 @@ t_parsing_result	post_parsing(t_minishell *shell)
 	if (!build_command_loop(shell, NULL, 0))
 		return (ft_delete_token(&shell->parsing_cmd.tokens, end_token), ERROR);
 	remove_quotes(shell);
+	add_path_to_commands(shell);
 	shell->command_amount = ft_get_numbers_of_commands(shell->commands);
 	ft_delete_token(&shell->parsing_cmd.tokens, end_token);
 	return (SUCCESS);
