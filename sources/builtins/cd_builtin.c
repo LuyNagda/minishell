@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_builtin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:25:57 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/25 19:58:56 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/26 12:40:12 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,15 @@ static void	handle_cd_args(t_minishell *shell, t_commands *command)
 	oldpwd = env_map_find_node(shell->env_map, "OLDPWD");
 	if (ft_str_equals(command->arguments[1], "~"))
 	{
+		if (home == NULL)
+			err_msg(shell, "cd: HOME not set");
 		if (home != NULL && chdir(home->value) != 0)
 			err_msg(shell, "cd: HOME not set");
 	}
 	else if (ft_str_equals(command->arguments[1], "-"))
 	{
+		if (oldpwd == NULL)
+			err_msg(shell, "cd: OLDPWD not set");
 		if (oldpwd != NULL && chdir(oldpwd->value) != 0)
 			err_msg(shell, "cd: OLDPWD not set");
 	}
