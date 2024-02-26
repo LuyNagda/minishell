@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 17:42:42 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 14:27:51 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/26 14:25:10 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static t_boolean	specials_is_valid(t_minishell *shell)
 			tmp2 = tmp->next;
 			while (tmp2->type == _SPACE)
 				tmp2 = tmp2->next;
-			if (is_special_token(tmp2))
+			if (is_special_token(tmp2) || tmp2->type == PIPE)
 				return (_false);
 		}
 		tmp = tmp->next;
