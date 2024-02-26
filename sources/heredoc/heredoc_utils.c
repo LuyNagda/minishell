@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 18:05:56 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 17:49:22 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/26 15:37:22 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,11 +114,6 @@ void	normal_redirections(t_minishell *shell,
 			if (dup2(command->input_fd, STDIN_FILENO) == -1)
 				error_msg(shell, pipex, "DUP2 failed");
 			close(command->input_fd);
-		}
-		else
-		{
-			perror("bash");
-			free_and_exit(shell, pipex, errno);
 		}
 	}
 }
