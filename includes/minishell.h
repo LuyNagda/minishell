@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/26 14:17:48 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/26 18:01:44 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ t_commands			*build_command_loop(t_minishell *shell, char **args, \
 size_t				ft_get_numbers_of_commands(t_commands *commands_list);
 t_commands			*ft_add_command(t_minishell *shell, t_commands *new_node);
 size_t				ft_get_arguments_amount(t_commands *command);
-t_commands			*ft_command_new_node(t_env_map *map, char **args);
+t_commands			*ft_command_new_node(char **args);
 void				ft_flush_command_list(t_commands *list);
 int					*ft_fill_args_quotes(char **args);
 

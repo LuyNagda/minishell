@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 19:26:42 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/26 17:59:53 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/26 18:01:34 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ size_t	ft_get_arguments_amount(t_commands *command)
 	return (i);
 }
 
-t_commands	*ft_command_new_node(t_env_map *map, char **args)
+t_commands	*ft_command_new_node(char **args)
 {
 	t_commands	*command;
 
@@ -54,10 +54,6 @@ t_commands	*ft_command_new_node(t_env_map *map, char **args)
 	command->next_node = NULL;
 	command->error_during_creation = _false;
 	command->is_builtin = is_builtins(command);
-	if (is_builtins(command))
-		command->path = ft_strdup("builtin");
-	else
-		command->path = find_command(map, args[0]);
 	command->args_quoted = ft_fill_args_quotes(args);
 	return (command);
 }

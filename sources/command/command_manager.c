@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 19:26:51 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/09 13:56:04 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/26 18:01:52 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static char	**build_and_add_command(t_minishell *shell, char **args)
 {
 	t_commands	*builded;
 
-	builded = ft_command_new_node(shell->env_map, args);
+	builded = ft_command_new_node(args);
 	if (!builded)
 		return (ft_free_split(args), NULL);
 	ft_add_command(shell, builded);
