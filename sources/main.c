@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/26 15:12:30 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/26 16:07:02 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ static void	ft_shell_loop(t_minishell *shell)
 		shell->sended_line = ft_strtrim(line, " ");
 		if (!shell->sended_line)
 			break ;
-		add_history(shell->sended_line);
+		if (shell->sended_line[0])
+			add_history(shell->sended_line);
 		free(line);
 		if (pre_parsing(shell) != SUCCESS)
 			continue ;
