@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 14:58:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/22 15:46:32 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/26 15:08:03 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,6 @@ int	g_signal_state;
 
 static void	handle_exit_signal(int signum)
 {
-	if (signum == SIGQUIT)
-	{
-		env_map_replace(get_minishell(NULL)->env_map, "?", "131");
-		ft_putstr_fd("\b\b  \b\b", 0);
-	}
 	if (signum == SIGINT)
 	{
 		env_map_replace(get_minishell(NULL)->env_map, "?", "130");
@@ -52,10 +47,15 @@ void	hook_exit_signal(void)
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = SA_RESTART;
 	sig.sa_handler = handle_signals;
-	if (sigaction(SIGINT, &sig, NULL) == -1
-		|| sigaction(SIGQUIT, &sig, NULL) == -1)
+	if (sigaction(SIGINT, &sig, NULL) == -1)
 	{
 		perror("sigaction");
 		exit(1);
 	}
+	if (signal(SIGQUIT, SIG_IGN) == SIG_ERR)
+	{
+		perror("signal");
+		exit(1);
+	}
+
 }

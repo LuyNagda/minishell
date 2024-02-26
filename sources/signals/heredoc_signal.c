@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:20:38 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/24 15:48:13 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/26 15:03:45 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,6 @@ static void	handle_heredoc_signal(int signum)
 		ft_putendl_fd("\n", 0);
 		env_map_replace(get_minishell(NULL)->env_map, "?", "130");
 	}
-	if (signum == SIGQUIT)
-	{
-		env_map_replace(get_minishell(NULL)->env_map, "?", "131");
-		ft_putstr_fd("\b\b  \b\b", 0);
-	}
 }
 
 static void	handle_heredoc_signals(int signum)
@@ -42,15 +37,17 @@ static void	handle_heredoc_signals(int signum)
 
 void	hook_heredoc_signal(void)
 {
-	struct sigaction	sig;
+	struct sigaction sig;
 
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
 	sig.sa_handler = handle_heredoc_signals;
-	if (sigaction(SIGINT, &sig, NULL) == -1
-		|| sigaction(SIGQUIT, &sig, NULL) == -1)
-	{
+	if (sigaction(SIGINT, &sig, NULL) == -1) {
 		perror("sigaction");
+		exit(1);
+	}
+	if (signal(SIGQUIT, SIG_IGN) == SIG_ERR) {
+		perror("signal");
 		exit(1);
 	}
 }
