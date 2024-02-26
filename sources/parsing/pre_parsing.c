@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parsing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 03:15:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/06 18:29:46 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/26 14:20:47 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ t_parsing_result	pre_parsing(t_minishell *shell)
 {
 	if (!shell->sended_line || !is_valid_line(shell->sended_line))
 		return (free(shell->sended_line), INVALID_INPUT);
-	if (!ft_string_in_quotes(ft_strchr(shell->sended_line, '\"')) && \
-		ft_str_contains(shell->sended_line, "||", 0))
+	if (ft_str_contains(shell->sended_line, "\"", 0)
+		&& find_unsual_things(ft_strchr(shell->sended_line, '\"')) == 1)
 		return (ft_putstr_fd(shell->messages.double_pipe_error, 2),
 			free(shell->sended_line), INVALID_INPUT);
-	if (!ft_string_in_quotes(ft_strchr(shell->sended_line, '\"')) && \
-		ft_str_contains(shell->sended_line, ";", 0))
+	if (ft_str_contains(shell->sended_line, "\"", 0)
+		&& find_unsual_things(ft_strchr(shell->sended_line, '\"')) == 2)
 		return (ft_putstr_fd(shell->messages.semicolon_detected, 2),
 			free(shell->sended_line), INVALID_INPUT);
 	if (ft_get_first_char_iw(shell->sended_line) == '|'

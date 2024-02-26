@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 11:45:39 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/24 17:49:58 by lunagda          ###   ########.fr       */
+/*   Updated: 2024/02/26 14:17:48 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,6 +233,7 @@ void				close_fds(t_minishell *shell,
 						t_pipex *pipex, t_commands *tmp);
 void				close_fds_pipex(t_minishell *shell,
 						t_commands *command, t_pipex *pipex);
+int					find_unsual_things(char *str);
 
 /* *****************************************************/
 /* ******************** TOKENS *************************/

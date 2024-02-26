@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: luynagda <luynagda@student.42.fr>          +#+  +:+       +#+         #
+#    By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/24 20:52:05 by luynagda          #+#    #+#              #
-#    Updated: 2024/02/25 16:56:03 by luynagda         ###   ########.fr        #
+#    Updated: 2024/02/26 14:10:42 by lunagda          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ FILES = main.c                         \
     exec/exec_pipex.c                 \
     exec/path_handler.c               \
     exec/exec_utils.c                 \
+    parsing/parsing_utils.c           \
     parsing/on_parsing.c              \
     parsing/post_parsing.c            \
     parsing/pre_parsing.c             \
