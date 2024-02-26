@@ -6,7 +6,7 @@
 /*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 09:27:22 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/02/25 18:21:30 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/02/26 15:12:30 by lunagda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,7 @@ int	main(int argc, char **argv, char **env)
 	shell.is_running = 1;
 	shell.messages = ft_init_messages();
 	env_map_init(&shell);
-	if (&shell.env_map)
-		env_array_to_map(&shell, &shell.env_map, env);
+	env_array_to_map(&shell, &shell.env_map, env);
 	node = env_map_find_node(shell.env_map, "?");
 	get_minishell(&shell);
 	ft_shell_loop(&shell);
