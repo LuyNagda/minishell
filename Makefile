@@ -62,17 +62,17 @@ FILES = main.c                         \
     utils/merge_sort.c                \
     signals/exit_signal.c             \
     signals/heredoc_signal.c          \
-    signals/signals_manager.c         
+    signals/signals_manager.c
 
 BUILD_DIRECTORY = ./build/
 
 CC = gcc
 
-FLAGS = -c -Wall -Wextra -Werror -g3
+FLAGS = -c -Wall -Wextra -Werror -g3 -MD
 
 OBJS = $(addprefix $(BUILD_DIRECTORY), $(FILES:.c=.o))
 
-$(NAME): $(BUILD_DIRECTORY) $(OBJS) $(LIBFT)
+$(NAME): $(BUILD_DIRECTORY) $(OBJS) | $(LIBFT)
 	@NEED_LINK=0; \
 	for file in $(OBJS) $(LIBFT); do \
 		if [ $$file -nt $(NAME) ]; then \
@@ -89,7 +89,7 @@ $(NAME): $(BUILD_DIRECTORY) $(OBJS) $(LIBFT)
 $(LIBFT):
 	$(MAKE_LIBFT)
 
-$(BUILD_DIRECTORY)%.o: ./sources/%.c Makefile ./includes/*.h
+$(BUILD_DIRECTORY)%.o: ./sources/%.c Makefile
 	$(CC) $(FLAGS) -I ./includes/ -I ./dependencies/libft/.includes/ $< -o $@
 
 $(BUILD_DIRECTORY):
@@ -116,4 +116,6 @@ fclean : clean
 
 re : fclean all
 
-.PHONY: all clean fclean re minishell
+.PHONY: all clean fclean re minishell $(LIBFT)
+
+-include $(OBJS:.o=.d)

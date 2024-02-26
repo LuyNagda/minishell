@@ -3,92 +3,90 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/01/17 17:54:42 by jbadaire          #+#    #+#              #
-#    Updated: 2023/01/17 17:54:46 by jbadaire         ###   ########lyon.fr    #
+#    Created: 2024/02/26 15:40:47 by lunagda           #+#    #+#              #
+#    Updated: 2024/02/26 15:54:27 by lunagda          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 RM					=	rm -rf
-
 CC					=	gcc
-FLAGS				=	-Wall -Wextra -Werror -g3
+FLAGS				=	-Wall -Wextra -Werror -MD -g3
 NAME				=	libft.a
-
 BUILD_DIRECTORY		= 	./build/
-
 SRCS			=						\
-	chained_utils/ft_lst_new.c		\
-	chained_utils/ft_lst_add_front.c	\
-	chained_utils/ft_lst_size.c			\
-	chained_utils/ft_lst_last.c			\
-	chained_utils/ft_lst_add_back.c		\
-	chained_utils/ft_lst_delone.c		\
-	chained_utils/ft_lst_clear.c		\
-	chained_utils/ft_lst_iter.c			\
-	char_utils/ft_is_sign.c			\
-	char_utils/ft_is_whitespace.c		\
-	char_utils/ft_is_space.c			\
-	char_utils/ft_is_alpha_num.c		\
-	char_utils/ft_is_alpha.c			\
-	char_utils/ft_is_ascii.c			\
-	char_utils/ft_is_digit.c			\
-	char_utils/ft_is_print.c			\
-	char_utils/ft_to_lower.c			\
-	char_utils/ft_to_upper.c			\
-	ft_printf/ft_printf.c			\
-	ft_printf/ft_args_handler.c			\
-	ft_printf/ft_get_address.c			\
-	ft_printf/ft_get_base16.c			\
-	ft_printf/ft_get_char.c				\
-	ft_printf/ft_get_integer.c			\
-	ft_printf/ft_get_string.c			\
-	get_next_line/get_next_line.c	\
-	get_next_line/get_next_line_utils.c	\
-	mem_utils/ft_calloc.c			\
-	mem_utils/ft_memset.c				\
-	mem_utils/ft_memchr.c				\
-	mem_utils/ft_memcmp.c				\
-	mem_utils/ft_memcpy.c				\
-	mem_utils/ft_memmove.c				\
-	put_utils/ft_putchar_fd.c		\
-	put_utils/ft_putstr_fd.c			\
-	put_utils/ft_putendl_fd.c			\
-	put_utils/ft_putnbr_fd.c			\
-	string_utils/ft_bzero.c			\
-	string_utils/ft_strlen.c			\
-	string_utils/ft_strlcat.c			\
-	string_utils/ft_strrchr.c			\
-	string_utils/ft_strchr.c 			\
-	string_utils/ft_strncmp.c			\
-	string_utils/ft_strnstr.c			\
-	string_utils/ft_strdup.c			\
-	string_utils/ft_strlcpy.c			\
-	string_utils/ft_substr.c			\
-	string_utils/ft_strjoin.c			\
-	string_utils/ft_strtrim.c			\
-	string_utils/ft_split.c				\
-	string_utils/ft_striteri.c			\
-	string_utils/ft_strmapi.c			\
-	tab_utils/ft_str_tab_len.c		\
-	ft_atoi.c						\
-	ft_itoa.c							\
+	chained_utils/ft_lst_new		\
+	chained_utils/ft_lst_add_front	\
+	chained_utils/ft_lst_size			\
+	chained_utils/ft_lst_last			\
+	chained_utils/ft_lst_add_back		\
+	chained_utils/ft_lst_delone		\
+	chained_utils/ft_lst_clear		\
+	chained_utils/ft_lst_iter			\
+	char_utils/ft_is_sign			\
+	char_utils/ft_is_whitespace		\
+	char_utils/ft_is_space			\
+	char_utils/ft_is_alpha_num		\
+	char_utils/ft_is_alpha			\
+	char_utils/ft_is_ascii			\
+	char_utils/ft_is_digit			\
+	char_utils/ft_is_print			\
+	char_utils/ft_to_lower			\
+	char_utils/ft_to_upper			\
+	ft_printf/ft_printf			\
+	ft_printf/ft_args_handler			\
+	ft_printf/ft_get_address			\
+	ft_printf/ft_get_base16			\
+	ft_printf/ft_get_char				\
+	ft_printf/ft_get_integer			\
+	ft_printf/ft_get_string			\
+	get_next_line/get_next_line	\
+	get_next_line/get_next_line_utils	\
+	mem_utils/ft_calloc			\
+	mem_utils/ft_memset				\
+	mem_utils/ft_memchr				\
+	mem_utils/ft_memcmp				\
+	mem_utils/ft_memcpy				\
+	mem_utils/ft_memmove				\
+	put_utils/ft_putchar_fd		\
+	put_utils/ft_putstr_fd			\
+	put_utils/ft_putendl_fd			\
+	put_utils/ft_putnbr_fd			\
+	string_utils/ft_bzero			\
+	string_utils/ft_strlen			\
+	string_utils/ft_strlcat			\
+	string_utils/ft_strrchr			\
+	string_utils/ft_strchr 			\
+	string_utils/ft_strncmp			\
+	string_utils/ft_strnstr			\
+	string_utils/ft_strdup			\
+	string_utils/ft_strlcpy			\
+	string_utils/ft_substr			\
+	string_utils/ft_strjoin			\
+	string_utils/ft_strtrim			\
+	string_utils/ft_split				\
+	string_utils/ft_striteri			\
+	string_utils/ft_strmapi			\
+	tab_utils/ft_str_tab_len		\
+	ft_atoi						\
+	ft_itoa							
+	
+OBJS = $(addsuffix .o, $(addprefix $(BUILD_DIRECTORY), $(SRCS)))
+DPDS = $(addsuffix .d, $(addprefix $(BUILD_DIRECTORY), $(SRCS)))
 
-OBJS	= $(addprefix $(BUILD_DIRECTORY), $(SRCS:.c=.o))
+$(BUILD_DIRECTORY)$(NAME): $(OBJS)
+	mkdir -p $(dir $(NAME))
+	ar rcs $@ $(OBJS)
+
+$(NAME): $(BUILD_DIRECTORY)$(NAME)
+	cp $< $@
 
 all:	$(NAME)
 
-so:		$(all)
-
-$(NAME): $(BUILD_DIRECTORY) $(OBJS) .includes/*.h
-	ar -rcs $(BUILD_DIRECTORY)$(NAME) $(OBJS)
-
-$(BUILD_DIRECTORY)%.o: %.c Makefile .includes/*.h
+build/%.o: %.c
+	mkdir -p $(dir $@)
 	$(CC) $(FLAGS) -I.includes/ -c $< -o $@
-
-$(BUILD_DIRECTORY):
-	mkdir -p $(BUILD_DIRECTORY)chained_utils $(BUILD_DIRECTORY)char_utils $(BUILD_DIRECTORY)ft_printf $(BUILD_DIRECTORY)get_next_line $(BUILD_DIRECTORY)mem_utils $(BUILD_DIRECTORY)put_utils $(BUILD_DIRECTORY)string_utils $(BUILD_DIRECTORY)tab_utils
 
 clean:
 	$(RM) $(BUILD_DIRECTORY)
@@ -99,3 +97,5 @@ fclean:	clean
 re:		fclean $(NAME)
 
 .PHONY:	fclean clean all re
+
+-include $(OBJS:.o=.d)
