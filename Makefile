@@ -6,7 +6,7 @@
 #    By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/24 20:52:05 by luynagda          #+#    #+#              #
-#    Updated: 2024/02/26 14:10:42 by lunagda          ###   ########.fr        #
+#    Updated: 2024/03/05 11:47:50 by lunagda          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,6 +62,7 @@ FILES = main.c                         \
     utils/merge_sort.c                \
     signals/exit_signal.c             \
     signals/heredoc_signal.c          \
+    signals/pipe_signal.c          \
     signals/signals_manager.c
 
 BUILD_DIRECTORY = ./build/
