@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_parsing_2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lunagda <lunagda@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 17:23:35 by lunagda           #+#    #+#             */
-/*   Updated: 2024/02/26 15:00:50 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/05/24 21:28:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	check_for_eof(char *here_doc, char *line)
 		ft_putstr_fd("at line 1 delimited by end-of-file", 2);
 		ft_putstr_fd(" (wanted `", 2);
 		ft_putstr_fd(here_doc, 2);
-		ft_putendl_fd("')", 2);
+		ft_putstr_fd("')", 2);
 		return (1);
 	}
 	return (0);
@@ -62,10 +62,10 @@ int	here_doc_execution(t_minishell *shell, t_commands *tmp, int i)
 		return (free(delimiter), free(line), 1);
 	if (check_for_eof(tmp->arguments[i], line))
 		return (free(delimiter), 0);
+	line = expand_line(line, shell->env_map, !tmp->args_quoted[i]);
 	while (!ft_str_equals(line, delimiter))
 	{
 		hook_heredoc_signal();
-		line = expand_line(line, shell->env_map, !tmp->args_quoted[i]);
 		ft_putstr_fd(line, shell->doc_fd);
 		free(line);
 		ft_putstr_fd("heredoc> ", 0);
@@ -74,6 +74,7 @@ int	here_doc_execution(t_minishell *shell, t_commands *tmp, int i)
 			return (free(delimiter), free(line), 1);
 		if (check_for_eof(tmp->arguments[i], line))
 			return (free(delimiter), 0);
+		line = expand_line(line, shell->env_map, !tmp->args_quoted[i]);
 	}
 	return (free(delimiter), free(line), 0);
 }
